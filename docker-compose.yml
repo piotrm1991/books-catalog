@@ -1,0 +1,10 @@
+services:
+  database:
+    image: mysql:8.0
+    container_name: 'books_catalog_db'
+    volumes:
+      - ./db:/var/lib/mysql
+    env_file:
+      - .env.local
+    ports:
+      - "3307:3306"

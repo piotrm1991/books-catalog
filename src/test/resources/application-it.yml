@@ -1,0 +1,33 @@
+spring:
+  jpa:
+    properties:
+      hibernate:
+        globally_quoted_identifiers: 'true'
+    generate-ddl: 'true'
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+  flyway:
+    locations: filesystem:./src/main/resources/db/migration
+    enabled: true
+    table: schema_history_table
+    baseline-on-migrate: true
+    out-of-order: true
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+  sql:
+    init:
+      continue-on-error: true
+      mode: always
+  mvc:
+    format:
+      date: iso
+      date-time: iso
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  # FIXME: remove after auth implementation
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
+server:
+  servlet:
+    context-path: /api
