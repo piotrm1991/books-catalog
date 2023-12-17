@@ -4,6 +4,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+/**
+ * The main class that initializes and runs the catalog application.
+ */
 @Slf4j
 @SpringBootApplication
 public class MainApplication {

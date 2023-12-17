@@ -32,4 +32,26 @@ public abstract class AbstractIntegrationTest {
     System.setProperty("spring.datasource.username", mysqlContainer.getUsername());
     System.setProperty("spring.datasource.password", mysqlContainer.getPassword());
   }
+
+  protected String createUrlPathWithId(String baseUrl, Long id) {
+    StringBuilder sb = new StringBuilder(baseUrl);
+    sb.append("/");
+    sb.append(id);
+
+    return sb.toString();
+  }
+
+  protected String createUrlPathGetPageable(String baseUrl, int page, int size, String sort, boolean isAscending) {
+    StringBuilder sb = new StringBuilder(baseUrl);
+    sb.append("?page=").append(page)
+            .append("&size=").append(size)
+            .append("&sort=").append(sort).append(",");
+    if (isAscending) {
+      sb.append("ASC");
+    } else {
+      sb.append("DESC");
+    }
+
+    return sb.toString();
+  }
 }
