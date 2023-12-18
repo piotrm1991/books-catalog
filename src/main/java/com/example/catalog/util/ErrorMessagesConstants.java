@@ -15,6 +15,10 @@ public class ErrorMessagesConstants {
           "Publisher with this name already exists.";
   public static final String PublisherNameCanNotBeBlank = "You need to provide publisher name.";
 
+  public static final String RoomNameAlreadyExists =
+          "Room with this name already exists.";
+  public static final String RoomNameCanNotBeBlank = "You need to provide room name.";
+
   public static String createAuthorNotExistMessage(Long id) {
 
     return String.format("Author with id: %d is not found.", id);
@@ -23,5 +27,10 @@ public class ErrorMessagesConstants {
   public static String createPublisherNotExistMessage(Long id) {
 
     return String.format("Publisher with id: %d is not found.", id);
+  }
+
+  public static String createRoomNotExistMessage(Long id) {
+
+    return String.format("Room with id: %d is not found.", id);
   }
 }
