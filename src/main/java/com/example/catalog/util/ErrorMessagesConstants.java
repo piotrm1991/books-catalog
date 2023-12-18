@@ -19,6 +19,10 @@ public class ErrorMessagesConstants {
           "Room with this name already exists.";
   public static final String RoomNameCanNotBeBlank = "You need to provide room name.";
 
+  public static final String StatusTypeNameAlreadyExists =
+          "StatusType with this name already exists.";
+  public static final String StatusTypeNameCanNotBeBlank = "You need to provide status type name.";
+
   public static String createAuthorNotExistMessage(Long id) {
 
     return String.format("Author with id: %d is not found.", id);
@@ -32,5 +36,10 @@ public class ErrorMessagesConstants {
   public static String createRoomNotExistMessage(Long id) {
 
     return String.format("Room with id: %d is not found.", id);
+  }
+
+  public static String createStatusTypeNotExistMessage(Long id) {
+
+    return String.format("StatusType with id: %d is not found.", id);
   }
 }
