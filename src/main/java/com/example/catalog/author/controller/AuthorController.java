@@ -1,10 +1,9 @@
 package com.example.catalog.author.controller;
 
-import com.example.catalog.author.entity.Author;
 import com.example.catalog.author.request.AuthorCreate;
 import com.example.catalog.author.request.AuthorUpdate;
 import com.example.catalog.author.response.AuthorResponse;
-import com.example.catalog.author.service.impl.AuthorService;
+import com.example.catalog.author.service.AuthorService;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

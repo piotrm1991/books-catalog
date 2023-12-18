@@ -1,6 +1,6 @@
-package com.example.catalog.author.validator;
+package com.example.catalog.publisher.validator;
 
-import static com.example.catalog.util.ErrorMessagesConstants.AuthorNameAlreadyExists;
+import static com.example.catalog.util.ErrorMessagesConstants.PublisherNameAlreadyExists;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -12,20 +12,20 @@ import javax.validation.Payload;
 
 /**
  * Custom validation annotation to ensure that
- * the provided name of the author does not exist in the system.
+ * the provided name of the publisher does not exist in the system.
  */
-@Constraint(validatedBy = AuthorNameValidator.class)
+@Constraint(validatedBy = PublisherNameValidator.class)
 @Target({ ElementType.METHOD, ElementType.FIELD })
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public  @interface NameAlreadyExists {
+public  @interface PublisherNameAlreadyExists {
 
   /**
    * The validation error message to be displayed when the name already exists.
    *
    * @return The validation error message.
    */
-  String message() default AuthorNameAlreadyExists;
+  String message() default PublisherNameAlreadyExists;
 
   /**
    * Specifies the validation groups to which this constraint belongs.

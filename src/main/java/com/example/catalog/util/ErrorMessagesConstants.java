@@ -11,8 +11,17 @@ public class ErrorMessagesConstants {
   public static final String AuthorNameAlreadyExists = "Author with this name already exists.";
   public static final String AuthorNameCanNotBeBlank = "You need to provide author name.";
 
+  public static final String PublisherNameAlreadyExists =
+          "Publisher with this name already exists.";
+  public static final String PublisherNameCanNotBeBlank = "You need to provide publisher name.";
+
   public static String createAuthorNotExistMessage(Long id) {
 
     return String.format("Author with id: %d is not found.", id);
+  }
+
+  public static String createPublisherNotExistMessage(Long id) {
+
+    return String.format("Publisher with id: %d is not found.", id);
   }
 }

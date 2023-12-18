@@ -1,4 +1,4 @@
-package com.example.catalog.author.service.impl;
+package com.example.catalog.author.service;
 
 import com.example.catalog.author.entity.Author;
 import com.example.catalog.author.request.AuthorCreate;

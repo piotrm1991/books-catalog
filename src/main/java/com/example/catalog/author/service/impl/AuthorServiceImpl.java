@@ -1,4 +1,4 @@
-package com.example.catalog.author.service.impl.impl;
+package com.example.catalog.author.service.impl;
 
 import static com.example.catalog.util.ErrorMessagesConstants.createAuthorNotExistMessage;
 
@@ -8,7 +8,7 @@ import com.example.catalog.author.repository.AuthorRepository;
 import com.example.catalog.author.request.AuthorCreate;
 import com.example.catalog.author.request.AuthorUpdate;
 import com.example.catalog.author.response.AuthorResponse;
-import com.example.catalog.author.service.impl.AuthorService;
+import com.example.catalog.author.service.AuthorService;
 import com.example.catalog.exception.EntityNotFoundException;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;

@@ -1,4 +1,4 @@
-package com.example.catalog.author.service.impl;
+package com.example.catalog.author.service;
 
 import com.example.catalog.author.AuthorHelper;
 import com.example.catalog.author.entity.Author;
@@ -7,7 +7,7 @@ import com.example.catalog.author.repository.AuthorRepository;
 import com.example.catalog.author.request.AuthorCreate;
 import com.example.catalog.author.request.AuthorUpdate;
 import com.example.catalog.author.response.AuthorResponse;
-import com.example.catalog.author.service.impl.impl.AuthorServiceImpl;
+import com.example.catalog.author.service.impl.AuthorServiceImpl;
 import com.example.catalog.exception.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

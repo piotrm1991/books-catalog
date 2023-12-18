@@ -1,6 +1,6 @@
 package com.example.catalog.author.validator;
 
-import com.example.catalog.author.service.impl.AuthorService;
+import com.example.catalog.author.service.AuthorService;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import lombok.RequiredArgsConstructor;
@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
  * Custom validator that checks if the provided author name does not exist in the system.
  */
 @RequiredArgsConstructor
-public class AuthorNameValidator implements ConstraintValidator<NameAlreadyExists, String> {
+public class AuthorNameValidator implements ConstraintValidator<AuthorNameAlreadyExists, String> {
 
   private final AuthorService authorService;
 

@@ -1,5 +1,14 @@
 package com.example.catalog.integration.author;
 
+import static com.example.catalog.util.ErrorMessagesConstants.createAuthorNotExistMessage;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import com.example.catalog.author.AuthorHelper;
 import com.example.catalog.author.entity.Author;
 import com.example.catalog.author.mapper.AuthorMapper;
@@ -18,17 +27,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
-
 import javax.transaction.Transactional;
 import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class ViewAuthorsIntegrationTest extends AbstractIntegrationTest {
 
@@ -72,7 +72,8 @@ public class ViewAuthorsIntegrationTest extends AbstractIntegrationTest {
             .andReturn();
 
     String errorMessage = response.getResponse().getContentAsString();
-    assertTrue(errorMessage.contains("Author with id: " + invalidId + " is not found."));
+    assertTrue(errorMessage.contains(createAuthorNotExistMessage(invalidId)));
+
   }
 
   @Test

@@ -1,4 +1,4 @@
-package com.example.catalog.author.entity;
+package com.example.catalog.publisher.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,16 +13,16 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * Entity class representing author in the catalog.
+ * Entity class representing publisher in the catalog.
  */
 @Entity
-@Table(name = "author")
+@Table(name = "publisher")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Getter
 @Setter
-public class Author {
+public class Publisher {
 
   @Id
   @Column

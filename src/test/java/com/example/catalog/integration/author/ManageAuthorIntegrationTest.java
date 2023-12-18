@@ -1,5 +1,12 @@
 package com.example.catalog.integration.author;
 
+import static com.example.catalog.util.ErrorMessagesConstants.createAuthorNotExistMessage;
+import static com.example.catalog.util.ErrorMessagesConstants.AuthorNameCanNotBeBlank;
+import static com.example.catalog.util.ErrorMessagesConstants.AuthorNameAlreadyExists;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import com.example.catalog.author.AuthorHelper;
 import com.example.catalog.author.entity.Author;
 import com.example.catalog.author.mapper.AuthorMapper;
@@ -15,11 +22,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import javax.transaction.Transactional;
 import java.util.List;
-
-import static com.example.catalog.util.ErrorMessagesConstants.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class ManageAuthorIntegrationTest extends AbstractIntegrationTest {
 
