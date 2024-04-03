@@ -1,5 +1,7 @@
 package com.example.catalog.shelf.service.impl;
 
+import static com.example.catalog.util.ErrorMessagesConstants.createShelfNotExistMessage;
+
 import com.example.catalog.exception.EntityNotFoundException;
 import com.example.catalog.room.entity.Room;
 import com.example.catalog.room.service.RoomService;
@@ -10,15 +12,12 @@ import com.example.catalog.shelf.request.ShelfCreate;
 import com.example.catalog.shelf.request.ShelfUpdate;
 import com.example.catalog.shelf.response.ShelfResponse;
 import com.example.catalog.shelf.service.ShelfService;
+import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import javax.transaction.Transactional;
-
-import static com.example.catalog.util.ErrorMessagesConstants.createShelfNotExistMessage;
 
 /**
  * Implementation of the ShelfService interface for managing shelf requests.
@@ -36,7 +35,8 @@ public class ShelfServiceImpl implements ShelfService {
   public ShelfResponse createShelf(ShelfCreate shelfCreate) {
     Room room = roomService.getRoomById(shelfCreate.idRoom());
 
-    log.info("Creating shelf with letter: {}, and number: {} in the room: {}", shelfCreate.letter(), shelfCreate.number(), room.getName());
+    log.info("Creating shelf with letter: {}, and number: {} in the room: {}",
+          shelfCreate.letter(), shelfCreate.number(), room.getName());
 
     Shelf shelf = shelfMapper.mapShelfCreateToEntity(shelfCreate);
     shelf.setRoom(room);
