@@ -40,17 +40,17 @@ class StatusTypeMapperTest {
   void givenCorrectRequest_whenMapRequestToEntity_thenCorrect() throws JsonProcessingException {
     when(mapper.readValue(mapper.writeValueAsString(statusTypeCreate), StatusType.class)).thenReturn(statusType);
 
-    StatusType expectedLeave = statusTypeMapper.mapStatusTypeCreateToEntity(statusTypeCreate);
+    StatusType expectedStatusType = statusTypeMapper.mapStatusTypeCreateToEntity(statusTypeCreate);
 
-    assertEquals(expectedLeave, statusType);
+    assertEquals(expectedStatusType, statusType);
   }
 
   @Test
   void givenCorrectEntity_whenMapEntityToResponse_thenCorrect() throws JsonProcessingException {
     when(mapper.readValue(mapper.writeValueAsString(statusType), StatusTypeResponse.class)).thenReturn(statusTypeResponse);
 
-    StatusTypeResponse expectedLeaveResponse = statusTypeMapper.mapEntityToResponse(statusType);
+    StatusTypeResponse expectedStatusTypeResponse = statusTypeMapper.mapEntityToResponse(statusType);
 
-    assertEquals(expectedLeaveResponse, statusTypeResponse);
+    assertEquals(expectedStatusTypeResponse, statusTypeResponse);
   }
 }

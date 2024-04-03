@@ -41,17 +41,17 @@ class RoomMapperTest {
   void givenCorrectRequest_whenMapRequestToEntity_thenCorrect() throws JsonProcessingException {
     when(mapper.readValue(mapper.writeValueAsString(roomCreate), Room.class)).thenReturn(room);
 
-    Room expectedLeave = roomMapper.mapRoomCreateToEntity(roomCreate);
+    Room expectedRoom = roomMapper.mapRoomCreateToEntity(roomCreate);
 
-    assertEquals(expectedLeave, room);
+    assertEquals(expectedRoom, room);
   }
 
   @Test
   void givenCorrectEntity_whenMapEntityToResponse_thenCorrect() throws JsonProcessingException {
     when(mapper.readValue(mapper.writeValueAsString(room), RoomResponse.class)).thenReturn(roomResponse);
 
-    RoomResponse expectedLeaveResponse = roomMapper.mapEntityToResponse(room);
+    RoomResponse expectedRoomResponse = roomMapper.mapEntityToResponse(room);
 
-    assertEquals(expectedLeaveResponse, roomResponse);
+    assertEquals(expectedRoomResponse, roomResponse);
   }
 }

@@ -78,10 +78,10 @@ public class ManageAuthorIntegrationTest extends AbstractIntegrationTest {
   @Transactional
   public void givenIncorrectAuthorCreateBlankName_whenCreateAuthor_thenException() throws Exception {
     var response = mockMvc.perform(MockMvcRequestBuilders
-                    .post(AuthorHelper.authorUrlPath)
-                    .content(mapper.writeValueAsString(AuthorHelper.createEmptyAuthorCreate()))
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .accept(MediaType.APPLICATION_JSON))
+            .post(AuthorHelper.authorUrlPath)
+            .content(mapper.writeValueAsString(AuthorHelper.createEmptyAuthorCreate()))
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isBadRequest())
             .andReturn();
 

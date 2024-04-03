@@ -48,32 +48,3 @@ To run Integration Tests:
 * Compile project with maven compiler plugin
 * Compile testClasses
 * Navigate to failsafe maven plugin. Launch tests with `failsafe:integration-test`
-
-## Swagger
-
-Swagger is configured for the current project. It allows you to efficiently test API you developed
-Read more: https://swagger.io/tools/swagger-ui/
-
-Swagger is up on spring boot project run under the endpoint: `localhost:8080/api/swagger-ui.html`
-
-## Possibles issues and solutions
-
-#### Resource folder cant be recognized as spring boot resources
-
-Mark directory as resources with clicking on directory with mouse right button -> Mark as -> Resource Root
-
-
-## Test feature
-
-We included test feature implementation, which includes controller with core requests, service, repository and some tests.
-We assume that feature will be deleted with implementation of CRUD feature that will correspond to this feature.
-
-Our recommendation for you is to use package structure based on business entities (recipe, user, etc.) and within these packages
-keep structure based on components (repository, controller, service, dto, etc.).
-It will allow you to find necessary classes quicker.
-
-## SecurityContextConfig
-
-We disabled security context configuration because we have no security logic yet.
-
-You have to enable autoconfiguration in `application.yml` (autoconfiguration section)

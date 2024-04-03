@@ -10,7 +10,9 @@ public class ErrorMessagesConstants {
 
   public static final String AuthorNameAlreadyExists = "Author with this name already exists.";
   public static final String AuthorNameCanNotBeBlank = "You need to provide author name.";
-
+  public static final String ShelfLetterNotBeBlank = "You need to provide letter for shelf.";
+  public static final String ShelfNumberNotBeBlank = "You need to provide number for shelf.";
+  public static final String ShelfRoomNotBeBlank = "You need to provide room for shelf.";
   public static final String PublisherNameAlreadyExists =
           "Publisher with this name already exists.";
   public static final String PublisherNameCanNotBeBlank = "You need to provide publisher name.";
@@ -41,5 +43,10 @@ public class ErrorMessagesConstants {
   public static String createStatusTypeNotExistMessage(Long id) {
 
     return String.format("StatusType with id: %d is not found.", id);
+  }
+
+  public static String createShelfNotExistMessage(Long id) {
+
+    return String.format("Shelf with id: %d is not found.", id);
   }
 }

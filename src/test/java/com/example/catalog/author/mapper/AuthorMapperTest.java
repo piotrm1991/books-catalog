@@ -39,9 +39,9 @@ class AuthorMapperTest {
   void givenCorrectRequest_whenMapRequestToEntity_thenCorrect() throws JsonProcessingException {
     when(mapper.readValue(mapper.writeValueAsString(authorCreate), Author.class)).thenReturn(author);
 
-    Author expectedLeave = authorMapper.mapAuthorCreateToEntity(authorCreate);
+    Author expectedAuthor = authorMapper.mapAuthorCreateToEntity(authorCreate);
 
-    assertEquals(expectedLeave, author);
+    assertEquals(expectedAuthor, author);
   }
 
   @Test
