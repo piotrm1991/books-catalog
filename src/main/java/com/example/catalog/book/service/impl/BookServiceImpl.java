@@ -1,6 +1,6 @@
 package com.example.catalog.book.service.impl;
 
-import static com.example.catalog.util.ErrorMessagesConstants.createBookNotExistMessage;
+import static com.example.catalog.util.ErrorMessagesConstants.createEntityNotExistsMessage;
 
 import com.example.catalog.author.service.AuthorService;
 import com.example.catalog.book.entity.Book;
@@ -99,7 +99,8 @@ public class BookServiceImpl implements BookService {
     log.info("Getting book from database with id: {}", id);
 
     return bookRepository.findById(id).orElseThrow(()
-            -> new EntityNotFoundException(createBookNotExistMessage(id)));
+            -> new EntityNotFoundException(
+                    createEntityNotExistsMessage(Book.class.getSimpleName(), id)));
   }
 
   @Transactional

@@ -1,6 +1,6 @@
 package com.example.catalog.integration.author;
 
-import static com.example.catalog.util.ErrorMessagesConstants.createAuthorNotExistMessage;
+import static com.example.catalog.util.ErrorMessagesConstants.createEntityNotExistsMessage;
 import static com.example.catalog.util.ErrorMessagesConstants.AuthorNameCanNotBeBlank;
 import static com.example.catalog.util.ErrorMessagesConstants.AuthorNameAlreadyExists;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -167,7 +167,7 @@ public class ManageAuthorIntegrationTest extends AbstractIntegrationTest {
 
     String errorMessage = response.getResponse().getContentAsString();
 
-    assertEquals(createAuthorNotExistMessage(invalidId), errorMessage);
+    assertEquals(createEntityNotExistsMessage(Author.class.getSimpleName(), invalidId), errorMessage);
   }
 
   @Test
@@ -202,7 +202,7 @@ public class ManageAuthorIntegrationTest extends AbstractIntegrationTest {
 
     String errorMessage = response.getResponse().getContentAsString();
 
-    assertEquals(createAuthorNotExistMessage(invalidId), errorMessage);
+    assertEquals(createEntityNotExistsMessage(Author.class.getSimpleName(), invalidId), errorMessage);
     assertEquals(AuthorHelper.testAuthorsCount, authorRepository.findAll().size());
   }
 }

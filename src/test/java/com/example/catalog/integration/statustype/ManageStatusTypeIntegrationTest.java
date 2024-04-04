@@ -19,7 +19,7 @@ import java.util.List;
 
 import static com.example.catalog.util.ErrorMessagesConstants.StatusTypeNameAlreadyExists;
 import static com.example.catalog.util.ErrorMessagesConstants.StatusTypeNameCanNotBeBlank;
-import static com.example.catalog.util.ErrorMessagesConstants.createStatusTypeNotExistMessage;
+import static com.example.catalog.util.ErrorMessagesConstants.createEntityNotExistsMessage;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -168,7 +168,7 @@ public class ManageStatusTypeIntegrationTest extends AbstractIntegrationTest {
 
     String errorMessage = response.getResponse().getContentAsString();
 
-    assertEquals(createStatusTypeNotExistMessage(invalidId), errorMessage);
+    assertEquals(createEntityNotExistsMessage(StatusType.class.getSimpleName(), invalidId), errorMessage);
   }
 
   @Test
@@ -203,7 +203,7 @@ public class ManageStatusTypeIntegrationTest extends AbstractIntegrationTest {
 
     String errorMessage = response.getResponse().getContentAsString();
 
-    assertEquals(createStatusTypeNotExistMessage(invalidId), errorMessage);
+    assertEquals(createEntityNotExistsMessage(StatusType.class.getSimpleName(), invalidId), errorMessage);
     assertEquals(StatusTypeHelper.testStatusTypesCount, statusTypeRepository.findAll().size());
   }
 }

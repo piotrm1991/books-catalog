@@ -1,6 +1,6 @@
 package com.example.catalog.integration.author;
 
-import static com.example.catalog.util.ErrorMessagesConstants.createAuthorNotExistMessage;
+import static com.example.catalog.util.ErrorMessagesConstants.createEntityNotExistsMessage;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -72,7 +72,7 @@ public class ViewAuthorsIntegrationTest extends AbstractIntegrationTest {
             .andReturn();
 
     String errorMessage = response.getResponse().getContentAsString();
-    assertTrue(errorMessage.contains(createAuthorNotExistMessage(invalidId)));
+    assertTrue(errorMessage.contains(createEntityNotExistsMessage(Author.class.getSimpleName(), invalidId)));
 
   }
 

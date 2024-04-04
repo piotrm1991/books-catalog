@@ -8,6 +8,20 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class ErrorMessagesConstants {
 
+  public static final String PasswordMustMatchDefaultMessage = "Passwords must match!";
+  public static final String StrongPasswordDefaultMessage =
+          "Must be 8 characters long and combination of uppercase letters, "
+        + "lowercase letters, numbers, special characters.";
+  public static final String PasswordAndConfirmPasswordMatchingMessage =
+          "Password and Confirm Password must be matched!";
+  public static final String PasswordCanNotBeBlankErrorMessage = "Password is required";
+  public static final String ConfirmPasswordCanNotBeBlankErrorMessage =
+          "Confirm Password is required";
+  public static final String LoginIsRequiredMessage = "Login is required.";
+  public static final String LoginSizeMinMessage = "Login must be at least 5 characters long.";
+  public static final String PasswordSizeMinMessage =
+          "Password must be at least 8 characters long.";
+  public static final String LoginAlreadyExists = "This login already exists in the system.";
   public static final String AuthorNameAlreadyExists = "Author with this name already exists.";
   public static final String AuthorNameCanNotBeBlank = "You need to provide author name.";
   public static final String ShelfLetterNotBeBlank = "You need to provide letter for shelf.";
@@ -30,33 +44,15 @@ public class ErrorMessagesConstants {
           "StatusType with this name already exists.";
   public static final String StatusTypeNameCanNotBeBlank = "You need to provide status type name.";
 
-  public static String createAuthorNotExistMessage(Long id) {
+  /**
+   * Takes entity name and its id and creates error message entity not found.
+   *
+   * @param entityName String entity name. Entity.class.getSimpleName().
+   * @param id Long entity's id.
+   * @return String with entity not found message.
+   */
+  public static String createEntityNotExistsMessage(String entityName, Long id) {
 
-    return String.format("Author with id: %d is not found.", id);
-  }
-
-  public static String createPublisherNotExistMessage(Long id) {
-
-    return String.format("Publisher with id: %d is not found.", id);
-  }
-
-  public static String createRoomNotExistMessage(Long id) {
-
-    return String.format("Room with id: %d is not found.", id);
-  }
-
-  public static String createStatusTypeNotExistMessage(Long id) {
-
-    return String.format("StatusType with id: %d is not found.", id);
-  }
-
-  public static String createShelfNotExistMessage(Long id) {
-
-    return String.format("Shelf with id: %d is not found.", id);
-  }
-
-  public static String createBookNotExistMessage(Long id) {
-
-    return String.format("Book with id: %d is not found.", id);
+    return String.format("%s with id: %d is not found.", entityName, id);
   }
 }

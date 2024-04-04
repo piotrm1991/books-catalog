@@ -22,7 +22,7 @@ import org.springframework.http.MediaType;
 import javax.transaction.Transactional;
 import java.util.List;
 
-import static com.example.catalog.util.ErrorMessagesConstants.createRoomNotExistMessage;
+import static com.example.catalog.util.ErrorMessagesConstants.createEntityNotExistsMessage;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -73,7 +73,7 @@ public class ViewRoomIntegrationTest extends AbstractIntegrationTest {
             .andReturn();
 
     String errorMessage = response.getResponse().getContentAsString();
-    assertTrue(errorMessage.contains(createRoomNotExistMessage(invalidId)));
+    assertTrue(errorMessage.contains(createEntityNotExistsMessage(Room.class.getSimpleName(), invalidId)));
 
   }
 

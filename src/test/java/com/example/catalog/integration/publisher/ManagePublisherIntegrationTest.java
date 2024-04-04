@@ -3,7 +3,7 @@ package com.example.catalog.integration.publisher;
 
 import static com.example.catalog.util.ErrorMessagesConstants.PublisherNameAlreadyExists;
 import static com.example.catalog.util.ErrorMessagesConstants.PublisherNameCanNotBeBlank;
-import static com.example.catalog.util.ErrorMessagesConstants.createPublisherNotExistMessage;
+import static com.example.catalog.util.ErrorMessagesConstants.createEntityNotExistsMessage;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -168,7 +168,7 @@ public class ManagePublisherIntegrationTest extends AbstractIntegrationTest {
 
     String errorMessage = response.getResponse().getContentAsString();
 
-    assertEquals(createPublisherNotExistMessage(invalidId), errorMessage);
+    assertEquals(createEntityNotExistsMessage(Publisher.class.getSimpleName(), invalidId), errorMessage);
   }
 
   @Test
@@ -203,7 +203,7 @@ public class ManagePublisherIntegrationTest extends AbstractIntegrationTest {
 
     String errorMessage = response.getResponse().getContentAsString();
 
-    assertEquals(createPublisherNotExistMessage(invalidId), errorMessage);
+    assertEquals(createEntityNotExistsMessage(Publisher.class.getSimpleName(), invalidId), errorMessage);
     assertEquals(PublisherHelper.testPublishersCount, publisherRepository.findAll().size());
   }
 }

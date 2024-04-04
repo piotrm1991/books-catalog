@@ -1,6 +1,6 @@
 package com.example.catalog.author.service.impl;
 
-import static com.example.catalog.util.ErrorMessagesConstants.createAuthorNotExistMessage;
+import static com.example.catalog.util.ErrorMessagesConstants.createEntityNotExistsMessage;
 
 import com.example.catalog.author.entity.Author;
 import com.example.catalog.author.mapper.AuthorMapper;
@@ -73,7 +73,8 @@ public class AuthorServiceImpl implements AuthorService {
     log.info("Getting author from database with id: {}", id);
 
     return authorRepository.findById(id).orElseThrow(()
-            -> new EntityNotFoundException(createAuthorNotExistMessage(id)));
+            -> new EntityNotFoundException(
+                    createEntityNotExistsMessage(Author.class.getSimpleName(), id)));
   }
 
   @Override

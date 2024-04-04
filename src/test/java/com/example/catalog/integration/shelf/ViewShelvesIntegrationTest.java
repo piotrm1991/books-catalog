@@ -22,7 +22,7 @@ import org.springframework.http.MediaType;
 import javax.transaction.Transactional;
 import java.util.List;
 
-import static com.example.catalog.util.ErrorMessagesConstants.createShelfNotExistMessage;
+import static com.example.catalog.util.ErrorMessagesConstants.createEntityNotExistsMessage;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -73,7 +73,7 @@ public class ViewShelvesIntegrationTest extends AbstractIntegrationTest {
             .andReturn();
 
     String errorMessage = response.getResponse().getContentAsString();
-    assertTrue(errorMessage.contains(createShelfNotExistMessage(invalidId)));
+    assertTrue(errorMessage.contains(createEntityNotExistsMessage(Shelf.class.getSimpleName(), invalidId)));
 
   }
 

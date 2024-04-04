@@ -73,7 +73,7 @@ public class ManageShelvesIntegrationTest extends AbstractIntegrationTest {
 
     String errorMessage = response.getResponse().getContentAsString();
 
-    assertTrue(errorMessage.contains(ErrorMessagesConstants.createRoomNotExistMessage(1L)));
+    assertTrue(errorMessage.contains(ErrorMessagesConstants.createEntityNotExistsMessage(Room.class.getSimpleName(), 1L)));
     assertEquals(0, shelfRepository.findAll().size());
   }
 
@@ -169,7 +169,7 @@ public class ManageShelvesIntegrationTest extends AbstractIntegrationTest {
 
     String errorMessage = response.getResponse().getContentAsString();
 
-    assertEquals(createShelfNotExistMessage(invalidId), errorMessage);
+    assertEquals(createEntityNotExistsMessage(Shelf.class.getSimpleName(), invalidId), errorMessage);
   }
 
   @Test
@@ -204,7 +204,7 @@ public class ManageShelvesIntegrationTest extends AbstractIntegrationTest {
 
     String errorMessage = response.getResponse().getContentAsString();
 
-    assertEquals(createShelfNotExistMessage(invalidId), errorMessage);
+    assertEquals(createEntityNotExistsMessage(Shelf.class.getSimpleName(), invalidId), errorMessage);
     assertEquals(ShelfHelper.testShelvesCount, shelfRepository.findAll().size());
   }
 }

@@ -1,6 +1,6 @@
 package com.example.catalog.publisher.service.impl;
 
-import static com.example.catalog.util.ErrorMessagesConstants.createPublisherNotExistMessage;
+import static com.example.catalog.util.ErrorMessagesConstants.createEntityNotExistsMessage;
 
 import com.example.catalog.exception.EntityNotFoundException;
 import com.example.catalog.publisher.entity.Publisher;
@@ -73,7 +73,8 @@ public class PublisherServiceImpl implements PublisherService {
     log.info("Getting publisher from database with id: {}", id);
 
     return publisherRepository.findById(id).orElseThrow(()
-            -> new EntityNotFoundException(createPublisherNotExistMessage(id)));
+            -> new EntityNotFoundException(
+                    createEntityNotExistsMessage(Publisher.class.getSimpleName(), id)));
   }
 
   @Override

@@ -1,6 +1,6 @@
 package com.example.catalog.statustype.service.impl;
 
-import static com.example.catalog.util.ErrorMessagesConstants.createStatusTypeNotExistMessage;
+import static com.example.catalog.util.ErrorMessagesConstants.createEntityNotExistsMessage;
 
 import com.example.catalog.exception.EntityNotFoundException;
 import com.example.catalog.statustype.entity.StatusType;
@@ -73,7 +73,8 @@ public class StatusTypeServiceImpl implements StatusTypeService {
     log.info("Getting statusType from database with id: {}", id);
 
     return statusTypeRepository.findById(id).orElseThrow(()
-            -> new EntityNotFoundException(createStatusTypeNotExistMessage(id)));
+            -> new EntityNotFoundException(
+                    createEntityNotExistsMessage(StatusType.class.getSimpleName(), id)));
   }
 
   @Override

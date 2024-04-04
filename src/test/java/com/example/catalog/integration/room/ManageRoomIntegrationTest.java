@@ -19,7 +19,7 @@ import java.util.List;
 
 import static com.example.catalog.util.ErrorMessagesConstants.RoomNameAlreadyExists;
 import static com.example.catalog.util.ErrorMessagesConstants.RoomNameCanNotBeBlank;
-import static com.example.catalog.util.ErrorMessagesConstants.createRoomNotExistMessage;
+import static com.example.catalog.util.ErrorMessagesConstants.createEntityNotExistsMessage;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -168,7 +168,7 @@ public class ManageRoomIntegrationTest extends AbstractIntegrationTest {
 
     String errorMessage = response.getResponse().getContentAsString();
 
-    assertEquals(createRoomNotExistMessage(invalidId), errorMessage);
+    assertEquals(createEntityNotExistsMessage(Room.class.getSimpleName(), invalidId), errorMessage);
   }
 
   @Test
@@ -203,7 +203,7 @@ public class ManageRoomIntegrationTest extends AbstractIntegrationTest {
 
     String errorMessage = response.getResponse().getContentAsString();
 
-    assertEquals(createRoomNotExistMessage(invalidId), errorMessage);
+    assertEquals(createEntityNotExistsMessage(Room.class.getSimpleName(), invalidId), errorMessage);
     assertEquals(RoomHelper.testRoomsCount, roomRepository.findAll().size());
   }
 }

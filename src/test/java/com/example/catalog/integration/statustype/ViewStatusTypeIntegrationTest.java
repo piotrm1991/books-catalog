@@ -22,7 +22,7 @@ import org.springframework.http.MediaType;
 import javax.transaction.Transactional;
 import java.util.List;
 
-import static com.example.catalog.util.ErrorMessagesConstants.createStatusTypeNotExistMessage;
+import static com.example.catalog.util.ErrorMessagesConstants.createEntityNotExistsMessage;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -73,7 +73,7 @@ public class ViewStatusTypeIntegrationTest extends AbstractIntegrationTest {
             .andReturn();
 
     String errorMessage = response.getResponse().getContentAsString();
-    assertTrue(errorMessage.contains(createStatusTypeNotExistMessage(invalidId)));
+    assertTrue(errorMessage.contains(createEntityNotExistsMessage(StatusType.class.getSimpleName(), invalidId)));
 
   }
 

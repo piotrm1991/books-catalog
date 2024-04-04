@@ -1,6 +1,6 @@
 package com.example.catalog.room.service.impl;
 
-import static com.example.catalog.util.ErrorMessagesConstants.createRoomNotExistMessage;
+import static com.example.catalog.util.ErrorMessagesConstants.createEntityNotExistsMessage;
 
 import com.example.catalog.exception.EntityNotFoundException;
 import com.example.catalog.room.entity.Room;
@@ -73,7 +73,8 @@ public class RoomServiceImpl implements RoomService {
     log.info("Getting room from database with id: {}", id);
 
     return roomRepository.findById(id).orElseThrow(()
-            -> new EntityNotFoundException(createRoomNotExistMessage(id)));
+            -> new EntityNotFoundException(
+                    createEntityNotExistsMessage(Room.class.getSimpleName(), id)));
   }
 
   @Override

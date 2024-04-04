@@ -1,6 +1,6 @@
 package com.example.catalog.shelf.service.impl;
 
-import static com.example.catalog.util.ErrorMessagesConstants.createShelfNotExistMessage;
+import static com.example.catalog.util.ErrorMessagesConstants.createEntityNotExistsMessage;
 
 import com.example.catalog.exception.EntityNotFoundException;
 import com.example.catalog.room.entity.Room;
@@ -80,7 +80,8 @@ public class ShelfServiceImpl implements ShelfService {
     log.info("Getting shelf from database with id: {}", id);
 
     return shelfRepository.findById(id).orElseThrow(()
-            -> new EntityNotFoundException(createShelfNotExistMessage(id)));
+            -> new EntityNotFoundException(
+                    createEntityNotExistsMessage(Shelf.class.getSimpleName(), id)));
   }
 
   @Transactional

@@ -31,7 +31,7 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 import static com.example.catalog.util.ErrorMessagesConstants.BookTitleCanNotBeBlank;
-import static com.example.catalog.util.ErrorMessagesConstants.createBookNotExistMessage;
+import static com.example.catalog.util.ErrorMessagesConstants.createEntityNotExistsMessage;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -175,7 +175,7 @@ public class ManageBookIntegrationTest extends AbstractIntegrationTest {
 
     String errorMessage = response.getResponse().getContentAsString();
 
-    assertEquals(createBookNotExistMessage(invalidId), errorMessage);
+    assertEquals(createEntityNotExistsMessage(Book.class.getSimpleName(), invalidId), errorMessage);
   }
 
   @Test
@@ -210,7 +210,7 @@ public class ManageBookIntegrationTest extends AbstractIntegrationTest {
 
     String errorMessage = response.getResponse().getContentAsString();
 
-    assertEquals(createBookNotExistMessage(invalidId), errorMessage);
+    assertEquals(createEntityNotExistsMessage(Book.class.getSimpleName(), invalidId), errorMessage);
     assertEquals(BookHelper.testBooksCount, bookRepository.findAll().size());
   }
 }
