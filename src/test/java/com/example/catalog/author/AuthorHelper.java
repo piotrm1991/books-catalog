@@ -1,9 +1,11 @@
 package com.example.catalog.author;
 
 import com.example.catalog.author.entity.Author;
+import com.example.catalog.author.repository.AuthorRepository;
 import com.example.catalog.author.request.AuthorCreate;
 import com.example.catalog.author.request.AuthorUpdate;
 import com.example.catalog.author.response.AuthorResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;

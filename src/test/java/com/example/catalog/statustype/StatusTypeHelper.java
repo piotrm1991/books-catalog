@@ -14,7 +14,7 @@ public class StatusTypeHelper {
   public static final Long id = 1L;
   public static final String name = "StatusType Test";
   public static final String nameUpdated = "StatusType Test Updated";
-  public static final int testStatusTypesCount = 18;
+  public static final int testStatusTypesCount = 10;
 
   public static StatusType createStatusType() {
 

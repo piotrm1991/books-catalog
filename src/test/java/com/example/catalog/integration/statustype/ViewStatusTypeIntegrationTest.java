@@ -92,7 +92,7 @@ public class ViewStatusTypeIntegrationTest extends AbstractIntegrationTest {
 
     assertFalse(statusTypesResponse.isEmpty());
     assertEquals( StatusTypeHelper.testStatusTypesCount, statusTypesResponse.getTotalElements());
-    assertEquals(4, statusTypesResponse.getTotalPages());
+    assertEquals(2, statusTypesResponse.getTotalPages());
     assertEquals(5, statusTypesResponse.getContent().size());
 
     for (int i = 0; i < 5; i++) {

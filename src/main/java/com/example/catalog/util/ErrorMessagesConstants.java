@@ -13,6 +13,11 @@ public class ErrorMessagesConstants {
   public static final String ShelfLetterNotBeBlank = "You need to provide letter for shelf.";
   public static final String ShelfNumberNotBeBlank = "You need to provide number for shelf.";
   public static final String ShelfRoomNotBeBlank = "You need to provide room for shelf.";
+  public static final String BookTitleCanNotBeBlank = "You need to provide title for book.";
+  public static final String BookTitleAlreadyExists = "Book with this title already exists.";
+  public static final String AuthorCanNotBeBlank = "You need to provide author.";
+  public static final String PublisherCanNotBeBlank = "You need to provide publisher.";
+  public static final String StatusTypeCanNotBeBlank = "You need to provide status type.";
   public static final String PublisherNameAlreadyExists =
           "Publisher with this name already exists.";
   public static final String PublisherNameCanNotBeBlank = "You need to provide publisher name.";
@@ -48,5 +53,10 @@ public class ErrorMessagesConstants {
   public static String createShelfNotExistMessage(Long id) {
 
     return String.format("Shelf with id: %d is not found.", id);
+  }
+
+  public static String createBookNotExistMessage(Long id) {
+
+    return String.format("Book with id: %d is not found.", id);
   }
 }

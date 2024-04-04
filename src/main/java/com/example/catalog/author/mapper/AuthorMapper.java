@@ -39,7 +39,7 @@ public class AuthorMapper {
   }
 
   /**
-   * Maps Author entity to a UserResponse DTO.
+   * Maps Author entity to a AuthorResponse DTO.
    *
    * @param author The Author entity to be mapped.
    * @return A AuthorResponse DTO.
