@@ -1,5 +1,6 @@
 package com.example.catalog.user.service;
 
+import com.example.catalog.user.entity.User;
 import com.example.catalog.user.request.UserCreate;
 import com.example.catalog.user.request.UserUpdate;
 import com.example.catalog.user.response.UserResponse;
@@ -59,4 +60,20 @@ public interface UserService {
    * @return A UserResponse representing the created user.
    */
   UserResponse createUser(UserCreate userCreate);
+
+  /**
+   * Retrieves User object by id.
+   *
+   * @param userId Long User id.
+   * @return User object or throws EntityNotFoundException.
+   */
+  User getUserById(Long userId);
+
+  /**
+   * Saves User object in database.
+   *
+   * @param user User object to be saved.
+   * @return saved User.
+   */
+  User save(User user);
 }

@@ -32,6 +32,7 @@ public class UserServiceImpl implements UserService {
   private final DateService dateService;
 
   @Override
+  @Transactional
   public void disableUserById(Long id) {
     log.info("Disabling user with ID: {}", id);
 
@@ -42,6 +43,7 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
+  @Transactional
   public UserResponse updateUser(Long id, UserUpdate userUpdate) {
     log.info("Updating user with ID: {}", id);
 
@@ -61,6 +63,7 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
+  @Transactional
   public UserResponse getUserResponseById(Long id) {
     log.info("Getting user from database with id: {}", id);
 
@@ -68,6 +71,7 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
+  @Transactional
   public UserResponse createUser(UserCreate userCreate) {
     log.info("Creating new user with login: {}", userCreate.login());
 
@@ -88,17 +92,19 @@ public class UserServiceImpl implements UserService {
     return userRepository.existsByLogin(login);
   }
 
+  @Override
   @Transactional
-  private User getUserById(Long userId) {
+  public User getUserById(Long userId) {
     log.info("Getting user from database with id: {}", userId);
 
     return userRepository.findById(userId).orElseThrow(()
-            -> new EntityNotFoundException(
-                    createEntityNotExistsMessage(User.class.getSimpleName(), userId)));
+        -> new EntityNotFoundException(
+                createEntityNotExistsMessage(User.class.getSimpleName(), userId)));
   }
 
+  @Override
   @Transactional
-  private User save(User user) {
+  public User save(User user) {
     log.info("Saving user with login: {} into database.", user.getLogin());
 
     return userRepository.save(user);
