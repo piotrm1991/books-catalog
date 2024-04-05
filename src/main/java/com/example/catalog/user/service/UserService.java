@@ -76,4 +76,6 @@ public interface UserService {
    * @return saved User.
    */
   User save(User user);
+
+  User getUserByLogin(String login);
 }

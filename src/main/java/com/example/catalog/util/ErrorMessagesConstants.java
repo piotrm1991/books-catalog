@@ -55,4 +55,9 @@ public class ErrorMessagesConstants {
 
     return String.format("%s with id: %d is not found.", entityName, id);
   }
+
+  public static String createUserWithLoginNotExistsMessage(String entityName, String login) {
+
+    return String.format("%s with login: %s is not found.", entityName, login);
+  }
 }

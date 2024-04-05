@@ -3,6 +3,7 @@ package com.example.catalog.user.repository;
 import com.example.catalog.user.entity.User;
 import com.example.catalog.user.enums.UserStatusEnum;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -27,4 +28,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
    * @return List of User objects with given status.
    */
   List<User> findAllByStatus(UserStatusEnum status);
+
+  Optional<User> findByLogin(String login);
 }
