@@ -1,5 +1,11 @@
 package com.example.catalog.integration.book;
 
+import static com.example.catalog.util.ErrorMessagesConstants.BookTitleCanNotBeBlank;
+import static com.example.catalog.util.ErrorMessagesConstants.createEntityNotExistsMessage;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import com.example.catalog.author.AuthorHelper;
 import com.example.catalog.author.entity.Author;
 import com.example.catalog.author.repository.AuthorRepository;
@@ -21,20 +27,13 @@ import com.example.catalog.statustype.repository.StatusTypeRepository;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import java.util.List;
+import javax.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-
-import javax.transaction.Transactional;
-import java.util.List;
-
-import static com.example.catalog.util.ErrorMessagesConstants.BookTitleCanNotBeBlank;
-import static com.example.catalog.util.ErrorMessagesConstants.createEntityNotExistsMessage;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class ManageBookIntegrationTest extends AbstractIntegrationTest {
 
@@ -56,7 +55,10 @@ public class ManageBookIntegrationTest extends AbstractIntegrationTest {
   @Autowired
   private StatusTypeRepository statusTypeRepository;
 
-  private final ObjectMapper mapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false).registerModule(new JavaTimeModule());
+  private final ObjectMapper mapper =
+          new ObjectMapper()
+                  .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+                  .registerModule(new JavaTimeModule());
 
   private Author author;
   private Publisher publisher;
@@ -77,15 +79,16 @@ public class ManageBookIntegrationTest extends AbstractIntegrationTest {
   public void givenCorrectBookCreate_whenCreateBook_thenCorrect() throws Exception {
 
     var response = mockMvc.perform(MockMvcRequestBuilders
-                    .post(BookHelper.bookUrlPath)
-                    .content(mapper.writeValueAsString(BookHelper.createBookCreateWithAllIds(
-                            author.getId(), publisher.getId(), shelf.getId(), statusType.getId())))
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isCreated())
-            .andReturn();
+        .post(BookHelper.bookUrlPath)
+        .content(mapper.writeValueAsString(BookHelper.createBookCreateWithAllIds(
+                author.getId(), publisher.getId(), shelf.getId(), statusType.getId())))
+        .contentType(MediaType.APPLICATION_JSON)
+        .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isCreated())
+        .andReturn();
 
-    BookResponse bookResponse = mapper.readValue(response.getResponse().getContentAsString(), BookResponse.class);
+    BookResponse bookResponse =
+            mapper.readValue(response.getResponse().getContentAsString(), BookResponse.class);
 
     assertEquals(BookHelper.title, bookResponse.title());
     assertEquals(1, bookRepository.findAll().size());
@@ -95,12 +98,12 @@ public class ManageBookIntegrationTest extends AbstractIntegrationTest {
   @Transactional
   public void givenIncorrectBookCreateBlankName_whenCreateBook_thenException() throws Exception {
     var response = mockMvc.perform(MockMvcRequestBuilders
-                    .post(BookHelper.bookUrlPath)
-                    .content(mapper.writeValueAsString(BookHelper.createEmptyBookCreate()))
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isBadRequest())
-            .andReturn();
+        .post(BookHelper.bookUrlPath)
+        .content(mapper.writeValueAsString(BookHelper.createEmptyBookCreate()))
+        .contentType(MediaType.APPLICATION_JSON)
+        .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isBadRequest())
+        .andReturn();
 
     String errorMessage = response.getResponse().getContentAsString();
 
@@ -119,14 +122,15 @@ public class ManageBookIntegrationTest extends AbstractIntegrationTest {
     book = bookRepository.save(book);
 
     var response = mockMvc.perform(MockMvcRequestBuilders
-            .put(createUrlPathWithId(BookHelper.bookUrlPath, book.getId()))
-            .content(mapper.writeValueAsString(BookHelper.createBookUpdate()))
-            .contentType(MediaType.APPLICATION_JSON)
-            .accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andReturn();
+        .put(createUrlPathWithId(BookHelper.bookUrlPath, book.getId()))
+        .content(mapper.writeValueAsString(BookHelper.createBookUpdate()))
+        .contentType(MediaType.APPLICATION_JSON)
+        .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andReturn();
 
-    BookResponse bookResponse = mapper.readValue(response.getResponse().getContentAsString(), BookResponse.class);
+    BookResponse bookResponse =
+            mapper.readValue(response.getResponse().getContentAsString(), BookResponse.class);
 
     assertEquals(book.getId(), bookResponse.id());
     assertEquals(BookHelper.titleUpdated, bookResponse.title());
@@ -191,7 +195,7 @@ public class ManageBookIntegrationTest extends AbstractIntegrationTest {
                     .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isNoContent());
 
-    assertEquals(BookHelper.testBooksCount-1, bookRepository.findAll().size());
+    assertEquals(BookHelper.testBooksCount - 1, bookRepository.findAll().size());
   }
 
   @Test

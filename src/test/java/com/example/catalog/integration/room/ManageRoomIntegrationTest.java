@@ -1,5 +1,12 @@
 package com.example.catalog.integration.room;
 
+import static com.example.catalog.util.ErrorMessagesConstants.RoomNameAlreadyExists;
+import static com.example.catalog.util.ErrorMessagesConstants.RoomNameCanNotBeBlank;
+import static com.example.catalog.util.ErrorMessagesConstants.createEntityNotExistsMessage;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import com.example.catalog.room.RoomHelper;
 import com.example.catalog.room.entity.Room;
 import com.example.catalog.room.mapper.RoomMapper;
@@ -9,20 +16,12 @@ import com.example.catalog.shared.AbstractIntegrationTest;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import java.util.List;
+import javax.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-
-import javax.transaction.Transactional;
-import java.util.List;
-
-import static com.example.catalog.util.ErrorMessagesConstants.RoomNameAlreadyExists;
-import static com.example.catalog.util.ErrorMessagesConstants.RoomNameCanNotBeBlank;
-import static com.example.catalog.util.ErrorMessagesConstants.createEntityNotExistsMessage;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class ManageRoomIntegrationTest extends AbstractIntegrationTest {
 
@@ -32,20 +31,23 @@ public class ManageRoomIntegrationTest extends AbstractIntegrationTest {
   @Autowired
   private RoomMapper roomMapper;
 
-  private final ObjectMapper mapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false).registerModule(new JavaTimeModule());
+  private final ObjectMapper mapper = new ObjectMapper()
+          .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+          .registerModule(new JavaTimeModule());
 
   @Test
   @Transactional
   public void givenCorrectRoomCreate_whenCreateRoom_thenCorrect() throws Exception {
     var response = mockMvc.perform(MockMvcRequestBuilders
-            .post(RoomHelper.roomUrlPath)
-            .content(mapper.writeValueAsString(RoomHelper.createRoomCreate()))
-            .contentType(MediaType.APPLICATION_JSON)
-            .accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isCreated())
-            .andReturn();
+        .post(RoomHelper.roomUrlPath)
+        .content(mapper.writeValueAsString(RoomHelper.createRoomCreate()))
+        .contentType(MediaType.APPLICATION_JSON)
+        .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isCreated())
+        .andReturn();
 
-    RoomResponse roomResponse = mapper.readValue(response.getResponse().getContentAsString(), RoomResponse.class);
+    RoomResponse roomResponse =
+            mapper.readValue(response.getResponse().getContentAsString(), RoomResponse.class);
 
     assertEquals(RoomHelper.name, roomResponse.name());
     assertEquals(1, roomRepository.findAll().size());
@@ -55,19 +57,19 @@ public class ManageRoomIntegrationTest extends AbstractIntegrationTest {
   @Transactional
   public void givenIncorrectRoomCreateExistingName_whenCreateRoom_thenException() throws Exception {
     mockMvc.perform(MockMvcRequestBuilders
-            .post(RoomHelper.roomUrlPath)
-            .content(mapper.writeValueAsString(RoomHelper.createRoomCreate()))
-            .contentType(MediaType.APPLICATION_JSON)
-            .accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isCreated());
+        .post(RoomHelper.roomUrlPath)
+        .content(mapper.writeValueAsString(RoomHelper.createRoomCreate()))
+        .contentType(MediaType.APPLICATION_JSON)
+        .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isCreated());
 
     var response = mockMvc.perform(MockMvcRequestBuilders
-            .post(RoomHelper.roomUrlPath)
-            .content(mapper.writeValueAsString(RoomHelper.createRoomCreate()))
-            .contentType(MediaType.APPLICATION_JSON)
-            .accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isBadRequest())
-            .andReturn();
+        .post(RoomHelper.roomUrlPath)
+        .content(mapper.writeValueAsString(RoomHelper.createRoomCreate()))
+        .contentType(MediaType.APPLICATION_JSON)
+        .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isBadRequest())
+        .andReturn();
 
     String errorMessage = response.getResponse().getContentAsString();
 
@@ -105,7 +107,8 @@ public class ManageRoomIntegrationTest extends AbstractIntegrationTest {
             .andExpect(status().isOk())
             .andReturn();
 
-    RoomResponse roomResponse = mapper.readValue(response.getResponse().getContentAsString(), RoomResponse.class);
+    RoomResponse roomResponse =
+            mapper.readValue(response.getResponse().getContentAsString(), RoomResponse.class);
 
     assertEquals(room.getId(), roomResponse.id());
     assertEquals(RoomHelper.nameUpdated, roomResponse.name());
@@ -119,12 +122,12 @@ public class ManageRoomIntegrationTest extends AbstractIntegrationTest {
     Room room = roomRepository.save(RoomHelper.createRoom());
 
     var response = mockMvc.perform(MockMvcRequestBuilders
-                    .put(createUrlPathWithId(RoomHelper.roomUrlPath, room.getId()))
-                    .content(mapper.writeValueAsString(RoomHelper.createRoomUpdateBlankName()))
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isBadRequest())
-            .andReturn();
+        .put(createUrlPathWithId(RoomHelper.roomUrlPath, room.getId()))
+        .content(mapper.writeValueAsString(RoomHelper.createRoomUpdateBlankName()))
+        .contentType(MediaType.APPLICATION_JSON)
+        .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isBadRequest())
+        .andReturn();
 
     String errorMessage = response.getResponse().getContentAsString();
 
@@ -134,16 +137,18 @@ public class ManageRoomIntegrationTest extends AbstractIntegrationTest {
 
   @Test
   @Transactional
-  public void givenIncorrectRoomUpdateNameAlreadyExists_whenUpdateRoom_thenException() throws Exception {
+  public void givenIncorrectRoomUpdateNameAlreadyExists_whenUpdateRoom_thenException()
+          throws Exception {
+
     Room room = roomRepository.save(RoomHelper.createRoom());
 
     var response = mockMvc.perform(MockMvcRequestBuilders
-                    .put(createUrlPathWithId(RoomHelper.roomUrlPath, room.getId()))
-                    .content(mapper.writeValueAsString(RoomHelper.createRoomUpdateWithExistingName()))
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isBadRequest())
-            .andReturn();
+        .put(createUrlPathWithId(RoomHelper.roomUrlPath, room.getId()))
+        .content(mapper.writeValueAsString(RoomHelper.createRoomUpdateWithExistingName()))
+        .contentType(MediaType.APPLICATION_JSON)
+        .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isBadRequest())
+        .andReturn();
 
     String errorMessage = response.getResponse().getContentAsString();
 
@@ -184,7 +189,7 @@ public class ManageRoomIntegrationTest extends AbstractIntegrationTest {
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isNoContent());
 
-    assertEquals(RoomHelper.testRoomsCount-1, roomRepository.findAll().size());
+    assertEquals(RoomHelper.testRoomsCount - 1, roomRepository.findAll().size());
   }
 
   @Test

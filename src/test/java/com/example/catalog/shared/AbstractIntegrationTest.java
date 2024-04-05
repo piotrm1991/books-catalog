@@ -41,7 +41,12 @@ public abstract class AbstractIntegrationTest {
     return sb.toString();
   }
 
-  protected String createUrlPathGetPageable(String baseUrl, int page, int size, String sort, boolean isAscending) {
+  protected String createUrlPathGetPageable(
+          String baseUrl,
+          int page,
+          int size,
+          String sort,
+          boolean isAscending) {
     StringBuilder sb = new StringBuilder(baseUrl);
     sb.append("?page=").append(page)
             .append("&size=").append(size)
