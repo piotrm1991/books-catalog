@@ -1,7 +1,7 @@
 package com.example.catalog.user.service.impl;
 
-import static com.example.catalog.util.ErrorMessagesConstants.createEntityNotExistsMessage;
-import static com.example.catalog.util.ErrorMessagesConstants.createUserWithLoginNotExistsMessage;
+import static com.example.catalog.util.MessagesConstants.createEntityNotExistsMessage;
+import static com.example.catalog.util.MessagesConstants.createUserWithLoginNotExistsMessage;
 
 import com.example.catalog.date.service.DateService;
 import com.example.catalog.exception.EntityNotFoundException;

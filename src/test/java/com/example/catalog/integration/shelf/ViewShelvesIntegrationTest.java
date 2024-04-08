@@ -18,11 +18,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 
 import javax.transaction.Transactional;
 import java.util.List;
 
-import static com.example.catalog.util.ErrorMessagesConstants.createEntityNotExistsMessage;
+import static com.example.catalog.util.MessagesConstants.createEntityNotExistsMessage;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -42,6 +43,7 @@ public class ViewShelvesIntegrationTest extends AbstractIntegrationTest {
 
   @Test
   @Transactional
+  @WithMockUser(roles = {"ADMIN"})
   public void givenCorrectId_whenGetShelfById_theReturnShelfResponseCorrect() throws Exception {
     Shelf expectedShelf = ShelfHelper.createShelf();
     expectedShelf = shelfRepository.save(expectedShelf);
@@ -62,6 +64,7 @@ public class ViewShelvesIntegrationTest extends AbstractIntegrationTest {
 
   @Test
   @Transactional
+  @WithMockUser(roles = {"ADMIN"})
   public void givenIncorrectId_whenGetById_thenException() throws Exception {
     List<Shelf> shelfList = ShelfHelper.prepareShelfList();
     shelfList.forEach(a -> shelfRepository.save(a));
@@ -79,6 +82,7 @@ public class ViewShelvesIntegrationTest extends AbstractIntegrationTest {
 
   @Test
   @Transactional
+  @WithMockUser(roles = {"ADMIN"})
   public void testGetAllShelves_defaultPageRequest() throws Exception {
     List<Shelf> shelfList = ShelfHelper.prepareShelfList();
     shelfList.forEach(a -> shelfRepository.save(a));
@@ -105,6 +109,7 @@ public class ViewShelvesIntegrationTest extends AbstractIntegrationTest {
 
   @Test
   @Transactional
+  @WithMockUser(roles = {"ADMIN"})
   public void testGetAllShelves_empty() throws Exception {
     var response = mockMvc.perform(get(ShelfHelper.shelfUrlPath)
                     .contentType(MediaType.APPLICATION_JSON))
@@ -121,6 +126,7 @@ public class ViewShelvesIntegrationTest extends AbstractIntegrationTest {
 
   @Test
   @Transactional
+  @WithMockUser(roles = {"ADMIN"})
   public void testGetAllShelves_customPageRequest() throws Exception {
     List<Shelf> shelfList = ShelfHelper.prepareShelfList();
     shelfList.forEach(a -> shelfRepository.save(a));

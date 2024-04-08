@@ -1,6 +1,6 @@
 package com.example.catalog.publisher.validator;
 
-import static com.example.catalog.util.ErrorMessagesConstants.PublisherNameAlreadyExists;
+import static com.example.catalog.util.MessagesConstants.PublisherNameAlreadyExists;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;

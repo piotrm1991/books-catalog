@@ -1,6 +1,6 @@
 package com.example.catalog.publisher.request;
 
-import static com.example.catalog.util.ErrorMessagesConstants.PublisherNameCanNotBeBlank;
+import static com.example.catalog.util.MessagesConstants.PublisherNameCanNotBeBlank;
 
 import com.example.catalog.publisher.validator.PublisherNameAlreadyExists;
 import javax.validation.constraints.NotBlank;

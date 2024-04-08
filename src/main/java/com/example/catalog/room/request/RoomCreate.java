@@ -1,6 +1,6 @@
 package com.example.catalog.room.request;
 
-import static com.example.catalog.util.ErrorMessagesConstants.RoomNameCanNotBeBlank;
+import static com.example.catalog.util.MessagesConstants.RoomNameCanNotBeBlank;
 
 import com.example.catalog.room.validator.RoomNameAlreadyExists;
 import javax.validation.constraints.NotBlank;

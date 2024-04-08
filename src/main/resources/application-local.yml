@@ -4,5 +4,13 @@ spring:
     username: user
     password: password
   mvc:
-    pathmatch:
+    path match:
       matching-strategy: ant_path_matcher
+# FIXME: just example
+defaultCredentials:
+  admin:
+    login: admin
+    password: Admin!123
+  user:
+    login: user
+    password: Password!123

@@ -1,6 +1,6 @@
 package com.example.catalog.integration.user;
 
-import static com.example.catalog.util.ErrorMessagesConstants.createEntityNotExistsMessage;
+import static com.example.catalog.util.MessagesConstants.createEntityNotExistsMessage;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -29,6 +29,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 
 public class ViewUserIntegrationTest extends AbstractIntegrationTest {
 
@@ -42,6 +43,7 @@ public class ViewUserIntegrationTest extends AbstractIntegrationTest {
 
 	@Test
 	@Transactional
+	@WithMockUser(roles = {"ADMIN"})
 	public void givenCorrectId_whenGetUserById_theReturnUserResponseCorrect() throws Exception {
 		User expectedUser = UserHelper.createUser();
 		expectedUser = userRepository.save(expectedUser);
@@ -61,6 +63,7 @@ public class ViewUserIntegrationTest extends AbstractIntegrationTest {
 
 	@Test
 	@Transactional
+	@WithMockUser(roles = {"ADMIN"})
 	public void givenIncorrectId_whenGetById_thenException() throws Exception {
 		List<User> userList = UserHelper.prepareUserList();
 		userList.forEach(a -> userRepository.save(a));
@@ -78,9 +81,11 @@ public class ViewUserIntegrationTest extends AbstractIntegrationTest {
 
 	@Test
 	@Transactional
+	@WithMockUser(roles = {"ADMIN"})
 	public void testGetAllUsers_defaultPageRequest() throws Exception {
 		List<User> userList = UserHelper.prepareUserList();
 		userList.forEach(a -> userRepository.save(a));
+		userList = userRepository.findAll();
 
 		var response = mockMvc.perform(get(UserHelper.userUrlPath)
 						.contentType(MediaType.APPLICATION_JSON))
@@ -90,8 +95,8 @@ public class ViewUserIntegrationTest extends AbstractIntegrationTest {
 		Page<UserResponse> usersResponse = mapper.readValue(response.getResponse().getContentAsString(), new TypeReference<RestPageImpl<UserResponse>>() {});
 
 		assertFalse(usersResponse.isEmpty());
-		assertEquals( UserHelper.testUsersCount, usersResponse.getTotalElements());
-		assertEquals(2, usersResponse.getTotalPages());
+		assertEquals( UserHelper.numberOfUsersWithCreatedAtStartup(), usersResponse.getTotalElements());
+		assertEquals(3, usersResponse.getTotalPages());
 		assertEquals(5, usersResponse.getContent().size());
 
 		for (int i = 0; i < 5; i++) {
@@ -104,6 +109,7 @@ public class ViewUserIntegrationTest extends AbstractIntegrationTest {
 
 	@Test
 	@Transactional
+	@WithMockUser(roles = {"ADMIN"})
 	public void testGetAllUsers_empty() throws Exception {
 		var response = mockMvc.perform(get(UserHelper.userUrlPath)
 						.contentType(MediaType.APPLICATION_JSON))
@@ -112,14 +118,14 @@ public class ViewUserIntegrationTest extends AbstractIntegrationTest {
 				.andReturn();
 		Page<UserResponse> usersResponse = mapper.readValue(response.getResponse().getContentAsString(), new TypeReference<RestPageImpl<UserResponse>>() {});
 
-		assertTrue(usersResponse.isEmpty());
-		assertEquals( 0, usersResponse.getTotalElements());
-		assertEquals(0, usersResponse.getTotalPages());
-		assertEquals(0, usersResponse.getContent().size());
+		assertEquals( UserHelper.numberOfUserAtStartup, usersResponse.getTotalElements());
+		assertEquals(1, usersResponse.getTotalPages());
+		assertEquals(UserHelper.numberOfUserAtStartup, usersResponse.getContent().size());
 	}
 
 	@Test
 	@Transactional
+	@WithMockUser(roles = {"ADMIN"})
 	public void testGetAllUsers_customPageRequest() throws Exception {
 		List<User> userList = UserHelper.createListWithUsers(10);
 		userList.forEach(a -> userRepository.save(a));

@@ -1,6 +1,6 @@
 package com.example.catalog.user.validator;
 
-import static com.example.catalog.util.ErrorMessagesConstants.PasswordMustMatchDefaultMessage;
+import static com.example.catalog.util.MessagesConstants.PasswordMustMatchDefaultMessage;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

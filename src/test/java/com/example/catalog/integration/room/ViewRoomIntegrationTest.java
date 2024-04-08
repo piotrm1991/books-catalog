@@ -18,11 +18,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 
 import javax.transaction.Transactional;
 import java.util.List;
 
-import static com.example.catalog.util.ErrorMessagesConstants.createEntityNotExistsMessage;
+import static com.example.catalog.util.MessagesConstants.createEntityNotExistsMessage;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -43,6 +44,7 @@ public class ViewRoomIntegrationTest extends AbstractIntegrationTest {
 
   @Test
   @Transactional
+  @WithMockUser(roles = {"ADMIN"})
   public void givenCorrectId_whenGetRoomById_theReturnRoomResponseCorrect() throws Exception {
     Room expectedRoom = RoomHelper.createRoom();
     expectedRoom = roomRepository.save(expectedRoom);
@@ -62,6 +64,7 @@ public class ViewRoomIntegrationTest extends AbstractIntegrationTest {
 
   @Test
   @Transactional
+  @WithMockUser(roles = {"ADMIN"})
   public void givenIncorrectId_whenGetById_thenException() throws Exception {
     List<Room> roomList = RoomHelper.prepareRoomList();
     roomList.forEach(a -> roomRepository.save(a));
@@ -79,6 +82,7 @@ public class ViewRoomIntegrationTest extends AbstractIntegrationTest {
 
   @Test
   @Transactional
+  @WithMockUser(roles = {"ADMIN"})
   public void testGetAllRooms_defaultPageRequest() throws Exception {
     List<Room> roomList = RoomHelper.prepareRoomList();
     roomList.forEach(a -> roomRepository.save(a));
@@ -105,6 +109,7 @@ public class ViewRoomIntegrationTest extends AbstractIntegrationTest {
 
   @Test
   @Transactional
+  @WithMockUser(roles = {"ADMIN"})
   public void testGetAllRooms_empty() throws Exception {
     var response = mockMvc.perform(get(RoomHelper.roomUrlPath)
                     .contentType(MediaType.APPLICATION_JSON))
@@ -121,6 +126,7 @@ public class ViewRoomIntegrationTest extends AbstractIntegrationTest {
 
   @Test
   @Transactional
+  @WithMockUser(roles = {"ADMIN"})
   public void testGetAllRooms_customPageRequest() throws Exception {
     List<Room> roomList = RoomHelper.prepareRoomList();
     roomList.forEach(a -> roomRepository.save(a));

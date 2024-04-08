@@ -1,8 +1,8 @@
 package com.example.catalog.integration.author;
 
-import static com.example.catalog.util.ErrorMessagesConstants.AuthorNameAlreadyExists;
-import static com.example.catalog.util.ErrorMessagesConstants.AuthorNameCanNotBeBlank;
-import static com.example.catalog.util.ErrorMessagesConstants.createEntityNotExistsMessage;
+import static com.example.catalog.util.MessagesConstants.AuthorNameAlreadyExists;
+import static com.example.catalog.util.MessagesConstants.AuthorNameCanNotBeBlank;
+import static com.example.catalog.util.MessagesConstants.createEntityNotExistsMessage;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -21,6 +21,7 @@ import javax.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 public class ManageAuthorIntegrationTest extends AbstractIntegrationTest {
@@ -38,6 +39,7 @@ public class ManageAuthorIntegrationTest extends AbstractIntegrationTest {
 
   @Test
   @Transactional
+  @WithMockUser(roles = {"ADMIN"})
   public void givenCorrectAuthorCreate_whenCreateAuthor_thenCorrect() throws Exception {
     var response = mockMvc.perform(MockMvcRequestBuilders
             .post(AuthorHelper.authorUrlPath)
@@ -56,6 +58,7 @@ public class ManageAuthorIntegrationTest extends AbstractIntegrationTest {
 
   @Test
   @Transactional
+  @WithMockUser(roles = {"ADMIN"})
   public void givenIncorrectAuthorCreateExistingName_whenCreateAuthor_thenException()
           throws Exception {
     mockMvc.perform(MockMvcRequestBuilders
@@ -81,6 +84,7 @@ public class ManageAuthorIntegrationTest extends AbstractIntegrationTest {
 
   @Test
   @Transactional
+  @WithMockUser(roles = {"ADMIN"})
   public void givenIncorrectAuthorCreateBlankName_whenCreateAuthor_thenException()
           throws Exception {
     var response = mockMvc.perform(MockMvcRequestBuilders
@@ -99,6 +103,7 @@ public class ManageAuthorIntegrationTest extends AbstractIntegrationTest {
 
   @Test
   @Transactional
+  @WithMockUser(roles = {"ADMIN"})
   public void givenCorrectAuthorUpdate_whenUpdateAuthor_thenCorrect() throws Exception {
     Author author = authorRepository.save(AuthorHelper.createAuthor());
 
@@ -124,6 +129,7 @@ public class ManageAuthorIntegrationTest extends AbstractIntegrationTest {
 
   @Test
   @Transactional
+  @WithMockUser(roles = {"ADMIN"})
   public void givenIncorrectAuthorUpdateBlankName_whenUpdateAuthor_thenException()
           throws Exception {
     Author author = authorRepository.save(AuthorHelper.createAuthor());
@@ -144,6 +150,7 @@ public class ManageAuthorIntegrationTest extends AbstractIntegrationTest {
 
   @Test
   @Transactional
+  @WithMockUser(roles = {"ADMIN"})
   public void givenIncorrectAuthorUpdateNameAlreadyExists_whenUpdateAuthor_thenException()
           throws Exception {
     Author author = authorRepository.save(AuthorHelper.createAuthor());
@@ -164,6 +171,7 @@ public class ManageAuthorIntegrationTest extends AbstractIntegrationTest {
 
   @Test
   @Transactional
+  @WithMockUser(roles = {"ADMIN"})
   public void givenIncorrectAuthorUpdateIdNotExists_whenUpdateAuthor_thenException()
           throws Exception {
     List<Author> authorList = AuthorHelper.prepareAuthorList();
@@ -188,6 +196,7 @@ public class ManageAuthorIntegrationTest extends AbstractIntegrationTest {
 
   @Test
   @Transactional
+  @WithMockUser(roles = {"ADMIN"})
   public void givenCorrectId_whenDeleteAuthor_thenCorrect() throws Exception {
     List<Author> authorList = AuthorHelper.prepareAuthorList();
     authorList.forEach(a -> authorRepository.save(a));
@@ -204,6 +213,7 @@ public class ManageAuthorIntegrationTest extends AbstractIntegrationTest {
 
   @Test
   @Transactional
+  @WithMockUser(roles = {"ADMIN"})
   public void givenIncorrectId_whenDeleteAuthor_thenException() throws Exception {
     List<Author> authorList = AuthorHelper.prepareAuthorList();
     authorList.forEach(a -> authorRepository.save(a));

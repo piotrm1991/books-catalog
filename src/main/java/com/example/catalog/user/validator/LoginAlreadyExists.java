@@ -1,6 +1,6 @@
 package com.example.catalog.user.validator;
 
-import static com.example.catalog.util.ErrorMessagesConstants.LoginAlreadyExists;
+import static com.example.catalog.util.MessagesConstants.LoginAlreadyExists;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;

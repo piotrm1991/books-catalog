@@ -18,11 +18,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 
 import javax.transaction.Transactional;
 import java.util.List;
 
-import static com.example.catalog.util.ErrorMessagesConstants.createEntityNotExistsMessage;
+import static com.example.catalog.util.MessagesConstants.createEntityNotExistsMessage;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -43,6 +44,7 @@ public class ViewStatusTypeIntegrationTest extends AbstractIntegrationTest {
 
   @Test
   @Transactional
+  @WithMockUser(roles = {"ADMIN"})
   public void givenCorrectId_whenGetStatusTypeById_theReturnStatusTypeResponseCorrect() throws Exception {
     StatusType expectedStatusType = StatusTypeHelper.createStatusType();
     expectedStatusType = statusTypeRepository.save(expectedStatusType);
@@ -62,6 +64,7 @@ public class ViewStatusTypeIntegrationTest extends AbstractIntegrationTest {
 
   @Test
   @Transactional
+  @WithMockUser(roles = {"ADMIN"})
   public void givenIncorrectId_whenGetById_thenException() throws Exception {
     List<StatusType> statusTypeList = StatusTypeHelper.prepareStatusTypeList();
     statusTypeList.forEach(a -> statusTypeRepository.save(a));
@@ -79,6 +82,7 @@ public class ViewStatusTypeIntegrationTest extends AbstractIntegrationTest {
 
   @Test
   @Transactional
+  @WithMockUser(roles = {"ADMIN"})
   public void testGetAllStatusTypes_defaultPageRequest() throws Exception {
     List<StatusType> statusTypeList = StatusTypeHelper.prepareStatusTypeList();
     statusTypeList.forEach(a -> statusTypeRepository.save(a));
@@ -105,6 +109,7 @@ public class ViewStatusTypeIntegrationTest extends AbstractIntegrationTest {
 
   @Test
   @Transactional
+  @WithMockUser(roles = {"ADMIN"})
   public void testGetAllStatusTypes_empty() throws Exception {
     var response = mockMvc.perform(get(StatusTypeHelper.statusTypeUrlPath)
                     .contentType(MediaType.APPLICATION_JSON))
@@ -121,6 +126,7 @@ public class ViewStatusTypeIntegrationTest extends AbstractIntegrationTest {
 
   @Test
   @Transactional
+  @WithMockUser(roles = {"ADMIN"})
   public void testGetAllStatusTypes_customPageRequest() throws Exception {
     List<StatusType> statusTypeList = StatusTypeHelper.prepareStatusTypeList();
     statusTypeList.forEach(a -> statusTypeRepository.save(a));

@@ -6,7 +6,7 @@ import lombok.experimental.UtilityClass;
  * Utility class that provides error messages constants.
  */
 @UtilityClass
-public class ErrorMessagesConstants {
+public class MessagesConstants {
 
   public static final String PasswordMustMatchDefaultMessage = "Passwords must match!";
   public static final String StrongPasswordDefaultMessage =
@@ -43,6 +43,7 @@ public class ErrorMessagesConstants {
   public static final String StatusTypeNameAlreadyExists =
           "StatusType with this name already exists.";
   public static final String StatusTypeNameCanNotBeBlank = "You need to provide status type name.";
+  public static final String SuccessfulLoginMessage = "You successfully logged in!";
 
   /**
    * Takes entity name and its id and creates error message entity not found.

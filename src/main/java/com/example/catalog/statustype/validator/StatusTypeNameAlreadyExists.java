@@ -1,6 +1,6 @@
 package com.example.catalog.statustype.validator;
 
-import static com.example.catalog.util.ErrorMessagesConstants.StatusTypeNameAlreadyExists;
+import static com.example.catalog.util.MessagesConstants.StatusTypeNameAlreadyExists;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;

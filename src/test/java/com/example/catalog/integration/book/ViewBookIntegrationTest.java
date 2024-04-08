@@ -30,11 +30,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 
 import javax.transaction.Transactional;
 import java.util.List;
 
-import static com.example.catalog.util.ErrorMessagesConstants.createEntityNotExistsMessage;
+import static com.example.catalog.util.MessagesConstants.createEntityNotExistsMessage;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -67,6 +68,7 @@ public class ViewBookIntegrationTest extends AbstractIntegrationTest {
 
   @Test
   @Transactional
+  @WithMockUser(roles = {"ADMIN"})
   public void givenCorrectId_whenGetBookById_theReturnBookResponseCorrect() throws Exception {
     Book expectedBook = BookHelper.createBook();
     Author author = authorRepository.save(AuthorHelper.createAuthor());
@@ -94,6 +96,7 @@ public class ViewBookIntegrationTest extends AbstractIntegrationTest {
 
   @Test
   @Transactional
+  @WithMockUser(roles = {"ADMIN"})
   public void givenIncorrectId_whenGetById_thenException() throws Exception {
     List<Book> bookList = BookHelper.prepareBookList();
     bookList.forEach(a -> bookRepository.save(a));
@@ -111,6 +114,7 @@ public class ViewBookIntegrationTest extends AbstractIntegrationTest {
 
   @Test
   @Transactional
+  @WithMockUser(roles = {"ADMIN"})
   public void testGetAllBooks_defaultPageRequest() throws Exception {
     List<Book> bookList = BookHelper.prepareBookList();
     bookList.forEach(a -> bookRepository.save(a));
@@ -137,6 +141,7 @@ public class ViewBookIntegrationTest extends AbstractIntegrationTest {
 
   @Test
   @Transactional
+  @WithMockUser(roles = {"ADMIN"})
   public void testGetAllBooks_empty() throws Exception {
     var response = mockMvc.perform(get(BookHelper.bookUrlPath)
                     .contentType(MediaType.APPLICATION_JSON))
@@ -153,6 +158,7 @@ public class ViewBookIntegrationTest extends AbstractIntegrationTest {
 
   @Test
   @Transactional
+  @WithMockUser(roles = {"ADMIN"})
   public void testGetAllBooks_customPageRequest() throws Exception {
     List<Book> bookList = BookHelper.prepareBookList();
     bookList.forEach(a -> bookRepository.save(a));

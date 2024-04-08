@@ -27,6 +27,7 @@ public class UserHelper {
   private static final String updatePassword = "PassWor$$1";
   private static final UserRoleEnum updateRole = UserRoleEnum.ADMIN;
   private static final UserStatusEnum updateStatus = UserStatusEnum.DISABLED;
+  public static final Long numberOfUserAtStartup = 2L;
 
   public static User createUser() {
 
@@ -167,6 +168,21 @@ public class UserHelper {
         updatePassword,
         updateRole,
         updateStatus
+    );
+  }
+
+  public static Long numberOfUsersWithCreatedAtStartup() {
+
+    return testUsersCount + numberOfUserAtStartup;
+  }
+
+  public static UserCreate createUserCreateWithGivenLogin(String loginNew) {
+
+    return new UserCreate(
+          loginNew,
+          password,
+          password,
+          role
     );
   }
 }

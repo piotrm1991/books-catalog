@@ -1,6 +1,6 @@
 package com.example.catalog.book.service.impl;
 
-import static com.example.catalog.util.ErrorMessagesConstants.createEntityNotExistsMessage;
+import static com.example.catalog.util.MessagesConstants.createEntityNotExistsMessage;
 
 import com.example.catalog.author.service.AuthorService;
 import com.example.catalog.book.entity.Book;

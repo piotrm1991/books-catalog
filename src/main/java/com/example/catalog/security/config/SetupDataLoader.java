@@ -42,8 +42,16 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
     }
 
     // Create users
-    createUserIfNotFound("admin", "Admin!123", UserRoleEnum.ADMIN);
-    createUserIfNotFound("user", "Password!123", UserRoleEnum.USER);
+    createUserIfNotFound(
+          environment.getProperty("defaultCredentials.admin.login"),
+          environment.getProperty("defaultCredentials.admin.password"),
+          UserRoleEnum.ADMIN
+    );
+    createUserIfNotFound(
+          environment.getProperty("defaultCredentials.user.login"),
+          environment.getProperty("defaultCredentials.user.password"),
+          UserRoleEnum.USER
+    );
 
     alreadySetup = true;
   }

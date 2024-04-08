@@ -1,6 +1,6 @@
 package com.example.catalog.integration.publisher;
 
-import static com.example.catalog.util.ErrorMessagesConstants.createEntityNotExistsMessage;
+import static com.example.catalog.util.MessagesConstants.createEntityNotExistsMessage;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -27,6 +27,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
+
 import javax.transaction.Transactional;
 import java.util.List;
 
@@ -42,6 +44,7 @@ public class ViewPublishersIntegrationTest extends AbstractIntegrationTest {
 
   @Test
   @Transactional
+  @WithMockUser(roles = {"ADMIN"})
   public void givenCorrectId_whenGetPublisherById_theReturnPublisherResponseCorrect() throws Exception {
     Publisher expectedPublisher = PublisherHelper.createPublisher();
     expectedPublisher = publisherRepository.save(expectedPublisher);
@@ -61,6 +64,7 @@ public class ViewPublishersIntegrationTest extends AbstractIntegrationTest {
 
   @Test
   @Transactional
+  @WithMockUser(roles = {"ADMIN"})
   public void givenIncorrectId_whenGetById_thenException() throws Exception {
     List<Publisher> publisherList = PublisherHelper.preparePublisherList();
     publisherList.forEach(a -> publisherRepository.save(a));
@@ -77,6 +81,7 @@ public class ViewPublishersIntegrationTest extends AbstractIntegrationTest {
 
   @Test
   @Transactional
+  @WithMockUser(roles = {"ADMIN"})
   public void testGetAllPublishers_defaultPageRequest() throws Exception {
     List<Publisher> publisherList = PublisherHelper.preparePublisherList();
     publisherList.forEach(a -> publisherRepository.save(a));
@@ -103,6 +108,7 @@ public class ViewPublishersIntegrationTest extends AbstractIntegrationTest {
 
   @Test
   @Transactional
+  @WithMockUser(roles = {"ADMIN"})
   public void testGetAllPublishers_empty() throws Exception {
     var response = mockMvc.perform(get(PublisherHelper.publisherUrlPath)
                     .contentType(MediaType.APPLICATION_JSON))
@@ -119,6 +125,7 @@ public class ViewPublishersIntegrationTest extends AbstractIntegrationTest {
 
   @Test
   @Transactional
+  @WithMockUser(roles = {"ADMIN"})
   public void testGetAllPublishers_customPageRequest() throws Exception {
     List<Publisher> publisherList = PublisherHelper.preparePublisherList();
     publisherList.forEach(a -> publisherRepository.save(a));

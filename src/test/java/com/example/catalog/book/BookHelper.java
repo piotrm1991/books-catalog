@@ -1,13 +1,18 @@
 package com.example.catalog.book;
 
 import com.example.catalog.author.AuthorHelper;
+import com.example.catalog.author.entity.Author;
 import com.example.catalog.book.entity.Book;
 import com.example.catalog.book.request.BookCreate;
 import com.example.catalog.book.request.BookUpdate;
 import com.example.catalog.book.response.BookResponse;
 import com.example.catalog.publisher.PublisherHelper;
+import com.example.catalog.publisher.entity.Publisher;
 import com.example.catalog.shelf.ShelfHelper;
+import com.example.catalog.shelf.entity.Shelf;
 import com.example.catalog.statustype.StatusTypeHelper;
+import com.example.catalog.statustype.entity.StatusType;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -111,5 +116,22 @@ public class BookHelper {
             shelfId,
             statusTypeId
     );
+  }
+
+  public static Book createBookWithAllIds(
+        Author author,
+        Publisher publisher,
+        Shelf shelf,
+        StatusType statusType
+  ) {
+
+    return Book.builder()
+          .id(id)
+          .title(title)
+          .statusType(statusType)
+          .shelf(shelf)
+          .publisher(publisher)
+          .author(author)
+          .build();
   }
 }

@@ -2,9 +2,9 @@ package com.example.catalog.security.service;
 
 import com.example.catalog.user.entity.User;
 import com.example.catalog.user.enums.UserStatusEnum;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
@@ -23,8 +23,9 @@ public class UserDetailsImpl implements UserDetails {
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-    authorities.add(new SimpleGrantedAuthority(user.getRole().toString()));
+    Set<GrantedAuthority> authorities = new HashSet<>();
+    String role = user.getRole().name();
+    authorities.add(new SimpleGrantedAuthority("ROLE_" + role));
 
     return authorities;
   }

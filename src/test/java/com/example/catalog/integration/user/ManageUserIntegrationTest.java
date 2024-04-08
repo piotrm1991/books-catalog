@@ -1,8 +1,8 @@
 package com.example.catalog.integration.user;
 
-import static com.example.catalog.util.ErrorMessagesConstants.LoginAlreadyExists;
-import static com.example.catalog.util.ErrorMessagesConstants.LoginIsRequiredMessage;
-import static com.example.catalog.util.ErrorMessagesConstants.createEntityNotExistsMessage;
+import static com.example.catalog.util.MessagesConstants.LoginAlreadyExists;
+import static com.example.catalog.util.MessagesConstants.LoginIsRequiredMessage;
+import static com.example.catalog.util.MessagesConstants.createEntityNotExistsMessage;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -22,6 +22,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 public class ManageUserIntegrationTest extends AbstractIntegrationTest {
@@ -39,6 +40,7 @@ public class ManageUserIntegrationTest extends AbstractIntegrationTest {
 
 	@Test
 	@Transactional
+	@WithMockUser(roles = {"ADMIN"})
 	public void givenCorrectUserCreate_whenCreateUser_thenCorrect() throws Exception {
 		var response = mockMvc.perform(MockMvcRequestBuilders
 						.post(UserHelper.userUrlPath)
@@ -52,11 +54,12 @@ public class ManageUserIntegrationTest extends AbstractIntegrationTest {
 				mapper.readValue(response.getResponse().getContentAsString(), UserResponse.class);
 
 		assertEquals(UserHelper.login, userResponse.login());
-		assertEquals(1, userRepository.findAll().size());
+		assertEquals(UserHelper.numberOfUserAtStartup + 1, userRepository.findAll().size());
 	}
 
 	@Test
 	@Transactional
+	@WithMockUser(roles = {"ADMIN"})
 	public void givenIncorrectUserCreateExistingName_whenCreateUser_thenException()
 			throws Exception {
 		mockMvc.perform(MockMvcRequestBuilders
@@ -77,11 +80,12 @@ public class ManageUserIntegrationTest extends AbstractIntegrationTest {
 		String errorMessage = response.getResponse().getContentAsString();
 
 		assertTrue(errorMessage.contains(LoginAlreadyExists));
-		assertEquals(1, userRepository.findAll().size());
+		assertEquals(UserHelper.numberOfUserAtStartup + 1, userRepository.findAll().size());
 	}
 
 	@Test
 	@Transactional
+	@WithMockUser(roles = {"ADMIN"})
 	public void givenIncorrectUserCreateBlankLogin_whenCreateUser_thenException()
 			throws Exception {
 		var response = mockMvc.perform(MockMvcRequestBuilders
@@ -95,11 +99,12 @@ public class ManageUserIntegrationTest extends AbstractIntegrationTest {
 		String errorMessage = response.getResponse().getContentAsString();
 
 		assertTrue(errorMessage.contains(LoginIsRequiredMessage));
-		assertEquals(0, userRepository.findAll().size());
+		assertEquals(UserHelper.numberOfUserAtStartup, userRepository.findAll().size());
 	}
 
 	@Test
 	@Transactional
+	@WithMockUser(roles = {"ADMIN"})
 	public void givenCorrectUserUpdate_whenUpdateUser_thenCorrect() throws Exception {
 		User user = userRepository.save(UserHelper.createUser());
 
@@ -120,11 +125,12 @@ public class ManageUserIntegrationTest extends AbstractIntegrationTest {
 				UserHelper.updateLogin,
 				userRepository.findById(user.getId()).get().getLogin()
 		);
-		assertEquals(1, userRepository.findAll().size());
+		assertEquals(UserHelper.numberOfUserAtStartup + 1, userRepository.findAll().size());
 	}
 
 	@Test
 	@Transactional
+	@WithMockUser(roles = {"ADMIN"})
 	public void givenIncorrectUserUpdateBlankLogin_whenUpdateUser_thenException()
 			throws Exception {
 		User user = userRepository.save(UserHelper.createUser());
@@ -140,11 +146,12 @@ public class ManageUserIntegrationTest extends AbstractIntegrationTest {
 		String errorMessage = response.getResponse().getContentAsString();
 
 		assertTrue(errorMessage.contains(LoginIsRequiredMessage));
-		assertEquals(1, userRepository.findAll().size());
+		assertEquals(UserHelper.numberOfUserAtStartup + 1, userRepository.findAll().size());
 	}
 
 	@Test
 	@Transactional
+	@WithMockUser(roles = {"ADMIN"})
 	public void givenIncorrectUserUpdateLoginAlreadyExists_whenUpdateUser_thenException()
 			throws Exception {
 		User user = userRepository.save(UserHelper.createUser());
@@ -160,11 +167,12 @@ public class ManageUserIntegrationTest extends AbstractIntegrationTest {
 		String errorMessage = response.getResponse().getContentAsString();
 
 		assertTrue(errorMessage.contains(LoginAlreadyExists));
-		assertEquals(1, userRepository.findAll().size());
+		assertEquals(UserHelper.numberOfUserAtStartup + 1, userRepository.findAll().size());
 	}
 
 	@Test
 	@Transactional
+	@WithMockUser(roles = {"ADMIN"})
 	public void givenIncorrectUserCreateLoginAlreadyExists_whenUpdateUser_thenException()
 			throws Exception {
 		User user = userRepository.save(UserHelper.createUser());
@@ -180,11 +188,12 @@ public class ManageUserIntegrationTest extends AbstractIntegrationTest {
 		String errorMessage = response.getResponse().getContentAsString();
 
 		assertTrue(errorMessage.contains(LoginAlreadyExists));
-		assertEquals(1, userRepository.findAll().size());
+		assertEquals(UserHelper.numberOfUserAtStartup + 1, userRepository.findAll().size());
 	}
 
 	@Test
 	@Transactional
+	@WithMockUser(roles = {"ADMIN"})
 	public void givenIncorrectUserUpdateIdNotExists_whenUpdateUser_thenException()
 			throws Exception {
 		List<User> userList = UserHelper.prepareUserList();
@@ -209,6 +218,7 @@ public class ManageUserIntegrationTest extends AbstractIntegrationTest {
 
 	@Test
 	@Transactional
+	@WithMockUser(roles = {"ADMIN"})
 	public void givenCorrectId_whenDeleteUser_thenCorrect() throws Exception {
 		List<User> userList = UserHelper.prepareUserList();
 		userList.forEach(a -> userRepository.save(a));
@@ -220,11 +230,12 @@ public class ManageUserIntegrationTest extends AbstractIntegrationTest {
 						.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isNoContent());
 
-		assertEquals(UserHelper.testUsersCount - 1, userRepository.findAllByStatus(UserStatusEnum.ENABLED).size());
+		assertEquals(UserHelper.numberOfUsersWithCreatedAtStartup() - 1, userRepository.findAllByStatus(UserStatusEnum.ENABLED).size());
 	}
 
 	@Test
 	@Transactional
+	@WithMockUser(roles = {"ADMIN"})
 	public void givenIncorrectId_whenDeleteUser_thenException() throws Exception {
 		List<User> userList = UserHelper.prepareUserList();
 		userList.forEach(a -> userRepository.save(a));
@@ -243,6 +254,6 @@ public class ManageUserIntegrationTest extends AbstractIntegrationTest {
 				createEntityNotExistsMessage(User.class.getSimpleName(), invalidId),
 				errorMessage
 		);
-		assertEquals(UserHelper.testUsersCount, userRepository.findAll().size());
+		assertEquals(UserHelper.numberOfUsersWithCreatedAtStartup(), userRepository.findAll().size());
 	}
 }

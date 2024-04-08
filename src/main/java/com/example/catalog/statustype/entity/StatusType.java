@@ -16,7 +16,7 @@ import lombok.Setter;
  * Entity class representing statusType in the catalog.
  */
 @Entity
-@Table(name = "statusType")
+@Table(name = "status_type")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder

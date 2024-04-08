@@ -12,14 +12,15 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import javax.transaction.Transactional;
 import java.util.List;
 
-import static com.example.catalog.util.ErrorMessagesConstants.StatusTypeNameAlreadyExists;
-import static com.example.catalog.util.ErrorMessagesConstants.StatusTypeNameCanNotBeBlank;
-import static com.example.catalog.util.ErrorMessagesConstants.createEntityNotExistsMessage;
+import static com.example.catalog.util.MessagesConstants.StatusTypeNameAlreadyExists;
+import static com.example.catalog.util.MessagesConstants.StatusTypeNameCanNotBeBlank;
+import static com.example.catalog.util.MessagesConstants.createEntityNotExistsMessage;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -36,6 +37,7 @@ public class ManageStatusTypeIntegrationTest extends AbstractIntegrationTest {
 
   @Test
   @Transactional
+  @WithMockUser(roles = {"ADMIN"})
   public void givenCorrectStatusTypeCreate_whenCreateStatusType_thenCorrect() throws Exception {
     var response = mockMvc.perform(MockMvcRequestBuilders
             .post(StatusTypeHelper.statusTypeUrlPath)
@@ -53,6 +55,7 @@ public class ManageStatusTypeIntegrationTest extends AbstractIntegrationTest {
 
   @Test
   @Transactional
+  @WithMockUser(roles = {"ADMIN"})
   public void givenIncorrectStatusTypeCreateExistingName_whenCreateStatusType_thenException() throws Exception {
     mockMvc.perform(MockMvcRequestBuilders
             .post(StatusTypeHelper.statusTypeUrlPath)
@@ -77,6 +80,7 @@ public class ManageStatusTypeIntegrationTest extends AbstractIntegrationTest {
 
   @Test
   @Transactional
+  @WithMockUser(roles = {"ADMIN"})
   public void givenIncorrectStatusTypeCreateBlankName_whenCreateStatusType_thenException() throws Exception {
     var response = mockMvc.perform(MockMvcRequestBuilders
                     .post(StatusTypeHelper.statusTypeUrlPath)
@@ -94,6 +98,7 @@ public class ManageStatusTypeIntegrationTest extends AbstractIntegrationTest {
 
   @Test
   @Transactional
+  @WithMockUser(roles = {"ADMIN"})
   public void givenCorrectStatusTypeUpdate_whenUpdateStatusType_thenCorrect() throws Exception {
     StatusType statusType = statusTypeRepository.save(StatusTypeHelper.createStatusType());
 
@@ -115,6 +120,7 @@ public class ManageStatusTypeIntegrationTest extends AbstractIntegrationTest {
 
   @Test
   @Transactional
+  @WithMockUser(roles = {"ADMIN"})
   public void givenIncorrectStatusTypeUpdateBlankName_whenUpdateStatusType_thenException() throws Exception {
     StatusType statusType = statusTypeRepository.save(StatusTypeHelper.createStatusType());
 
@@ -134,6 +140,7 @@ public class ManageStatusTypeIntegrationTest extends AbstractIntegrationTest {
 
   @Test
   @Transactional
+  @WithMockUser(roles = {"ADMIN"})
   public void givenIncorrectStatusTypeUpdateNameAlreadyExists_whenUpdateStatusType_thenException() throws Exception {
     StatusType statusType = statusTypeRepository.save(StatusTypeHelper.createStatusType());
 
@@ -153,6 +160,7 @@ public class ManageStatusTypeIntegrationTest extends AbstractIntegrationTest {
 
   @Test
   @Transactional
+  @WithMockUser(roles = {"ADMIN"})
   public void givenIncorrectStatusTypeUpdateIdNotExists_whenUpdateStatusType_thenException() throws Exception {
     List<StatusType> statusTypeList = StatusTypeHelper.prepareStatusTypeList();
     statusTypeList.forEach(a -> statusTypeRepository.save(a));
@@ -173,6 +181,7 @@ public class ManageStatusTypeIntegrationTest extends AbstractIntegrationTest {
 
   @Test
   @Transactional
+  @WithMockUser(roles = {"ADMIN"})
   public void givenCorrectId_whenDeleteStatusType_thenCorrect() throws Exception {
     List<StatusType> statusTypeList = StatusTypeHelper.prepareStatusTypeList();
     statusTypeList.forEach(a -> statusTypeRepository.save(a));
@@ -189,6 +198,7 @@ public class ManageStatusTypeIntegrationTest extends AbstractIntegrationTest {
 
   @Test
   @Transactional
+  @WithMockUser(roles = {"ADMIN"})
   public void givenIncorrectId_whenDeleteStatusType_thenException() throws Exception {
     List<StatusType> statusTypeList = StatusTypeHelper.prepareStatusTypeList();
     statusTypeList.forEach(a -> statusTypeRepository.save(a));

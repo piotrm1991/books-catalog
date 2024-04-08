@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,6 +41,7 @@ public class BookController {
    */
   @ResponseStatus(HttpStatus.CREATED)
   @PostMapping
+  @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
   public BookResponse createBook(@Valid @RequestBody BookCreate bookCreate) {
     log.info("POST-request: creating book with title: {}", bookCreate.title());
 
@@ -55,6 +57,7 @@ public class BookController {
    */
   @ResponseStatus(HttpStatus.OK)
   @PutMapping("/{id}")
+  @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
   public BookResponse updateBookById(
           @PathVariable Long id,
           @Valid @RequestBody BookUpdate bookUpdate) {
@@ -71,6 +74,7 @@ public class BookController {
    */
   @GetMapping("/{id}")
   @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
   public BookResponse getBookById(@PathVariable Long id) {
     log.info("GET-request: getting user with id: {}", id);
 
@@ -85,6 +89,7 @@ public class BookController {
    */
   @GetMapping
   @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
   public Page<BookResponse> getAllBooks(@PageableDefault(size = 5) Pageable pageable) {
     log.info("GET-request: getting all books.");
 
@@ -98,6 +103,7 @@ public class BookController {
    */
   @DeleteMapping("/{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
   public void deleteBook(@PathVariable Long id) {
     log.info("DELETE-request: deleting book with id: {}", id);
     bookService.deleteBookById(id);

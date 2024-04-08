@@ -77,4 +77,11 @@ public class StatusTypeHelper {
             name
     );
   }
+
+  public static StatusTypeCreate createStatusTypeWithNewName(String statusTypeNewName) {
+
+    return new StatusTypeCreate(
+          statusTypeNewName
+    );
+  }
 }

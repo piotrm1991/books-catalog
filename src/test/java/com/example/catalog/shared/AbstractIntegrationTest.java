@@ -59,4 +59,9 @@ public abstract class AbstractIntegrationTest {
 
     return sb.toString();
   }
+
+  protected String createPathWithBaseUrlAndId(String url, Long id) {
+
+    return url + "/" + id;
+  }
 }

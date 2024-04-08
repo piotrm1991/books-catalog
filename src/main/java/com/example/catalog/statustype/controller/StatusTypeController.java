@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -41,6 +42,7 @@ public class StatusTypeController {
    */
   @ResponseStatus(HttpStatus.CREATED)
   @PostMapping
+  @PreAuthorize("hasRole('ADMIN')")
   public StatusTypeResponse createStatusType(
       @Valid @RequestBody StatusTypeCreate statusTypeCreate) {
     log.info("POST-request: creating statusType with name: {}", statusTypeCreate.name());
@@ -57,6 +59,7 @@ public class StatusTypeController {
    */
   @ResponseStatus(HttpStatus.OK)
   @PutMapping("/{id}")
+  @PreAuthorize("hasRole('ADMIN')")
   public StatusTypeResponse updateStatusTypeById(
       @PathVariable Long id,
       @Valid @RequestBody StatusTypeUpdate statusTypeUpdate) {
@@ -73,6 +76,7 @@ public class StatusTypeController {
    */
   @GetMapping("/{id}")
   @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
   public StatusTypeResponse getStatusTypeById(@PathVariable Long id) {
     log.info("GET-request: getting user with id: {}", id);
 
@@ -87,6 +91,7 @@ public class StatusTypeController {
    */
   @GetMapping
   @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
   public Page<StatusTypeResponse> getAllStatusTypes(@PageableDefault(size = 5) Pageable pageable) {
     log.info("GET-request: getting all statusTypes.");
 
@@ -100,6 +105,7 @@ public class StatusTypeController {
    */
   @DeleteMapping("/{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PreAuthorize("hasRole('ADMIN')")
   public void deleteStatusType(@PathVariable Long id) {
     log.info("DELETE-request: deleting statusType with id: {}", id);
     statusTypeService.deleteStatusTypeById(id);

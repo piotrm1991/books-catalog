@@ -1,6 +1,6 @@
 package com.example.catalog.statustype.request;
 
-import static com.example.catalog.util.ErrorMessagesConstants.StatusTypeNameCanNotBeBlank;
+import static com.example.catalog.util.MessagesConstants.StatusTypeNameCanNotBeBlank;
 
 import com.example.catalog.statustype.validator.StatusTypeNameAlreadyExists;
 import javax.validation.constraints.NotBlank;

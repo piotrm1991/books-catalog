@@ -9,19 +9,20 @@ import com.example.catalog.shelf.mapper.ShelfMapper;
 import com.example.catalog.shelf.repository.ShelfRepository;
 import com.example.catalog.shelf.response.ShelfResponse;
 import com.example.catalog.shared.AbstractIntegrationTest;
-import com.example.catalog.util.ErrorMessagesConstants;
+import com.example.catalog.util.MessagesConstants;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import javax.transaction.Transactional;
 import java.util.List;
 
-import static com.example.catalog.util.ErrorMessagesConstants.*;
+import static com.example.catalog.util.MessagesConstants.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -41,6 +42,7 @@ public class ManageShelvesIntegrationTest extends AbstractIntegrationTest {
 
   @Test
   @Transactional
+  @WithMockUser(roles = {"ADMIN"})
   public void givenCorrectShelfCreate_whenCreateShelf_thenCorrect() throws Exception {
     Room room = RoomHelper.createRoom();
     room = roomRepository.save(room);
@@ -62,6 +64,7 @@ public class ManageShelvesIntegrationTest extends AbstractIntegrationTest {
 
   @Test
   @Transactional
+  @WithMockUser(roles = {"ADMIN"})
   public void givenIncorrectShelfCreateRoomNotExists_whenCreateShelf_thenException() throws Exception {
     var response = mockMvc.perform(MockMvcRequestBuilders
                     .post(ShelfHelper.shelfUrlPath)
@@ -73,12 +76,13 @@ public class ManageShelvesIntegrationTest extends AbstractIntegrationTest {
 
     String errorMessage = response.getResponse().getContentAsString();
 
-    assertTrue(errorMessage.contains(ErrorMessagesConstants.createEntityNotExistsMessage(Room.class.getSimpleName(), 1L)));
+    assertTrue(errorMessage.contains(MessagesConstants.createEntityNotExistsMessage(Room.class.getSimpleName(), 1L)));
     assertEquals(0, shelfRepository.findAll().size());
   }
 
   @Test
   @Transactional
+  @WithMockUser(roles = {"ADMIN"})
   public void givenIncorrectShelfCreateBlankLetter_whenCreateShelf_thenException() throws Exception {
     var response = mockMvc.perform(MockMvcRequestBuilders
                     .post(ShelfHelper.shelfUrlPath)
@@ -96,6 +100,7 @@ public class ManageShelvesIntegrationTest extends AbstractIntegrationTest {
 
   @Test
   @Transactional
+  @WithMockUser(roles = {"ADMIN"})
   public void givenIncorrectShelfCreateBlankNumber_whenCreateShelf_thenException() throws Exception {
     var response = mockMvc.perform(MockMvcRequestBuilders
             .post(ShelfHelper.shelfUrlPath)
@@ -113,6 +118,7 @@ public class ManageShelvesIntegrationTest extends AbstractIntegrationTest {
 
   @Test
   @Transactional
+  @WithMockUser(roles = {"ADMIN"})
   public void givenIncorrectShelfCreateBlankRoomId_whenCreateShelf_thenException() throws Exception {
     var response = mockMvc.perform(MockMvcRequestBuilders
             .post(ShelfHelper.shelfUrlPath)
@@ -130,6 +136,7 @@ public class ManageShelvesIntegrationTest extends AbstractIntegrationTest {
 
   @Test
   @Transactional
+  @WithMockUser(roles = {"ADMIN"})
   public void givenCorrectShelfUpdate_whenUpdateShelf_thenCorrect() throws Exception {
     Room room = roomRepository.save(RoomHelper.createRoom());
     Shelf shelf = ShelfHelper.createShelf();
@@ -154,6 +161,7 @@ public class ManageShelvesIntegrationTest extends AbstractIntegrationTest {
 
   @Test
   @Transactional
+  @WithMockUser(roles = {"ADMIN"})
   public void givenIncorrectShelfUpdateIdNotExists_whenUpdateShelf_thenException() throws Exception {
     List<Shelf> shelfList = ShelfHelper.prepareShelfList();
     shelfList.forEach(a -> shelfRepository.save(a));
@@ -174,6 +182,7 @@ public class ManageShelvesIntegrationTest extends AbstractIntegrationTest {
 
   @Test
   @Transactional
+  @WithMockUser(roles = {"ADMIN"})
   public void givenCorrectId_whenDeleteShelf_thenCorrect() throws Exception {
     List<Shelf> shelfList = ShelfHelper.prepareShelfList();
     shelfList.forEach(a -> shelfRepository.save(a));
@@ -190,6 +199,7 @@ public class ManageShelvesIntegrationTest extends AbstractIntegrationTest {
 
   @Test
   @Transactional
+  @WithMockUser(roles = {"ADMIN"})
   public void givenIncorrectId_whenDeleteShelf_thenException() throws Exception {
     List<Shelf> shelfList = ShelfHelper.prepareShelfList();
     shelfList.forEach(a -> shelfRepository.save(a));

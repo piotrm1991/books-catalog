@@ -1,5 +1,7 @@
 package com.example.catalog.security.controller;
 
+import static com.example.catalog.util.MessagesConstants.SuccessfulLoginMessage;
+
 import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +33,6 @@ public class LoginController {
 
     session.setMaxInactiveInterval(60 * 5);
 
-    return "You successfully logged in!";
+    return SuccessfulLoginMessage;
   }
 }

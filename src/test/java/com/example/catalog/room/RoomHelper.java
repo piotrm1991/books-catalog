@@ -77,4 +77,11 @@ public class RoomHelper {
             name
     );
   }
+
+  public static RoomCreate createRoomWithName(String roomNewName) {
+
+    return new RoomCreate(
+          roomNewName
+    );
+  }
 }

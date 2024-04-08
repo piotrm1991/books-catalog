@@ -1,8 +1,8 @@
 package com.example.catalog.integration.room;
 
-import static com.example.catalog.util.ErrorMessagesConstants.RoomNameAlreadyExists;
-import static com.example.catalog.util.ErrorMessagesConstants.RoomNameCanNotBeBlank;
-import static com.example.catalog.util.ErrorMessagesConstants.createEntityNotExistsMessage;
+import static com.example.catalog.util.MessagesConstants.RoomNameAlreadyExists;
+import static com.example.catalog.util.MessagesConstants.RoomNameCanNotBeBlank;
+import static com.example.catalog.util.MessagesConstants.createEntityNotExistsMessage;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -21,6 +21,7 @@ import javax.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 public class ManageRoomIntegrationTest extends AbstractIntegrationTest {
@@ -37,6 +38,7 @@ public class ManageRoomIntegrationTest extends AbstractIntegrationTest {
 
   @Test
   @Transactional
+  @WithMockUser(roles = {"ADMIN"})
   public void givenCorrectRoomCreate_whenCreateRoom_thenCorrect() throws Exception {
     var response = mockMvc.perform(MockMvcRequestBuilders
         .post(RoomHelper.roomUrlPath)
@@ -55,6 +57,7 @@ public class ManageRoomIntegrationTest extends AbstractIntegrationTest {
 
   @Test
   @Transactional
+  @WithMockUser(roles = {"ADMIN"})
   public void givenIncorrectRoomCreateExistingName_whenCreateRoom_thenException() throws Exception {
     mockMvc.perform(MockMvcRequestBuilders
         .post(RoomHelper.roomUrlPath)
@@ -79,6 +82,7 @@ public class ManageRoomIntegrationTest extends AbstractIntegrationTest {
 
   @Test
   @Transactional
+  @WithMockUser(roles = {"ADMIN"})
   public void givenIncorrectRoomCreateBlankName_whenCreateRoom_thenException() throws Exception {
     var response = mockMvc.perform(MockMvcRequestBuilders
                     .post(RoomHelper.roomUrlPath)
@@ -96,6 +100,7 @@ public class ManageRoomIntegrationTest extends AbstractIntegrationTest {
 
   @Test
   @Transactional
+  @WithMockUser(roles = {"ADMIN"})
   public void givenCorrectRoomUpdate_whenUpdateRoom_thenCorrect() throws Exception {
     Room room = roomRepository.save(RoomHelper.createRoom());
 
@@ -118,6 +123,7 @@ public class ManageRoomIntegrationTest extends AbstractIntegrationTest {
 
   @Test
   @Transactional
+  @WithMockUser(roles = {"ADMIN"})
   public void givenIncorrectRoomUpdateBlankName_whenUpdateRoom_thenException() throws Exception {
     Room room = roomRepository.save(RoomHelper.createRoom());
 
@@ -137,6 +143,7 @@ public class ManageRoomIntegrationTest extends AbstractIntegrationTest {
 
   @Test
   @Transactional
+  @WithMockUser(roles = {"ADMIN"})
   public void givenIncorrectRoomUpdateNameAlreadyExists_whenUpdateRoom_thenException()
           throws Exception {
 
@@ -158,6 +165,7 @@ public class ManageRoomIntegrationTest extends AbstractIntegrationTest {
 
   @Test
   @Transactional
+  @WithMockUser(roles = {"ADMIN"})
   public void givenIncorrectRoomUpdateIdNotExists_whenUpdateRoom_thenException() throws Exception {
     List<Room> roomList = RoomHelper.prepareRoomList();
     roomList.forEach(a -> roomRepository.save(a));
@@ -178,6 +186,7 @@ public class ManageRoomIntegrationTest extends AbstractIntegrationTest {
 
   @Test
   @Transactional
+  @WithMockUser(roles = {"ADMIN"})
   public void givenCorrectId_whenDeleteRoom_thenCorrect() throws Exception {
     List<Room> roomList = RoomHelper.prepareRoomList();
     roomList.forEach(a -> roomRepository.save(a));
@@ -194,6 +203,7 @@ public class ManageRoomIntegrationTest extends AbstractIntegrationTest {
 
   @Test
   @Transactional
+  @WithMockUser(roles = {"ADMIN"})
   public void givenIncorrectId_whenDeleteRoom_thenException() throws Exception {
     List<Room> roomList = RoomHelper.prepareRoomList();
     roomList.forEach(a -> roomRepository.save(a));

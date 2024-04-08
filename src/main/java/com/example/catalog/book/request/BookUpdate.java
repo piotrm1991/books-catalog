@@ -1,6 +1,6 @@
 package com.example.catalog.book.request;
 
-import static com.example.catalog.util.ErrorMessagesConstants.BookTitleCanNotBeBlank;
+import static com.example.catalog.util.MessagesConstants.BookTitleCanNotBeBlank;
 
 import javax.validation.constraints.NotBlank;
 

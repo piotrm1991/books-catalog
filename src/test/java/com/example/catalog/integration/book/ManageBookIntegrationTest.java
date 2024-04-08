@@ -1,7 +1,7 @@
 package com.example.catalog.integration.book;
 
-import static com.example.catalog.util.ErrorMessagesConstants.BookTitleCanNotBeBlank;
-import static com.example.catalog.util.ErrorMessagesConstants.createEntityNotExistsMessage;
+import static com.example.catalog.util.MessagesConstants.BookTitleCanNotBeBlank;
+import static com.example.catalog.util.MessagesConstants.createEntityNotExistsMessage;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -33,6 +33,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 public class ManageBookIntegrationTest extends AbstractIntegrationTest {
@@ -76,6 +77,7 @@ public class ManageBookIntegrationTest extends AbstractIntegrationTest {
   //TODO: fix failed test, when all are run
   @Test
   @Transactional
+  @WithMockUser(roles = {"ADMIN"})
   public void givenCorrectBookCreate_whenCreateBook_thenCorrect() throws Exception {
 
     var response = mockMvc.perform(MockMvcRequestBuilders
@@ -96,6 +98,7 @@ public class ManageBookIntegrationTest extends AbstractIntegrationTest {
 
   @Test
   @Transactional
+  @WithMockUser(roles = {"ADMIN"})
   public void givenIncorrectBookCreateBlankName_whenCreateBook_thenException() throws Exception {
     var response = mockMvc.perform(MockMvcRequestBuilders
         .post(BookHelper.bookUrlPath)
@@ -113,6 +116,7 @@ public class ManageBookIntegrationTest extends AbstractIntegrationTest {
 
   @Test
   @Transactional
+  @WithMockUser(roles = {"ADMIN"})
   public void givenCorrectBookUpdate_whenUpdateBook_thenCorrect() throws Exception {
     Book book = BookHelper.createBook();
     book.setAuthor(author);
@@ -140,6 +144,7 @@ public class ManageBookIntegrationTest extends AbstractIntegrationTest {
 
   @Test
   @Transactional
+  @WithMockUser(roles = {"ADMIN"})
   public void givenIncorrectBookUpdateBlankName_whenUpdateBook_thenException() throws Exception {
     Book book = BookHelper.createBook();
     book.setAuthor(author);
@@ -164,6 +169,7 @@ public class ManageBookIntegrationTest extends AbstractIntegrationTest {
 
   @Test
   @Transactional
+  @WithMockUser(roles = {"ADMIN"})
   public void givenIncorrectBookUpdateIdNotExists_whenUpdateBook_thenException() throws Exception {
     List<Book> bookList = BookHelper.prepareBookList();
     bookList.forEach(a -> bookRepository.save(a));
@@ -184,6 +190,7 @@ public class ManageBookIntegrationTest extends AbstractIntegrationTest {
 
   @Test
   @Transactional
+  @WithMockUser(roles = {"ADMIN"})
   public void givenCorrectId_whenDeleteBook_thenCorrect() throws Exception {
     List<Book> bookList = BookHelper.prepareBookList();
     bookList.forEach(a -> bookRepository.save(a));
@@ -200,6 +207,7 @@ public class ManageBookIntegrationTest extends AbstractIntegrationTest {
 
   @Test
   @Transactional
+  @WithMockUser(roles = {"ADMIN"})
   public void givenIncorrectId_whenDeleteBook_thenException() throws Exception {
     List<Book> bookList = BookHelper.prepareBookList();
     bookList.forEach(a -> bookRepository.save(a));

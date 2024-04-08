@@ -1,6 +1,6 @@
 package com.example.catalog.room.validator;
 
-import static com.example.catalog.util.ErrorMessagesConstants.RoomNameAlreadyExists;
+import static com.example.catalog.util.MessagesConstants.RoomNameAlreadyExists;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;

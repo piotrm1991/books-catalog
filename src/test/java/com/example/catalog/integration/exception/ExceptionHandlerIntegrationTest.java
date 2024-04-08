@@ -14,10 +14,12 @@ import com.example.catalog.exception.ValidationException;
 import com.example.catalog.shared.AbstractIntegrationTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 
 public class ExceptionHandlerIntegrationTest extends AbstractIntegrationTest {
 
   @Test
+  @WithMockUser(roles = {"ADMIN"})
   public void givenAccessDenied_whenGetSpecificException_thenForbidden() throws Exception {
     String exceptionParam = "accessDenied";
 
@@ -29,6 +31,7 @@ public class ExceptionHandlerIntegrationTest extends AbstractIntegrationTest {
   }
 
   @Test
+  @WithMockUser(roles = {"ADMIN"})
   public void givenBadRequest_whenGetSpecificException_thenBadRequest() throws Exception {
     String exceptionParam = "badRequest";
 
@@ -42,6 +45,7 @@ public class ExceptionHandlerIntegrationTest extends AbstractIntegrationTest {
   }
 
   @Test
+  @WithMockUser(roles = {"ADMIN"})
   public void givenEntityNotFound_whenGetSpecificException_thenNotFound() throws Exception {
     String exceptionParam = "entityNotFound";
 
@@ -55,6 +59,7 @@ public class ExceptionHandlerIntegrationTest extends AbstractIntegrationTest {
   }
 
   @Test
+  @WithMockUser(roles = {"ADMIN"})
   public void givenUnauthentication_whenGetSpecificException_thenUnauthorized() throws Exception {
     String exceptionParam = "unauthentication";
 
@@ -66,6 +71,7 @@ public class ExceptionHandlerIntegrationTest extends AbstractIntegrationTest {
   }
 
   @Test
+  @WithMockUser(roles = {"ADMIN"})
   public void givenValidation_whenGetSpecificException_thenBadRequest() throws Exception {
     String exceptionParam = "validation";
 
@@ -80,6 +86,7 @@ public class ExceptionHandlerIntegrationTest extends AbstractIntegrationTest {
   }
 
   @Test
+  @WithMockUser(roles = {"ADMIN"})
   public void givenOther_whenGetSpecificException_thenInternalServerError() throws Exception {
     String exceptionParam = "test";
 

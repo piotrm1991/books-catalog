@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,6 +41,7 @@ public class RoomController {
    */
   @ResponseStatus(HttpStatus.CREATED)
   @PostMapping
+  @PreAuthorize("hasRole('ADMIN')")
   public RoomResponse createRoom(@Valid @RequestBody RoomCreate roomCreate) {
     log.info("POST-request: creating room with name: {}", roomCreate.name());
 
@@ -55,6 +57,7 @@ public class RoomController {
    */
   @ResponseStatus(HttpStatus.OK)
   @PutMapping("/{id}")
+  @PreAuthorize("hasRole('ADMIN')")
   public RoomResponse updateRoomById(
       @PathVariable Long id,
       @Valid @RequestBody RoomUpdate roomUpdate) {
@@ -71,6 +74,7 @@ public class RoomController {
    */
   @GetMapping("/{id}")
   @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
   public RoomResponse getRoomById(@PathVariable Long id) {
     log.info("GET-request: getting user with id: {}", id);
 
@@ -85,6 +89,7 @@ public class RoomController {
    */
   @GetMapping
   @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
   public Page<RoomResponse> getAllRooms(@PageableDefault(size = 5) Pageable pageable) {
     log.info("GET-request: getting all rooms.");
 
@@ -98,6 +103,7 @@ public class RoomController {
    */
   @DeleteMapping("/{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PreAuthorize("hasRole('ADMIN')")
   public void deleteRoom(@PathVariable Long id) {
     log.info("DELETE-request: deleting room with id: {}", id);
     roomService.deleteRoomById(id);

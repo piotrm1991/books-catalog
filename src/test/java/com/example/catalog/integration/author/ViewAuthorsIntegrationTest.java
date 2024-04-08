@@ -1,6 +1,6 @@
 package com.example.catalog.integration.author;
 
-import static com.example.catalog.util.ErrorMessagesConstants.createEntityNotExistsMessage;
+import static com.example.catalog.util.MessagesConstants.createEntityNotExistsMessage;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -27,6 +27,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
+
 import javax.transaction.Transactional;
 import java.util.List;
 
@@ -42,6 +44,7 @@ public class ViewAuthorsIntegrationTest extends AbstractIntegrationTest {
 
   @Test
   @Transactional
+  @WithMockUser(roles = {"ADMIN"})
   public void givenCorrectId_whenGetAuthorById_theReturnAuthorResponseCorrect() throws Exception {
     Author expectedAuthor = AuthorHelper.createAuthor();
     expectedAuthor = authorRepository.save(expectedAuthor);
@@ -61,6 +64,7 @@ public class ViewAuthorsIntegrationTest extends AbstractIntegrationTest {
 
   @Test
   @Transactional
+  @WithMockUser(roles = {"ADMIN"})
   public void givenIncorrectId_whenGetById_thenException() throws Exception {
     List<Author> authorList = AuthorHelper.prepareAuthorList();
     authorList.forEach(a -> authorRepository.save(a));
@@ -78,6 +82,7 @@ public class ViewAuthorsIntegrationTest extends AbstractIntegrationTest {
 
   @Test
   @Transactional
+  @WithMockUser(roles = {"ADMIN"})
   public void testGetAllAuthors_defaultPageRequest() throws Exception {
     List<Author> authorList = AuthorHelper.prepareAuthorList();
     authorList.forEach(a -> authorRepository.save(a));
@@ -104,6 +109,7 @@ public class ViewAuthorsIntegrationTest extends AbstractIntegrationTest {
 
   @Test
   @Transactional
+  @WithMockUser(roles = {"ADMIN"})
   public void testGetAllAuthors_empty() throws Exception {
     var response = mockMvc.perform(get(AuthorHelper.authorUrlPath)
                     .contentType(MediaType.APPLICATION_JSON))
@@ -120,6 +126,7 @@ public class ViewAuthorsIntegrationTest extends AbstractIntegrationTest {
 
   @Test
   @Transactional
+  @WithMockUser(roles = {"ADMIN"})
   public void testGetAllAuthors_customPageRequest() throws Exception {
     List<Author> authorList = AuthorHelper.prepareAuthorList();
     authorList.forEach(a -> authorRepository.save(a));

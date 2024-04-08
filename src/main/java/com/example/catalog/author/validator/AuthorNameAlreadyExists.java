@@ -1,6 +1,6 @@
 package com.example.catalog.author.validator;
 
-import static com.example.catalog.util.ErrorMessagesConstants.AuthorNameAlreadyExists;
+import static com.example.catalog.util.MessagesConstants.AuthorNameAlreadyExists;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;

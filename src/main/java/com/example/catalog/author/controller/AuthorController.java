@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,6 +41,7 @@ public class AuthorController {
    */
   @ResponseStatus(HttpStatus.CREATED)
   @PostMapping
+  @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
   public AuthorResponse createAuthor(@Valid @RequestBody AuthorCreate authorCreate) {
     log.info("POST-request: creating author with name: {}", authorCreate.name());
 
@@ -55,6 +57,7 @@ public class AuthorController {
    */
   @ResponseStatus(HttpStatus.OK)
   @PutMapping("/{id}")
+  @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
   public AuthorResponse updateAuthorById(
       @PathVariable Long id,
       @Valid @RequestBody AuthorUpdate authorUpdate) {
@@ -71,6 +74,7 @@ public class AuthorController {
    */
   @GetMapping("/{id}")
   @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
   public AuthorResponse getAuthorById(@PathVariable Long id) {
     log.info("GET-request: getting user with id: {}", id);
 
@@ -85,6 +89,7 @@ public class AuthorController {
    */
   @GetMapping
   @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
   public Page<AuthorResponse> getAllAuthors(@PageableDefault(size = 5) Pageable pageable) {
     log.info("GET-request: getting all authors.");
 
@@ -98,6 +103,7 @@ public class AuthorController {
    */
   @DeleteMapping("/{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
   public void deleteAuthor(@PathVariable Long id) {
     log.info("DELETE-request: deleting author with id: {}", id);
     authorService.deleteAuthorById(id);

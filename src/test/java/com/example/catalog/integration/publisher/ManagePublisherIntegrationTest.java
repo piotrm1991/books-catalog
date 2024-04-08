@@ -1,8 +1,8 @@
 package com.example.catalog.integration.publisher;
 
-import static com.example.catalog.util.ErrorMessagesConstants.PublisherNameAlreadyExists;
-import static com.example.catalog.util.ErrorMessagesConstants.PublisherNameCanNotBeBlank;
-import static com.example.catalog.util.ErrorMessagesConstants.createEntityNotExistsMessage;
+import static com.example.catalog.util.MessagesConstants.PublisherNameAlreadyExists;
+import static com.example.catalog.util.MessagesConstants.PublisherNameCanNotBeBlank;
+import static com.example.catalog.util.MessagesConstants.createEntityNotExistsMessage;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -21,6 +21,7 @@ import javax.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 public class ManagePublisherIntegrationTest extends AbstractIntegrationTest {
@@ -37,6 +38,7 @@ public class ManagePublisherIntegrationTest extends AbstractIntegrationTest {
 
   @Test
   @Transactional
+  @WithMockUser(roles = {"ADMIN"})
   public void givenCorrectPublisherCreate_whenCreatePublisher_thenCorrect() throws Exception {
     var response = mockMvc.perform(MockMvcRequestBuilders
         .post(PublisherHelper.publisherUrlPath)
@@ -55,6 +57,7 @@ public class ManagePublisherIntegrationTest extends AbstractIntegrationTest {
 
   @Test
   @Transactional
+  @WithMockUser(roles = {"ADMIN"})
   public void givenIncorrectPublisherCreateExistingName_whenCreatePublisher_thenException()
           throws Exception {
 
@@ -81,6 +84,7 @@ public class ManagePublisherIntegrationTest extends AbstractIntegrationTest {
 
   @Test
   @Transactional
+  @WithMockUser(roles = {"ADMIN"})
   public void givenIncorrectPublisherCreateBlankName_whenCreatePublisher_thenException()
           throws Exception {
     var response = mockMvc.perform(MockMvcRequestBuilders
@@ -99,6 +103,7 @@ public class ManagePublisherIntegrationTest extends AbstractIntegrationTest {
 
   @Test
   @Transactional
+  @WithMockUser(roles = {"ADMIN"})
   public void givenCorrectPublisherUpdate_whenUpdatePublisher_thenCorrect() throws Exception {
     Publisher publisher = publisherRepository.save(PublisherHelper.createPublisher());
 
@@ -124,6 +129,7 @@ public class ManagePublisherIntegrationTest extends AbstractIntegrationTest {
 
   @Test
   @Transactional
+  @WithMockUser(roles = {"ADMIN"})
   public void givenIncorrectPublisherUpdateBlankName_whenUpdatePublisher_thenException()
           throws Exception {
 
@@ -145,6 +151,7 @@ public class ManagePublisherIntegrationTest extends AbstractIntegrationTest {
 
   @Test
   @Transactional
+  @WithMockUser(roles = {"ADMIN"})
   public void givenIncorrectPublisherUpdateNameAlreadyExists_whenUpdatePublisher_thenException()
           throws Exception {
 
@@ -166,6 +173,7 @@ public class ManagePublisherIntegrationTest extends AbstractIntegrationTest {
 
   @Test
   @Transactional
+  @WithMockUser(roles = {"ADMIN"})
   public void givenIncorrectPublisherUpdateIdNotExists_whenUpdatePublisher_thenException()
           throws Exception {
 
@@ -191,6 +199,7 @@ public class ManagePublisherIntegrationTest extends AbstractIntegrationTest {
 
   @Test
   @Transactional
+  @WithMockUser(roles = {"ADMIN"})
   public void givenCorrectId_whenDeletePublisher_thenCorrect() throws Exception {
     List<Publisher> publisherList = PublisherHelper.preparePublisherList();
     publisherList.forEach(a -> publisherRepository.save(a));
@@ -207,6 +216,7 @@ public class ManagePublisherIntegrationTest extends AbstractIntegrationTest {
 
   @Test
   @Transactional
+  @WithMockUser(roles = {"ADMIN"})
   public void givenIncorrectId_whenDeletePublisher_thenException() throws Exception {
     List<Publisher> publisherList = PublisherHelper.preparePublisherList();
     publisherList.forEach(a -> publisherRepository.save(a));
