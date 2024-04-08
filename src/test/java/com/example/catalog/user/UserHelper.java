@@ -6,11 +6,13 @@ import com.example.catalog.user.enums.UserStatusEnum;
 import com.example.catalog.user.request.UserCreate;
 import com.example.catalog.user.request.UserUpdate;
 import com.example.catalog.user.response.UserResponse;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Helper class for tests with User entity.
+ */
 public class UserHelper {
   public static final String userUrlPath = "/users";
   public static final Long testUsersCount = 10L;
@@ -29,6 +31,11 @@ public class UserHelper {
   private static final UserStatusEnum updateStatus = UserStatusEnum.DISABLED;
   public static final Long numberOfUserAtStartup = 2L;
 
+  /**
+   * Creates User object.
+   *
+   * @return User entity.
+   */
   public static User createUser() {
 
     return User.builder()
@@ -40,6 +47,11 @@ public class UserHelper {
         .build();
   }
 
+  /**
+   * Creates UserCreate record request.
+   *
+   * @return UserCreate record.
+   */
   public static UserCreate createUserCreate() {
 
     return new UserCreate(
@@ -50,6 +62,11 @@ public class UserHelper {
     );
   }
 
+  /**
+   * Creates UserResponse record.
+   *
+   * @return UserResponse record.
+   */
   public static UserResponse createUserResponse() {
 
     return new UserResponse(
@@ -61,7 +78,13 @@ public class UserHelper {
         updateDate,
         deleteDate
     );
-}
+  }
+
+  /**
+   * Creates UserUpdate record request.
+   *
+   * @return UserUpdate record.
+   */
   public static UserUpdate createUserUpdate() {
 
     return new UserUpdate(
@@ -73,26 +96,37 @@ public class UserHelper {
     );
   }
 
+  /**
+   * Creates given number of User objects and returns it in List.
+   *
+   * @param numberOfUsers int number of requested User objects.
+   * @return List of User entities.
+   */
   public static List<User> createListWithUsers(int numberOfUsers) {
 
     List<User> users = new ArrayList<>();
     if (numberOfUsers > 0) {
-        for (int i = 1; i <= numberOfUsers; i++) {
-            users.add(
-                User.builder()
-                    .login(login + i)
-                    .password(password)
-                    .role(role)
-                    .status(status)
-                    .createDate(createDate)
-                    .build()
-            );
-        }
+      for (int i = 1; i <= numberOfUsers; i++) {
+        users.add(
+            User.builder()
+              .login(login + i)
+              .password(password)
+              .role(role)
+              .status(status)
+              .createDate(createDate)
+              .build()
+        );
+      }
     }
 
     return users;
   }
 
+  /**
+   * Creates User object with updated data.
+   *
+   * @return User entity.
+   */
   public static User createUpdatedUser() {
 
     return User.builder()
@@ -105,6 +139,11 @@ public class UserHelper {
         .build();
   }
 
+  /**
+   * Creates UserResponse record with updated data.
+   *
+   * @return UserResponse record.
+   */
   public static UserResponse createUpdatedUserResponse() {
 
     return new UserResponse(
@@ -118,20 +157,24 @@ public class UserHelper {
     );
   }
 
+  /**
+   * Creates List of User objects.
+   *
+   * @return List of User entities.
+   */
   public static List<User> prepareUserList() {
-
 
     List<User> users = new ArrayList<>();
     if (testUsersCount > 0) {
       for (int i = 1; i <= testUsersCount; i++) {
         users.add(
             User.builder()
-                .login(login + i)
-                .password(password)
-                .role(role)
-                .status(status)
-                .createDate(createDate)
-                .build()
+              .login(login + i)
+              .password(password)
+              .role(role)
+              .status(status)
+              .createDate(createDate)
+              .build()
         );
       }
     }
@@ -139,6 +182,11 @@ public class UserHelper {
     return users;
   }
 
+  /**
+   * Creates UserCreate record request with blank login.
+   *
+   * @return UserCreate record.
+   */
   public static UserCreate createUserCreateBlankLogin() {
 
     return new UserCreate(
@@ -149,6 +197,11 @@ public class UserHelper {
     );
   }
 
+  /**
+   * Create UserUpdate record request with blank login.
+   *
+   * @return UserUpdate record.
+   */
   public static UserUpdate createUserUpdateBlankLogin() {
 
     return new UserUpdate(
@@ -160,6 +213,11 @@ public class UserHelper {
     );
   }
 
+  /**
+   * Creates UserUpdate record request with already existing login.
+   *
+   * @return UserUpdate record.
+   */
   public static UserUpdate createUserUpdateWithExistingLogin() {
 
     return new UserUpdate(
@@ -171,11 +229,22 @@ public class UserHelper {
     );
   }
 
+  /**
+   * Returns sum of created users and users created on startup.
+   *
+   * @return Long sum of Users.
+   */
   public static Long numberOfUsersWithCreatedAtStartup() {
 
     return testUsersCount + numberOfUserAtStartup;
   }
 
+  /**
+   * Creates UserCreate record request with given login.
+   *
+   * @param loginNew String given user login.
+   * @return UserCreate record.
+   */
   public static UserCreate createUserCreateWithGivenLogin(String loginNew) {
 
     return new UserCreate(

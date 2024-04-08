@@ -1,6 +1,15 @@
 package com.example.catalog.statustype.impl;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import com.example.catalog.exception.EntityNotFoundException;
+import com.example.catalog.statustype.StatusTypeHelper;
 import com.example.catalog.statustype.entity.StatusType;
 import com.example.catalog.statustype.mapper.StatusTypeMapper;
 import com.example.catalog.statustype.repository.StatusTypeRepository;
@@ -8,7 +17,8 @@ import com.example.catalog.statustype.request.StatusTypeCreate;
 import com.example.catalog.statustype.request.StatusTypeUpdate;
 import com.example.catalog.statustype.response.StatusTypeResponse;
 import com.example.catalog.statustype.service.impl.StatusTypeServiceImpl;
-import com.example.catalog.statustype.StatusTypeHelper;
+import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,17 +28,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-
-import java.util.List;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class StatusTypeServiceImplTest {
@@ -61,7 +60,8 @@ class StatusTypeServiceImplTest {
     when(statusTypeMapper.mapEntityToResponse(statusType)).thenReturn(statusTypeResponse);
     when(statusTypeRepository.save(any(StatusType.class))).thenReturn(statusType);
 
-    StatusTypeResponse actualStatusTypeResponse = statusTypeService.createStatusType(statusTypeCreate);
+    StatusTypeResponse actualStatusTypeResponse =
+          statusTypeService.createStatusType(statusTypeCreate);
 
     assertEquals(statusTypeResponse, actualStatusTypeResponse);
     verify(statusTypeRepository, times(1)).save(statusType);
@@ -71,9 +71,11 @@ class StatusTypeServiceImplTest {
   void givenCorrectStatusTypeRequest_whenUpdateStatusType_thenCorrect() {
     when(statusTypeRepository.findById(anyLong())).thenReturn(Optional.of(statusType));
     when(statusTypeRepository.save(any(StatusType.class))).thenReturn(statusType);
-    when(statusTypeMapper.mapEntityToResponse(any(StatusType.class))).thenReturn(statusTypeResponse);
+    when(statusTypeMapper.mapEntityToResponse(any(StatusType.class)))
+          .thenReturn(statusTypeResponse);
 
-    StatusTypeResponse actualStatusTypeResponse = statusTypeService.updateStatusType(StatusTypeHelper.id, statusTypeUpdate);
+    StatusTypeResponse actualStatusTypeResponse =
+          statusTypeService.updateStatusType(StatusTypeHelper.id, statusTypeUpdate);
 
     assertEquals(statusTypeResponse, actualStatusTypeResponse);
     verify(statusTypeRepository, times(1)).save(statusType);
@@ -138,7 +140,8 @@ class StatusTypeServiceImplTest {
     when(statusTypeRepository.findById(anyLong())).thenReturn(Optional.of(statusType));
     when(statusTypeMapper.mapEntityToResponse(statusType)).thenReturn(statusTypeResponse);
 
-    StatusTypeResponse actualStatusTypeResponse = statusTypeService.getStatusTypeResponseById(anyLong());
+    StatusTypeResponse actualStatusTypeResponse =
+          statusTypeService.getStatusTypeResponseById(anyLong());
 
     assertEquals(statusTypeResponse, actualStatusTypeResponse);
   }

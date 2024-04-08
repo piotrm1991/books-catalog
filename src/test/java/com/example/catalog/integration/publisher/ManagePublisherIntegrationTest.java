@@ -9,7 +9,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.example.catalog.publisher.PublisherHelper;
 import com.example.catalog.publisher.entity.Publisher;
-import com.example.catalog.publisher.mapper.PublisherMapper;
 import com.example.catalog.publisher.repository.PublisherRepository;
 import com.example.catalog.publisher.response.PublisherResponse;
 import com.example.catalog.shared.AbstractIntegrationTest;
@@ -24,13 +23,13 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+/**
+ * Integration test for POST, PUT, DELETE operations on Publisher entity.
+ */
 public class ManagePublisherIntegrationTest extends AbstractIntegrationTest {
 
   @Autowired
   private PublisherRepository publisherRepository;
-
-  @Autowired
-  private PublisherMapper publisherMapper;
 
   private final ObjectMapper mapper = new ObjectMapper()
           .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)

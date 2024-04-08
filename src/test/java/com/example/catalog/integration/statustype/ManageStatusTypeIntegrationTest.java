@@ -1,23 +1,5 @@
 package com.example.catalog.integration.statustype;
 
-import com.example.catalog.statustype.StatusTypeHelper;
-import com.example.catalog.statustype.entity.StatusType;
-import com.example.catalog.statustype.mapper.StatusTypeMapper;
-import com.example.catalog.statustype.repository.StatusTypeRepository;
-import com.example.catalog.statustype.response.StatusTypeResponse;
-import com.example.catalog.shared.AbstractIntegrationTest;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-
-import javax.transaction.Transactional;
-import java.util.List;
-
 import static com.example.catalog.util.MessagesConstants.StatusTypeNameAlreadyExists;
 import static com.example.catalog.util.MessagesConstants.StatusTypeNameCanNotBeBlank;
 import static com.example.catalog.util.MessagesConstants.createEntityNotExistsMessage;
@@ -25,15 +7,33 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.example.catalog.shared.AbstractIntegrationTest;
+import com.example.catalog.statustype.StatusTypeHelper;
+import com.example.catalog.statustype.entity.StatusType;
+import com.example.catalog.statustype.repository.StatusTypeRepository;
+import com.example.catalog.statustype.response.StatusTypeResponse;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import java.util.List;
+import javax.transaction.Transactional;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
+/**
+ * Integration tests for POST, PUT, DELETE operations on StatusType entity.
+ */
 public class ManageStatusTypeIntegrationTest extends AbstractIntegrationTest {
 
   @Autowired
   private StatusTypeRepository statusTypeRepository;
 
-  @Autowired
-  private StatusTypeMapper statusTypeMapper;
-
-  private final ObjectMapper mapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false).registerModule(new JavaTimeModule());
+  private final ObjectMapper mapper = new ObjectMapper()
+        .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+        .registerModule(new JavaTimeModule());
 
   @Test
   @Transactional
@@ -47,7 +47,10 @@ public class ManageStatusTypeIntegrationTest extends AbstractIntegrationTest {
             .andExpect(status().isCreated())
             .andReturn();
 
-    StatusTypeResponse statusTypeResponse = mapper.readValue(response.getResponse().getContentAsString(), StatusTypeResponse.class);
+    StatusTypeResponse statusTypeResponse = mapper.readValue(
+          response.getResponse().getContentAsString(),
+          StatusTypeResponse.class
+    );
 
     assertEquals(StatusTypeHelper.name, statusTypeResponse.name());
     assertEquals(1, statusTypeRepository.findAll().size());
@@ -56,7 +59,9 @@ public class ManageStatusTypeIntegrationTest extends AbstractIntegrationTest {
   @Test
   @Transactional
   @WithMockUser(roles = {"ADMIN"})
-  public void givenIncorrectStatusTypeCreateExistingName_whenCreateStatusType_thenException() throws Exception {
+  public void givenIncorrectStatusTypeCreateExistingName_whenCreateStatusType_thenException()
+        throws Exception {
+
     mockMvc.perform(MockMvcRequestBuilders
             .post(StatusTypeHelper.statusTypeUrlPath)
             .content(mapper.writeValueAsString(StatusTypeHelper.createStatusTypeCreate()))
@@ -81,10 +86,14 @@ public class ManageStatusTypeIntegrationTest extends AbstractIntegrationTest {
   @Test
   @Transactional
   @WithMockUser(roles = {"ADMIN"})
-  public void givenIncorrectStatusTypeCreateBlankName_whenCreateStatusType_thenException() throws Exception {
+  public void givenIncorrectStatusTypeCreateBlankName_whenCreateStatusType_thenException()
+        throws Exception {
+
     var response = mockMvc.perform(MockMvcRequestBuilders
                     .post(StatusTypeHelper.statusTypeUrlPath)
-                    .content(mapper.writeValueAsString(StatusTypeHelper.createEmptyStatusTypeCreate()))
+                    .content(mapper.writeValueAsString(
+                          StatusTypeHelper.createEmptyStatusTypeCreate())
+                    )
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isBadRequest())
@@ -103,30 +112,46 @@ public class ManageStatusTypeIntegrationTest extends AbstractIntegrationTest {
     StatusType statusType = statusTypeRepository.save(StatusTypeHelper.createStatusType());
 
     var response = mockMvc.perform(MockMvcRequestBuilders
-                    .put(createUrlPathWithId(StatusTypeHelper.statusTypeUrlPath, statusType.getId()))
+                    .put(createUrlPathWithId(
+                          StatusTypeHelper.statusTypeUrlPath,
+                          statusType.getId())
+                    )
                     .content(mapper.writeValueAsString(StatusTypeHelper.createStatusTypeUpdate()))
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andReturn();
 
-    StatusTypeResponse statusTypeResponse = mapper.readValue(response.getResponse().getContentAsString(), StatusTypeResponse.class);
+    StatusTypeResponse statusTypeResponse = mapper.readValue(
+          response.getResponse().getContentAsString(),
+          StatusTypeResponse.class
+    );
 
     assertEquals(statusType.getId(), statusTypeResponse.id());
     assertEquals(StatusTypeHelper.nameUpdated, statusTypeResponse.name());
-    assertEquals(StatusTypeHelper.nameUpdated, statusTypeRepository.findById(statusType.getId()).get().getName());
+    assertEquals(
+          StatusTypeHelper.nameUpdated,
+          statusTypeRepository.findById(statusType.getId()).get().getName()
+    );
     assertEquals(1, statusTypeRepository.findAll().size());
   }
 
   @Test
   @Transactional
   @WithMockUser(roles = {"ADMIN"})
-  public void givenIncorrectStatusTypeUpdateBlankName_whenUpdateStatusType_thenException() throws Exception {
+  public void givenIncorrectStatusTypeUpdateBlankName_whenUpdateStatusType_thenException()
+        throws Exception {
+
     StatusType statusType = statusTypeRepository.save(StatusTypeHelper.createStatusType());
 
     var response = mockMvc.perform(MockMvcRequestBuilders
-                    .put(createUrlPathWithId(StatusTypeHelper.statusTypeUrlPath, statusType.getId()))
-                    .content(mapper.writeValueAsString(StatusTypeHelper.createStatusTypeUpdateBlankName()))
+                    .put(createUrlPathWithId(
+                          StatusTypeHelper.statusTypeUrlPath,
+                          statusType.getId())
+                    )
+                    .content(mapper.writeValueAsString(
+                          StatusTypeHelper.createStatusTypeUpdateBlankName())
+                    )
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isBadRequest())
@@ -141,12 +166,19 @@ public class ManageStatusTypeIntegrationTest extends AbstractIntegrationTest {
   @Test
   @Transactional
   @WithMockUser(roles = {"ADMIN"})
-  public void givenIncorrectStatusTypeUpdateNameAlreadyExists_whenUpdateStatusType_thenException() throws Exception {
+  public void givenIncorrectStatusTypeUpdateNameAlreadyExists_whenUpdateStatusType_thenException()
+        throws Exception {
+
     StatusType statusType = statusTypeRepository.save(StatusTypeHelper.createStatusType());
 
     var response = mockMvc.perform(MockMvcRequestBuilders
-                    .put(createUrlPathWithId(StatusTypeHelper.statusTypeUrlPath, statusType.getId()))
-                    .content(mapper.writeValueAsString(StatusTypeHelper.createStatusTypeUpdateWithExistingName()))
+                    .put(createUrlPathWithId(
+                          StatusTypeHelper.statusTypeUrlPath,
+                          statusType.getId())
+                    )
+                    .content(mapper.writeValueAsString(
+                          StatusTypeHelper.createStatusTypeUpdateWithExistingName())
+                    )
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isBadRequest())
@@ -161,7 +193,9 @@ public class ManageStatusTypeIntegrationTest extends AbstractIntegrationTest {
   @Test
   @Transactional
   @WithMockUser(roles = {"ADMIN"})
-  public void givenIncorrectStatusTypeUpdateIdNotExists_whenUpdateStatusType_thenException() throws Exception {
+  public void givenIncorrectStatusTypeUpdateIdNotExists_whenUpdateStatusType_thenException()
+        throws Exception {
+
     List<StatusType> statusTypeList = StatusTypeHelper.prepareStatusTypeList();
     statusTypeList.forEach(a -> statusTypeRepository.save(a));
     Long invalidId = 100L;
@@ -176,7 +210,10 @@ public class ManageStatusTypeIntegrationTest extends AbstractIntegrationTest {
 
     String errorMessage = response.getResponse().getContentAsString();
 
-    assertEquals(createEntityNotExistsMessage(StatusType.class.getSimpleName(), invalidId), errorMessage);
+    assertEquals(
+          createEntityNotExistsMessage(StatusType.class.getSimpleName(), invalidId),
+          errorMessage
+    );
   }
 
   @Test
@@ -193,7 +230,7 @@ public class ManageStatusTypeIntegrationTest extends AbstractIntegrationTest {
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isNoContent());
 
-    assertEquals(StatusTypeHelper.testStatusTypesCount-1, statusTypeRepository.findAll().size());
+    assertEquals(StatusTypeHelper.testStatusTypesCount - 1, statusTypeRepository.findAll().size());
   }
 
   @Test
@@ -213,7 +250,10 @@ public class ManageStatusTypeIntegrationTest extends AbstractIntegrationTest {
 
     String errorMessage = response.getResponse().getContentAsString();
 
-    assertEquals(createEntityNotExistsMessage(StatusType.class.getSimpleName(), invalidId), errorMessage);
+    assertEquals(
+          createEntityNotExistsMessage(StatusType.class.getSimpleName(), invalidId),
+          errorMessage
+    );
     assertEquals(StatusTypeHelper.testStatusTypesCount, statusTypeRepository.findAll().size());
   }
 }

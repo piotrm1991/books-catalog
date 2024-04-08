@@ -16,6 +16,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 
+/**
+ * Integration test for exception handling.
+ */
 public class ExceptionHandlerIntegrationTest extends AbstractIntegrationTest {
 
   @Test

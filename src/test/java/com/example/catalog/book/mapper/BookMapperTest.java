@@ -16,6 +16,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+/**
+ * Unit tests for BookMapper class.
+ */
 @ExtendWith(MockitoExtension.class)
 public class BookMapperTest {
 

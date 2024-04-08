@@ -5,10 +5,12 @@ import com.example.catalog.shelf.entity.Shelf;
 import com.example.catalog.shelf.request.ShelfCreate;
 import com.example.catalog.shelf.request.ShelfUpdate;
 import com.example.catalog.shelf.response.ShelfResponse;
-
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Helpers class for tests with Shelf entity.
+ */
 public class ShelfHelper {
 
   public static final String shelfUrlPath = "/shelves";
@@ -19,6 +21,11 @@ public class ShelfHelper {
   public static final Integer numberUpdate = 3;
   public static final int testShelvesCount = 10;
 
+  /**
+   * Create Shelf object.
+   *
+   * @return Shelf entity.
+   */
   public static Shelf createShelf() {
 
     return Shelf.builder()
@@ -29,6 +36,11 @@ public class ShelfHelper {
             .build();
   }
 
+  /**
+   * Create ShelfCreate record request.
+   *
+   * @return ShelfCreate record.
+   */
   public static ShelfCreate createShelfCreate() {
 
     return new ShelfCreate(
@@ -38,6 +50,11 @@ public class ShelfHelper {
     );
   }
 
+  /**
+   * Creates ShelfUpdate record request.
+   *
+   * @return ShelfUpdate record.
+   */
   public static ShelfUpdate createShelfUpdate() {
 
     return new ShelfUpdate(
@@ -47,6 +64,11 @@ public class ShelfHelper {
     );
   }
 
+  /**
+   * Create ShelfResponse record.
+   *
+   * @return ShelfResponse record.
+   */
   public static ShelfResponse createShelfResponse() {
 
     return new ShelfResponse(
@@ -57,6 +79,11 @@ public class ShelfHelper {
     );
   }
 
+  /**
+   * Create List of Shelf objects.
+   *
+   * @return List of Shelf entities.
+   */
   public static List<Shelf> prepareShelfList() {
     List<Shelf> list = new ArrayList<>();
     for (int i = 0; i < testShelvesCount; i++) {
@@ -70,6 +97,11 @@ public class ShelfHelper {
     return list;
   }
 
+  /**
+   * Creates ShelfCreate record request with blank letter.
+   *
+   * @return ShelfCreate record.
+   */
   public static ShelfCreate createShelfCreateWithNoLetter() {
 
     return new ShelfCreate(
@@ -79,6 +111,11 @@ public class ShelfHelper {
     );
   }
 
+  /**
+   * Creates ShelfCreate record request with blank number.
+   *
+   * @return ShelfCreate record.
+   */
   public static ShelfCreate createShelfCreateWithNoNumber() {
 
     return new ShelfCreate(
@@ -88,6 +125,11 @@ public class ShelfHelper {
     );
   }
 
+  /**
+   * Creates ShelfCreate record request with blank room id.
+   *
+   * @return ShelfCreate record.
+   */
   public static ShelfCreate createShelfCreateWithNoRoomId() {
 
     return new ShelfCreate(
@@ -97,7 +139,12 @@ public class ShelfHelper {
     );
   }
 
-  public static ShelfCreate createShelfCreateWithRoomId(Long roomId) {
+  /**
+   * Creates ShelfCreate record request with given room id.
+   *
+   * @return ShelfCreate record.
+   */
+  public static ShelfCreate createShelfCreateWithGivenRoomId(Long roomId) {
 
     return new ShelfCreate(
             letter,
@@ -106,6 +153,12 @@ public class ShelfHelper {
     );
   }
 
+
+  /**
+   * Creates Shelf object with updated data.
+   *
+   * @return Shelf entity.
+   */
   public static Shelf createShelfAfterUpdate() {
 
     return Shelf.builder()

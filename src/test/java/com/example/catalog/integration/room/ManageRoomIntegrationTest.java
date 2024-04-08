@@ -9,7 +9,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.example.catalog.room.RoomHelper;
 import com.example.catalog.room.entity.Room;
-import com.example.catalog.room.mapper.RoomMapper;
 import com.example.catalog.room.repository.RoomRepository;
 import com.example.catalog.room.response.RoomResponse;
 import com.example.catalog.shared.AbstractIntegrationTest;
@@ -24,13 +23,13 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+/**
+ * Integration tests for POST, PUT, DELETE operations on Room entity.
+ */
 public class ManageRoomIntegrationTest extends AbstractIntegrationTest {
 
   @Autowired
   private RoomRepository roomRepository;
-
-  @Autowired
-  private RoomMapper roomMapper;
 
   private final ObjectMapper mapper = new ObjectMapper()
           .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)

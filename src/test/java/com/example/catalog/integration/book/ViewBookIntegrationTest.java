@@ -1,5 +1,14 @@
 package com.example.catalog.integration.book;
 
+import static com.example.catalog.util.MessagesConstants.createEntityNotExistsMessage;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import com.example.catalog.author.AuthorHelper;
 import com.example.catalog.author.entity.Author;
 import com.example.catalog.author.repository.AuthorRepository;
@@ -23,6 +32,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import java.util.List;
+import javax.transaction.Transactional;
 import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,18 +43,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 
-import javax.transaction.Transactional;
-import java.util.List;
-
-import static com.example.catalog.util.MessagesConstants.createEntityNotExistsMessage;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
+/**
+ * Integration tests for GET operation on Book entity.
+ */
 public class ViewBookIntegrationTest extends AbstractIntegrationTest {
 
   @Autowired
@@ -64,7 +66,9 @@ public class ViewBookIntegrationTest extends AbstractIntegrationTest {
   @Autowired
   private StatusTypeRepository statusTypeRepository;
 
-  private final ObjectMapper mapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false).registerModule(new JavaTimeModule());
+  private final ObjectMapper mapper = new ObjectMapper()
+        .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+        .registerModule(new JavaTimeModule());
 
   @Test
   @Transactional
@@ -81,12 +85,16 @@ public class ViewBookIntegrationTest extends AbstractIntegrationTest {
     expectedBook.setStatusType(statusType);
     expectedBook = bookRepository.save(expectedBook);
 
-    var response = mockMvc.perform(get(createUrlPathWithId(BookHelper.bookUrlPath, expectedBook.getId()))
-                    .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andReturn();
+    var response = mockMvc.perform(
+          get(createUrlPathWithId(BookHelper.bookUrlPath, expectedBook.getId()))
+                .contentType(MediaType.APPLICATION_JSON))
+          .andExpect(status().isOk())
+          .andReturn();
 
-    BookResponse bookResponse = mapper.readValue(response.getResponse().getContentAsString(), BookResponse.class);
+    BookResponse bookResponse = mapper.readValue(
+          response.getResponse().getContentAsString(),
+          BookResponse.class
+    );
 
     assertEquals(expectedBook.getId(), bookResponse.id());
     assertEquals(expectedBook.getTitle(), bookResponse.title());
@@ -103,12 +111,15 @@ public class ViewBookIntegrationTest extends AbstractIntegrationTest {
     Long invalidId = 10000L;
 
     var response = mockMvc.perform(get(createUrlPathWithId(BookHelper.bookUrlPath, invalidId))
-                    .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isNotFound())
-            .andReturn();
+                .contentType(MediaType.APPLICATION_JSON))
+          .andExpect(status().isNotFound())
+          .andReturn();
 
     String errorMessage = response.getResponse().getContentAsString();
-    assertTrue(errorMessage.contains(createEntityNotExistsMessage(Book.class.getSimpleName(), invalidId)));
+    assertTrue(errorMessage.contains(createEntityNotExistsMessage(
+          Book.class.getSimpleName(),
+          invalidId
+    )));
 
   }
 
@@ -120,22 +131,25 @@ public class ViewBookIntegrationTest extends AbstractIntegrationTest {
     bookList.forEach(a -> bookRepository.save(a));
 
     var response = mockMvc.perform(get(BookHelper.bookUrlPath)
-                    .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$['pageable']['paged']").value("true"))
-            .andReturn();
-    Page<BookResponse> booksResponse = mapper.readValue(response.getResponse().getContentAsString(), new TypeReference<RestPageImpl<BookResponse>>() {});
+                .contentType(MediaType.APPLICATION_JSON))
+          .andExpect(status().isOk())
+          .andExpect(jsonPath("$['pageable']['paged']").value("true"))
+          .andReturn();
+    Page<BookResponse> booksResponse = mapper.readValue(
+          response.getResponse().getContentAsString(),
+          new TypeReference<RestPageImpl<BookResponse>>() {}
+    );
 
     assertFalse(booksResponse.isEmpty());
-    assertEquals( BookHelper.testBooksCount, booksResponse.getTotalElements());
+    assertEquals(BookHelper.testBooksCount, booksResponse.getTotalElements());
     assertEquals(2, booksResponse.getTotalPages());
     assertEquals(5, booksResponse.getContent().size());
 
     for (int i = 0; i < 5; i++) {
       AssertionsForClassTypes.assertThat(booksResponse.getContent().get(i))
-              .usingRecursiveComparison()
-              .ignoringFields("id")
-              .isEqualTo(bookMapper.mapEntityToResponse(bookList.get(i)));
+            .usingRecursiveComparison()
+            .ignoringFields("id")
+            .isEqualTo(bookMapper.mapEntityToResponse(bookList.get(i)));
     }
   }
 
@@ -144,14 +158,17 @@ public class ViewBookIntegrationTest extends AbstractIntegrationTest {
   @WithMockUser(roles = {"ADMIN"})
   public void testGetAllBooks_empty() throws Exception {
     var response = mockMvc.perform(get(BookHelper.bookUrlPath)
-                    .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$['pageable']['paged']").value("true"))
-            .andReturn();
-    Page<BookResponse> booksResponse = mapper.readValue(response.getResponse().getContentAsString(), new TypeReference<RestPageImpl<BookResponse>>() {});
+                .contentType(MediaType.APPLICATION_JSON))
+          .andExpect(status().isOk())
+          .andExpect(jsonPath("$['pageable']['paged']").value("true"))
+          .andReturn();
+    Page<BookResponse> booksResponse = mapper.readValue(
+          response.getResponse().getContentAsString(),
+          new TypeReference<RestPageImpl<BookResponse>>() {}
+    );
 
     assertTrue(booksResponse.isEmpty());
-    assertEquals( 0, booksResponse.getTotalElements());
+    assertEquals(0, booksResponse.getTotalElements());
     assertEquals(0, booksResponse.getTotalPages());
     assertEquals(0, booksResponse.getContent().size());
   }
@@ -162,14 +179,20 @@ public class ViewBookIntegrationTest extends AbstractIntegrationTest {
   public void testGetAllBooks_customPageRequest() throws Exception {
     List<Book> bookList = BookHelper.prepareBookList();
     bookList.forEach(a -> bookRepository.save(a));
-    Page<Book> expectedBookList = bookRepository.findAll(PageRequest.of(1, 3, Sort.by("id").descending())) ;
+    Page<Book> expectedBookList =
+          bookRepository.findAll(PageRequest.of(1, 3, Sort.by("id").descending()));
 
-    var response = mockMvc.perform(get(createUrlPathGetPageable(BookHelper.bookUrlPath, 1, 3, "id", false))
-                    .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$['pageable']['paged']").value("true"))
-            .andReturn();
-    Page<BookResponse> booksResponse = mapper.readValue(response.getResponse().getContentAsString(), new TypeReference<RestPageImpl<BookResponse>>() {});
+    var response = mockMvc.perform(get(createUrlPathGetPageable(
+          BookHelper.bookUrlPath, 1, 3, "id", false)
+          )
+                .contentType(MediaType.APPLICATION_JSON))
+          .andExpect(status().isOk())
+          .andExpect(jsonPath("$['pageable']['paged']").value("true"))
+          .andReturn();
+    Page<BookResponse> booksResponse = mapper.readValue(
+          response.getResponse().getContentAsString(),
+          new TypeReference<RestPageImpl<BookResponse>>() {}
+    );
 
     assertFalse(booksResponse.isEmpty());
     assertEquals(expectedBookList.getTotalElements(), booksResponse.getTotalElements());
@@ -178,9 +201,9 @@ public class ViewBookIntegrationTest extends AbstractIntegrationTest {
 
     for (int i = 0; i < expectedBookList.getContent().size(); i++) {
       AssertionsForClassTypes.assertThat(booksResponse.getContent().get(i))
-              .usingRecursiveComparison()
-              .ignoringFields("id")
-              .isEqualTo(bookMapper.mapEntityToResponse(expectedBookList.getContent().get(i)));
+            .usingRecursiveComparison()
+            .ignoringFields("id")
+            .isEqualTo(bookMapper.mapEntityToResponse(expectedBookList.getContent().get(i)));
     }
   }
 }

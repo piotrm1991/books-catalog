@@ -20,6 +20,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import java.util.List;
+import javax.transaction.Transactional;
 import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,9 +31,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 
-import javax.transaction.Transactional;
-import java.util.List;
-
+/**
+ * Integration tests for GET operation in Author entity.
+ */
 public class ViewAuthorsIntegrationTest extends AbstractIntegrationTest {
 
   @Autowired
@@ -40,7 +42,9 @@ public class ViewAuthorsIntegrationTest extends AbstractIntegrationTest {
   @Autowired
   private AuthorMapper authorMapper;
 
-  private final ObjectMapper mapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false).registerModule(new JavaTimeModule());
+  private final ObjectMapper mapper = new ObjectMapper()
+        .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+        .registerModule(new JavaTimeModule());
 
   @Test
   @Transactional
@@ -49,12 +53,17 @@ public class ViewAuthorsIntegrationTest extends AbstractIntegrationTest {
     Author expectedAuthor = AuthorHelper.createAuthor();
     expectedAuthor = authorRepository.save(expectedAuthor);
 
-    var response = mockMvc.perform(get(createUrlPathWithId(AuthorHelper.authorUrlPath, expectedAuthor.getId()))
-            .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andReturn();
+    var response = mockMvc.perform(get(createUrlPathWithId(
+          AuthorHelper.authorUrlPath, expectedAuthor.getId())
+          )
+                .contentType(MediaType.APPLICATION_JSON))
+          .andExpect(status().isOk())
+          .andReturn();
 
-    AuthorResponse authorResponse = mapper.readValue(response.getResponse().getContentAsString(), AuthorResponse.class);
+    AuthorResponse authorResponse = mapper.readValue(
+          response.getResponse().getContentAsString(),
+          AuthorResponse.class
+    );
 
     assertEquals(expectedAuthor.getId(), authorResponse.id());
     assertEquals(expectedAuthor.getName(), authorResponse.name());
@@ -71,12 +80,15 @@ public class ViewAuthorsIntegrationTest extends AbstractIntegrationTest {
     Long invalidId = 10000L;
 
     var response = mockMvc.perform(get(createUrlPathWithId(AuthorHelper.authorUrlPath, invalidId))
-                    .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isNotFound())
-            .andReturn();
+                .contentType(MediaType.APPLICATION_JSON))
+          .andExpect(status().isNotFound())
+          .andReturn();
 
     String errorMessage = response.getResponse().getContentAsString();
-    assertTrue(errorMessage.contains(createEntityNotExistsMessage(Author.class.getSimpleName(), invalidId)));
+    assertTrue(errorMessage.contains(createEntityNotExistsMessage(
+          Author.class.getSimpleName(),
+          invalidId)
+    ));
 
   }
 
@@ -88,22 +100,25 @@ public class ViewAuthorsIntegrationTest extends AbstractIntegrationTest {
     authorList.forEach(a -> authorRepository.save(a));
 
     var response = mockMvc.perform(get(AuthorHelper.authorUrlPath)
-            .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$['pageable']['paged']").value("true"))
-            .andReturn();
-    Page<AuthorResponse> authorsResponse = mapper.readValue(response.getResponse().getContentAsString(), new TypeReference<RestPageImpl<AuthorResponse>>() {});
+                .contentType(MediaType.APPLICATION_JSON))
+          .andExpect(status().isOk())
+          .andExpect(jsonPath("$['pageable']['paged']").value("true"))
+          .andReturn();
+    Page<AuthorResponse> authorsResponse = mapper.readValue(
+          response.getResponse().getContentAsString(),
+          new TypeReference<RestPageImpl<AuthorResponse>>() {}
+    );
 
     assertFalse(authorsResponse.isEmpty());
-    assertEquals( AuthorHelper.testAuthorsCount, authorsResponse.getTotalElements());
+    assertEquals(AuthorHelper.testAuthorsCount, authorsResponse.getTotalElements());
     assertEquals(4, authorsResponse.getTotalPages());
     assertEquals(5, authorsResponse.getContent().size());
 
     for (int i = 0; i < 5; i++) {
       AssertionsForClassTypes.assertThat(authorsResponse.getContent().get(i))
-              .usingRecursiveComparison()
-              .ignoringFields("id")
-              .isEqualTo(authorMapper.mapEntityToResponse(authorList.get(i)));
+            .usingRecursiveComparison()
+            .ignoringFields("id")
+            .isEqualTo(authorMapper.mapEntityToResponse(authorList.get(i)));
     }
   }
 
@@ -112,14 +127,17 @@ public class ViewAuthorsIntegrationTest extends AbstractIntegrationTest {
   @WithMockUser(roles = {"ADMIN"})
   public void testGetAllAuthors_empty() throws Exception {
     var response = mockMvc.perform(get(AuthorHelper.authorUrlPath)
-                    .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$['pageable']['paged']").value("true"))
-            .andReturn();
-    Page<AuthorResponse> authorsResponse = mapper.readValue(response.getResponse().getContentAsString(), new TypeReference<RestPageImpl<AuthorResponse>>() {});
+                .contentType(MediaType.APPLICATION_JSON))
+          .andExpect(status().isOk())
+          .andExpect(jsonPath("$['pageable']['paged']").value("true"))
+          .andReturn();
+    Page<AuthorResponse> authorsResponse = mapper.readValue(
+          response.getResponse().getContentAsString(),
+          new TypeReference<RestPageImpl<AuthorResponse>>() {}
+    );
 
     assertTrue(authorsResponse.isEmpty());
-    assertEquals( 0, authorsResponse.getTotalElements());
+    assertEquals(0, authorsResponse.getTotalElements());
     assertEquals(0, authorsResponse.getTotalPages());
     assertEquals(0, authorsResponse.getContent().size());
   }
@@ -130,14 +148,20 @@ public class ViewAuthorsIntegrationTest extends AbstractIntegrationTest {
   public void testGetAllAuthors_customPageRequest() throws Exception {
     List<Author> authorList = AuthorHelper.prepareAuthorList();
     authorList.forEach(a -> authorRepository.save(a));
-    Page<Author> expectedAuthorList = authorRepository.findAll(PageRequest.of(1, 3, Sort.by("id").descending())) ;
+    Page<Author> expectedAuthorList =
+          authorRepository.findAll(PageRequest.of(1, 3, Sort.by("id").descending()));
 
-    var response = mockMvc.perform(get(createUrlPathGetPageable(AuthorHelper.authorUrlPath, 1, 3, "id", false))
-                    .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$['pageable']['paged']").value("true"))
-            .andReturn();
-    Page<AuthorResponse> authorsResponse = mapper.readValue(response.getResponse().getContentAsString(), new TypeReference<RestPageImpl<AuthorResponse>>() {});
+    var response = mockMvc.perform(get(createUrlPathGetPageable(
+          AuthorHelper.authorUrlPath, 1, 3, "id", false)
+          )
+                .contentType(MediaType.APPLICATION_JSON))
+          .andExpect(status().isOk())
+          .andExpect(jsonPath("$['pageable']['paged']").value("true"))
+          .andReturn();
+    Page<AuthorResponse> authorsResponse = mapper.readValue(
+          response.getResponse().getContentAsString(),
+          new TypeReference<RestPageImpl<AuthorResponse>>() {}
+    );
 
     assertFalse(authorsResponse.isEmpty());
     assertEquals(expectedAuthorList.getTotalElements(), authorsResponse.getTotalElements());
@@ -146,9 +170,9 @@ public class ViewAuthorsIntegrationTest extends AbstractIntegrationTest {
 
     for (int i = 0; i < expectedAuthorList.getContent().size(); i++) {
       AssertionsForClassTypes.assertThat(authorsResponse.getContent().get(i))
-              .usingRecursiveComparison()
-              .ignoringFields("id")
-              .isEqualTo(authorMapper.mapEntityToResponse(expectedAuthorList.getContent().get(i)));
+            .usingRecursiveComparison()
+            .ignoringFields("id")
+            .isEqualTo(authorMapper.mapEntityToResponse(expectedAuthorList.getContent().get(i)));
     }
   }
 }

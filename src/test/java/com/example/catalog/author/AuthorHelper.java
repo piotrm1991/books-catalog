@@ -7,6 +7,9 @@ import com.example.catalog.author.response.AuthorResponse;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Helper class for author tests.
+ */
 public class AuthorHelper {
 
   public static final String authorUrlPath = "/authors";
@@ -15,6 +18,11 @@ public class AuthorHelper {
   public static final String nameUpdated = "Author Test Updated";
   public static final int testAuthorsCount = 18;
 
+  /**
+   * Creates Author object.
+   *
+   * @return Author object.
+   */
   public static Author createAuthor() {
 
     return Author.builder()
@@ -23,6 +31,11 @@ public class AuthorHelper {
         .build();
   }
 
+  /**
+   * Creates list of Author objects.
+   *
+   * @return List of Authors.
+   */
   public static List<Author> prepareAuthorList() {
     List<Author> list = new ArrayList<>();
     for (int i = 0; i < testAuthorsCount; i++) {
@@ -34,6 +47,11 @@ public class AuthorHelper {
     return list;
   }
 
+  /**
+   * Creates AuthorCreate record request.
+   *
+   * @return AuthorCreate record.
+   */
   public static AuthorCreate createAuthorCreate() {
 
     return new AuthorCreate(
@@ -41,6 +59,11 @@ public class AuthorHelper {
     );
   }
 
+  /**
+   * Creates AuthorResponse record.
+   *
+   * @return AuthorResponse record.
+   */
   public static AuthorResponse createAuthorResponse() {
 
     return new AuthorResponse(
@@ -49,6 +72,11 @@ public class AuthorHelper {
     );
   }
 
+  /**
+   * Creates AuthorUpdate record request.
+   *
+   * @return AuthorUpdate record.
+   */
   public static AuthorUpdate createAuthorUpdate() {
 
     return new AuthorUpdate(
@@ -56,6 +84,11 @@ public class AuthorHelper {
     );
   }
 
+  /**
+   * Creates AuthorCreate record request with empty author name.
+   *
+   * @return AuthorCreate record.
+   */
   public static AuthorCreate createEmptyAuthorCreate() {
 
     return new AuthorCreate(
@@ -63,6 +96,11 @@ public class AuthorHelper {
     );
   }
 
+  /**
+   * Creates AuthorUpdate record request with empty author name.
+   *
+   * @return AuthorUpdate record.
+   */
   public static AuthorUpdate createAuthorUpdateBlankName() {
 
     return new AuthorUpdate(
@@ -70,6 +108,12 @@ public class AuthorHelper {
     );
   }
 
+
+  /**
+   * Creates AuthorUpdate record request with already created name.
+   *
+   * @return AuthorUpdate record.
+   */
   public static AuthorUpdate createAuthorUpdateWithExistingName() {
 
     return new AuthorUpdate(

@@ -1,6 +1,8 @@
 package com.example.catalog.shelf.mapper;
 
-import com.example.catalog.room.service.RoomService;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
+
 import com.example.catalog.room.service.impl.RoomServiceImpl;
 import com.example.catalog.shelf.ShelfHelper;
 import com.example.catalog.shelf.entity.Shelf;
@@ -16,9 +18,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.when;
-
+/**
+ * Unit tests for mapping Shelf entity to record and
+ * record requests to Shelf entity.
+ */
 @ExtendWith(MockitoExtension.class)
 public class ShelfMapperTest {
 
@@ -56,7 +59,8 @@ public class ShelfMapperTest {
 
   @Test
   void givenCorrectEntity_whenMapEntityToResponse_thenCorrect() throws JsonProcessingException {
-    when(mapper.readValue(mapper.writeValueAsString(shelf), ShelfResponse.class)).thenReturn(shelfResponse);
+    when(mapper.readValue(mapper.writeValueAsString(shelf), ShelfResponse.class))
+          .thenReturn(shelfResponse);
 
     ShelfResponse expectedShelfResponse = shelfMapper.mapEntityToResponse(shelf);
 
@@ -64,7 +68,7 @@ public class ShelfMapperTest {
   }
 
   @Test
-  void givenCorrectUpdateRequest_whenMapShelfUpdateToEntity_thenCorrect() throws JsonProcessingException {
+  void givenCorrectUpdateRequest_whenMapShelfUpdateToEntity_thenCorrect() {
     Shelf expectedShelfUpdate = shelfMapper.mapShelfUpdateToEntity(shelf, shelfUpdate);
 
     assertEquals(expectedShelfUpdate.getNumber(), shelfAfterUpdate.getNumber());

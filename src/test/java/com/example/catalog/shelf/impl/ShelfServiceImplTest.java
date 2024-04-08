@@ -1,5 +1,13 @@
 package com.example.catalog.shelf.impl;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import com.example.catalog.exception.EntityNotFoundException;
 import com.example.catalog.room.RoomHelper;
 import com.example.catalog.room.service.RoomService;
@@ -11,6 +19,8 @@ import com.example.catalog.shelf.request.ShelfCreate;
 import com.example.catalog.shelf.request.ShelfUpdate;
 import com.example.catalog.shelf.response.ShelfResponse;
 import com.example.catalog.shelf.service.impl.ShelfServiceImpl;
+import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,15 +30,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-
-import java.util.List;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class ShelfServiceImplTest {

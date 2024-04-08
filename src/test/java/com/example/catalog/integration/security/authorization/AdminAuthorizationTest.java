@@ -1,5 +1,11 @@
 package com.example.catalog.integration.security.authorization;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import com.example.catalog.author.AuthorHelper;
 import com.example.catalog.author.entity.Author;
 import com.example.catalog.author.repository.AuthorRepository;
@@ -26,16 +32,16 @@ import com.example.catalog.user.response.UserResponse;
 import com.example.catalog.user.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
-import org.springframework.security.test.context.support.WithMockUser;
-import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
+/**
+ * Test checks if admin has access to all endpoints.
+ */
 @WithMockUser(roles = {"ADMIN"})
 public class AdminAuthorizationTest extends AbstractIntegrationTest {
 
@@ -80,8 +86,12 @@ public class AdminAuthorizationTest extends AbstractIntegrationTest {
 
   @BeforeEach
   void setup() {
-    userAdmin = userService.getUserByLogin(environment.getProperty("defaultCredentials.admin.login"));
-    userUserStartup = userService.getUserByLogin(environment.getProperty("defaultCredentials.user.login"));
+    userAdmin = userService.getUserByLogin(
+          environment.getProperty("defaultCredentials.admin.login")
+    );
+    userUserStartup = userService.getUserByLogin(
+          environment.getProperty("defaultCredentials.user.login")
+    );
     UserResponse userResponse = userService.createUser(UserHelper.createUserCreate());
     user = userRepository.findByLogin(userResponse.login()).get();
     userRepository.save(user);
@@ -90,7 +100,9 @@ public class AdminAuthorizationTest extends AbstractIntegrationTest {
     author = authorRepository.save(AuthorHelper.createAuthor());
     publisher = publisherRepository.save(PublisherHelper.createPublisher());
     statusType = statusTypeRepository.save(StatusTypeHelper.createStatusType());
-    book = bookRepository.save(BookHelper.createBookWithAllIds(author, publisher, shelf, statusType));
+    book = bookRepository.save(
+          BookHelper.createBookWithGivenAllSubEntities(author, publisher, shelf, statusType)
+    );
   }
 
   @Test
@@ -104,7 +116,9 @@ public class AdminAuthorizationTest extends AbstractIntegrationTest {
           .andExpect(status().isOk());
 
     mockMvc.perform(post(UserHelper.userUrlPath)
-                .content(mapper.writeValueAsString(UserHelper.createUserCreateWithGivenLogin("LoginTest123")))
+                .content(mapper.writeValueAsString(
+                      UserHelper.createUserCreateWithGivenLogin("LoginTest123"))
+                )
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
           .andExpect(status().isCreated());
@@ -162,7 +176,9 @@ public class AdminAuthorizationTest extends AbstractIntegrationTest {
           .andExpect(status().isOk());
 
     mockMvc.perform(post(ShelfHelper.shelfUrlPath)
-                .content(mapper.writeValueAsString(ShelfHelper.createShelfCreateWithRoomId(room.getId())))
+                .content(mapper.writeValueAsString(
+                      ShelfHelper.createShelfCreateWithGivenRoomId(room.getId()))
+                )
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
           .andExpect(status().isCreated());
@@ -213,7 +229,9 @@ public class AdminAuthorizationTest extends AbstractIntegrationTest {
   @Transactional
   public void adminAuthorizationOnPublisherEntity() throws Exception {
 
-    mockMvc.perform(put(createPathWithBaseUrlAndId(PublisherHelper.publisherUrlPath, publisher.getId()))
+    mockMvc.perform(put(createPathWithBaseUrlAndId(
+          PublisherHelper.publisherUrlPath, publisher.getId())
+          )
                 .content(mapper.writeValueAsString(PublisherHelper.createPublisherUpdate()))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
@@ -229,11 +247,13 @@ public class AdminAuthorizationTest extends AbstractIntegrationTest {
                 .contentType(MediaType.APPLICATION_JSON))
           .andExpect(status().isOk());
 
-    mockMvc.perform(get(createPathWithBaseUrlAndId(PublisherHelper.publisherUrlPath, publisher.getId()))
+    mockMvc.perform(get(createPathWithBaseUrlAndId(
+          PublisherHelper.publisherUrlPath, publisher.getId()))
                 .contentType(MediaType.APPLICATION_JSON))
           .andExpect(status().isOk());
 
-    mockMvc.perform(delete(createPathWithBaseUrlAndId(PublisherHelper.publisherUrlPath, publisher.getId()))
+    mockMvc.perform(delete(createPathWithBaseUrlAndId(
+          PublisherHelper.publisherUrlPath, publisher.getId()))
                 .contentType(MediaType.APPLICATION_JSON))
           .andExpect(status().isNoContent());
   }
@@ -242,7 +262,8 @@ public class AdminAuthorizationTest extends AbstractIntegrationTest {
   @Transactional
   public void adminAuthorizationOnStatusTypeEntity() throws Exception {
 
-    mockMvc.perform(put(createPathWithBaseUrlAndId(StatusTypeHelper.statusTypeUrlPath, statusType.getId()))
+    mockMvc.perform(put(createPathWithBaseUrlAndId(
+          StatusTypeHelper.statusTypeUrlPath, statusType.getId()))
                 .content(mapper.writeValueAsString(StatusTypeHelper.createStatusTypeUpdate()))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
@@ -258,11 +279,13 @@ public class AdminAuthorizationTest extends AbstractIntegrationTest {
                 .contentType(MediaType.APPLICATION_JSON))
           .andExpect(status().isOk());
 
-    mockMvc.perform(get(createPathWithBaseUrlAndId(StatusTypeHelper.statusTypeUrlPath, statusType.getId()))
+    mockMvc.perform(get(createPathWithBaseUrlAndId(
+          StatusTypeHelper.statusTypeUrlPath, statusType.getId()))
                 .contentType(MediaType.APPLICATION_JSON))
           .andExpect(status().isOk());
 
-    mockMvc.perform(delete(createPathWithBaseUrlAndId(StatusTypeHelper.statusTypeUrlPath, statusType.getId()))
+    mockMvc.perform(delete(createPathWithBaseUrlAndId(
+          StatusTypeHelper.statusTypeUrlPath, statusType.getId()))
                 .contentType(MediaType.APPLICATION_JSON))
           .andExpect(status().isNoContent());
   }
@@ -274,7 +297,10 @@ public class AdminAuthorizationTest extends AbstractIntegrationTest {
   public void adminAuthorizationOnBookEntity() throws Exception {
 
     mockMvc.perform(post(BookHelper.bookUrlPath)
-                .content(mapper.writeValueAsString(BookHelper.createBookCreateWithAllIds(author.getId(), publisher.getId(), shelf.getId(), statusType.getId())))
+                .content(mapper.writeValueAsString(
+                      BookHelper.createBookCreateWithAllIds(
+                            author.getId(), publisher.getId(), shelf.getId(), statusType.getId()))
+                )
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
           .andExpect(status().isCreated());

@@ -1,11 +1,13 @@
 package com.example.catalog.integration.security;
 
 import static com.example.catalog.util.MessagesConstants.SuccessfulLoginMessage;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.example.catalog.shared.AbstractIntegrationTest;
 import com.example.catalog.shared.RestPageImpl;
@@ -18,6 +20,9 @@ import com.example.catalog.user.service.UserService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.ArrayList;
+import java.util.List;
+import javax.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,10 +32,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpSession;
-import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.List;
 
+/**
+ * Integration test check logout and login endpoints.
+ */
 public class AuthenticationTest extends AbstractIntegrationTest {
 
   @Autowired
@@ -45,15 +50,16 @@ public class AuthenticationTest extends AbstractIntegrationTest {
   @Autowired
   private Environment environment;
 
-  private final ObjectMapper mapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+  private final ObjectMapper mapper = new ObjectMapper()
+        .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
   private User userAdmin;
-  private User userUser;
 
   @BeforeEach
   void prepareNeededUsers() {
-    userAdmin = userService.getUserByLogin(environment.getProperty("defaultCredentials.admin.login"));
-    userUser = userService.getUserByLogin(environment.getProperty("defaultCredentials.user.login"));
+    userAdmin = userService.getUserByLogin(
+          environment.getProperty("defaultCredentials.admin.login")
+    );
     mapper.findAndRegisterModules();
   }
 
@@ -62,7 +68,10 @@ public class AuthenticationTest extends AbstractIntegrationTest {
   public void givenCorrectCredentials_whenLogin_thenCorrect() throws Exception {
 
     var responseLogin = mockMvc.perform(post(SecurityHelper.urlPathLogin)
-                .with(httpBasic(userAdmin.getLogin(), environment.getProperty("defaultCredentials.admin.password")))
+                .with(httpBasic(
+                      userAdmin.getLogin(),
+                      environment.getProperty("defaultCredentials.admin.password"))
+                )
                 .contentType(MediaType.APPLICATION_JSON))
           .andExpect(status().isOk())
           .andReturn();
@@ -75,7 +84,8 @@ public class AuthenticationTest extends AbstractIntegrationTest {
     Page<User> expectedUsers = userRepository
           .findAll(PageRequest.of(0, 3, Sort.by(Sort.Direction.ASC, "id")));
     List<UserResponse> expectedUsersResponse = new ArrayList<>();
-    expectedUsers.getContent().forEach(u -> expectedUsersResponse.add(userMapper.mapEntityToResponse(u)));
+    expectedUsers.getContent()
+          .forEach(u -> expectedUsersResponse.add(userMapper.mapEntityToResponse(u)));
 
     var response = mockMvc.perform(get(UserHelper.userUrlPath)
                 .session(session)
@@ -83,7 +93,10 @@ public class AuthenticationTest extends AbstractIntegrationTest {
           .andExpect(status().isOk())
           .andReturn();
 
-    Page<UserResponse> usersResponse = mapper.readValue(response.getResponse().getContentAsString(), new TypeReference<RestPageImpl<UserResponse>>() {});
+    Page<UserResponse> usersResponse = mapper.readValue(
+          response.getResponse().getContentAsString(),
+          new TypeReference<RestPageImpl<UserResponse>>() {}
+    );
 
     assertFalse(usersResponse.isEmpty());
     assertEquals(usersResponse.getTotalElements(), expectedUsers.getTotalElements());
@@ -106,7 +119,10 @@ public class AuthenticationTest extends AbstractIntegrationTest {
   public void givenCorrectCredentials_whenLoginAndLogout_thenCorrect() throws Exception {
 
     var responseLogin = mockMvc.perform(post(SecurityHelper.urlPathLogin)
-                .with(httpBasic(userAdmin.getLogin(), environment.getProperty("defaultCredentials.admin.password")))
+                .with(httpBasic(
+                      userAdmin.getLogin(),
+                      environment.getProperty("defaultCredentials.admin.password"))
+                )
                 .contentType(MediaType.APPLICATION_JSON))
           .andExpect(status().isOk())
           .andReturn();

@@ -1,14 +1,24 @@
 package com.example.catalog.publisher.impl;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import com.example.catalog.exception.EntityNotFoundException;
+import com.example.catalog.publisher.PublisherHelper;
 import com.example.catalog.publisher.entity.Publisher;
 import com.example.catalog.publisher.mapper.PublisherMapper;
 import com.example.catalog.publisher.repository.PublisherRepository;
 import com.example.catalog.publisher.request.PublisherCreate;
 import com.example.catalog.publisher.request.PublisherUpdate;
 import com.example.catalog.publisher.response.PublisherResponse;
-import com.example.catalog.exception.EntityNotFoundException;
-import com.example.catalog.publisher.PublisherHelper;
 import com.example.catalog.publisher.service.impl.PublisherServiceImpl;
+import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,15 +28,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import java.util.List;
-import java.util.Optional;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class PublisherServiceImplTest {
@@ -71,7 +72,8 @@ class PublisherServiceImplTest {
     when(publisherRepository.save(any(Publisher.class))).thenReturn(publisher);
     when(publisherMapper.mapEntityToResponse(any(Publisher.class))).thenReturn(publisherResponse);
 
-    PublisherResponse actualPublisherResponse = publisherService.updatePublisher(PublisherHelper.id, publisherUpdate);
+    PublisherResponse actualPublisherResponse =
+          publisherService.updatePublisher(PublisherHelper.id, publisherUpdate);
 
     assertEquals(publisherResponse, actualPublisherResponse);
     verify(publisherRepository, times(1)).save(publisher);
@@ -136,7 +138,8 @@ class PublisherServiceImplTest {
     when(publisherRepository.findById(anyLong())).thenReturn(Optional.of(publisher));
     when(publisherMapper.mapEntityToResponse(publisher)).thenReturn(publisherResponse);
 
-    PublisherResponse actualPublisherResponse = publisherService.getPublisherResponseById(anyLong());
+    PublisherResponse actualPublisherResponse =
+          publisherService.getPublisherResponseById(anyLong());
 
     assertEquals(publisherResponse, actualPublisherResponse);
   }

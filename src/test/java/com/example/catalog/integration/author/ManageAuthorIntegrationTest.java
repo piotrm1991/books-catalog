@@ -24,13 +24,14 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+/**
+ * Integration tests for managing CRUD operations on Author entity.
+ * POST, PUT, DELETE.
+ */
 public class ManageAuthorIntegrationTest extends AbstractIntegrationTest {
 
   @Autowired
   private AuthorRepository authorRepository;
-
-  @Autowired
-  private AuthorMapper authorMapper;
 
   private final ObjectMapper mapper =
       new ObjectMapper()

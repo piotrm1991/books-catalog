@@ -1,20 +1,18 @@
 package com.example.catalog.user.service;
 
-import static com.example.catalog.util.MessagesConstants.*;
+import static com.example.catalog.util.MessagesConstants.createEntityNotExistsMessage;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.mockito.ArgumentMatchers.any;
 
-import java.util.List;
-import java.util.Optional;
 import com.example.catalog.date.service.DateService;
 import com.example.catalog.exception.EntityNotFoundException;
 import com.example.catalog.exception.ValidationException;
@@ -27,14 +25,23 @@ import com.example.catalog.user.request.UserCreate;
 import com.example.catalog.user.request.UserUpdate;
 import com.example.catalog.user.response.UserResponse;
 import com.example.catalog.user.service.impl.UserServiceImpl;
+import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
+/**
+ * Unit tests for implementation of UserService.
+ */
 @ExtendWith(MockitoExtension.class)
 public class UserServiceImplTest {
 
@@ -202,7 +209,9 @@ public class UserServiceImplTest {
   void givenNonExistentUserId_whenUpdateUser_thenThrowException() {
     when(userRepository.findById(user.getId())).thenReturn(Optional.empty());
 
-    assertThrows(EntityNotFoundException.class, () -> userService.updateUser(user.getId(), userUpdate));
+    assertThrows(
+          EntityNotFoundException.class, () -> userService.updateUser(user.getId(), userUpdate)
+    );
     verify(userRepository, never()).save(any());
   }
 

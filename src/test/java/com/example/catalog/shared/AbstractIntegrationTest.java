@@ -10,6 +10,9 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.testcontainers.containers.MySQLContainer;
 
+/**
+ * Abstract class for integration tests with database container and util methods.
+ */
 @SpringBootTest(classes = MainApplication.class)
 @ActiveProfiles("it")
 @AutoConfigureMockMvc

@@ -1,9 +1,12 @@
 package com.example.catalog.publisher.mapper;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
+
+import com.example.catalog.publisher.PublisherHelper;
 import com.example.catalog.publisher.entity.Publisher;
 import com.example.catalog.publisher.request.PublisherCreate;
 import com.example.catalog.publisher.response.PublisherResponse;
-import com.example.catalog.publisher.PublisherHelper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,9 +15,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.when;
 
+/**
+ * Unit tests for mapping Publisher to record response and
+ * to mapping record requests to Publisher entity.
+ */
 @ExtendWith(MockitoExtension.class)
 class PublisherMapperTest {
 
@@ -37,7 +42,8 @@ class PublisherMapperTest {
 
   @Test
   void givenCorrectRequest_whenMapRequestToEntity_thenCorrect() throws JsonProcessingException {
-    when(mapper.readValue(mapper.writeValueAsString(publisherCreate), Publisher.class)).thenReturn(publisher);
+    when(mapper.readValue(mapper.writeValueAsString(publisherCreate), Publisher.class))
+          .thenReturn(publisher);
 
     Publisher expectedLeave = publisherMapper.mapPublisherCreateToEntity(publisherCreate);
 
@@ -46,7 +52,8 @@ class PublisherMapperTest {
 
   @Test
   void givenCorrectEntity_whenMapEntityToResponse_thenCorrect() throws JsonProcessingException {
-    when(mapper.readValue(mapper.writeValueAsString(publisher), PublisherResponse.class)).thenReturn(publisherResponse);
+    when(mapper.readValue(mapper.writeValueAsString(publisher), PublisherResponse.class))
+          .thenReturn(publisherResponse);
 
     PublisherResponse expectedLeaveResponse = publisherMapper.mapEntityToResponse(publisher);
 

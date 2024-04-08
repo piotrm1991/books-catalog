@@ -1,32 +1,36 @@
 package com.example.catalog.integration.shelf;
 
+import static com.example.catalog.util.MessagesConstants.ShelfLetterNotBeBlank;
+import static com.example.catalog.util.MessagesConstants.ShelfNumberNotBeBlank;
+import static com.example.catalog.util.MessagesConstants.ShelfRoomNotBeBlank;
+import static com.example.catalog.util.MessagesConstants.createEntityNotExistsMessage;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import com.example.catalog.room.RoomHelper;
 import com.example.catalog.room.entity.Room;
 import com.example.catalog.room.repository.RoomRepository;
+import com.example.catalog.shared.AbstractIntegrationTest;
 import com.example.catalog.shelf.ShelfHelper;
 import com.example.catalog.shelf.entity.Shelf;
-import com.example.catalog.shelf.mapper.ShelfMapper;
 import com.example.catalog.shelf.repository.ShelfRepository;
 import com.example.catalog.shelf.response.ShelfResponse;
-import com.example.catalog.shared.AbstractIntegrationTest;
 import com.example.catalog.util.MessagesConstants;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import java.util.List;
+import javax.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import javax.transaction.Transactional;
-import java.util.List;
-
-import static com.example.catalog.util.MessagesConstants.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
+/**
+ * Integration tests for POST, PUT, DELETE operations on Shelf entity.
+ */
 public class ManageShelvesIntegrationTest extends AbstractIntegrationTest {
 
   @Autowired
@@ -35,10 +39,9 @@ public class ManageShelvesIntegrationTest extends AbstractIntegrationTest {
   @Autowired
   private RoomRepository roomRepository;
 
-  @Autowired
-  private ShelfMapper shelfMapper;
-
-  private final ObjectMapper mapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false).registerModule(new JavaTimeModule());
+  private final ObjectMapper mapper = new ObjectMapper()
+        .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+        .registerModule(new JavaTimeModule());
 
   @Test
   @Transactional
@@ -49,13 +52,18 @@ public class ManageShelvesIntegrationTest extends AbstractIntegrationTest {
 
     var response = mockMvc.perform(MockMvcRequestBuilders
             .post(ShelfHelper.shelfUrlPath)
-            .content(mapper.writeValueAsString(ShelfHelper.createShelfCreateWithRoomId(room.getId())))
+            .content(mapper.writeValueAsString(
+                  ShelfHelper.createShelfCreateWithGivenRoomId(room.getId()))
+            )
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isCreated())
             .andReturn();
 
-    ShelfResponse shelfResponse = mapper.readValue(response.getResponse().getContentAsString(), ShelfResponse.class);
+    ShelfResponse shelfResponse = mapper.readValue(
+          response.getResponse().getContentAsString(),
+          ShelfResponse.class
+    );
 
     assertEquals(ShelfHelper.letter, shelfResponse.letter());
     assertEquals(ShelfHelper.number, shelfResponse.number());
@@ -65,7 +73,9 @@ public class ManageShelvesIntegrationTest extends AbstractIntegrationTest {
   @Test
   @Transactional
   @WithMockUser(roles = {"ADMIN"})
-  public void givenIncorrectShelfCreateRoomNotExists_whenCreateShelf_thenException() throws Exception {
+  public void givenIncorrectShelfCreateRoomNotExists_whenCreateShelf_thenException()
+        throws Exception {
+
     var response = mockMvc.perform(MockMvcRequestBuilders
                     .post(ShelfHelper.shelfUrlPath)
                     .content(mapper.writeValueAsString(ShelfHelper.createShelfCreate()))
@@ -76,14 +86,20 @@ public class ManageShelvesIntegrationTest extends AbstractIntegrationTest {
 
     String errorMessage = response.getResponse().getContentAsString();
 
-    assertTrue(errorMessage.contains(MessagesConstants.createEntityNotExistsMessage(Room.class.getSimpleName(), 1L)));
+    assertTrue(errorMessage
+          .contains(
+                MessagesConstants.createEntityNotExistsMessage(Room.class.getSimpleName(),
+                1L)
+          ));
     assertEquals(0, shelfRepository.findAll().size());
   }
 
   @Test
   @Transactional
   @WithMockUser(roles = {"ADMIN"})
-  public void givenIncorrectShelfCreateBlankLetter_whenCreateShelf_thenException() throws Exception {
+  public void givenIncorrectShelfCreateBlankLetter_whenCreateShelf_thenException()
+        throws Exception {
+
     var response = mockMvc.perform(MockMvcRequestBuilders
                     .post(ShelfHelper.shelfUrlPath)
                     .content(mapper.writeValueAsString(ShelfHelper.createShelfCreateWithNoLetter()))
@@ -101,7 +117,9 @@ public class ManageShelvesIntegrationTest extends AbstractIntegrationTest {
   @Test
   @Transactional
   @WithMockUser(roles = {"ADMIN"})
-  public void givenIncorrectShelfCreateBlankNumber_whenCreateShelf_thenException() throws Exception {
+  public void givenIncorrectShelfCreateBlankNumber_whenCreateShelf_thenException()
+        throws Exception {
+
     var response = mockMvc.perform(MockMvcRequestBuilders
             .post(ShelfHelper.shelfUrlPath)
             .content(mapper.writeValueAsString(ShelfHelper.createShelfCreateWithNoNumber()))
@@ -119,7 +137,9 @@ public class ManageShelvesIntegrationTest extends AbstractIntegrationTest {
   @Test
   @Transactional
   @WithMockUser(roles = {"ADMIN"})
-  public void givenIncorrectShelfCreateBlankRoomId_whenCreateShelf_thenException() throws Exception {
+  public void givenIncorrectShelfCreateBlankRoomId_whenCreateShelf_thenException()
+        throws Exception {
+
     var response = mockMvc.perform(MockMvcRequestBuilders
             .post(ShelfHelper.shelfUrlPath)
             .content(mapper.writeValueAsString(ShelfHelper.createShelfCreateWithNoRoomId()))
@@ -151,18 +171,26 @@ public class ManageShelvesIntegrationTest extends AbstractIntegrationTest {
             .andExpect(status().isOk())
             .andReturn();
 
-    ShelfResponse shelfResponse = mapper.readValue(response.getResponse().getContentAsString(), ShelfResponse.class);
+    ShelfResponse shelfResponse = mapper.readValue(
+          response.getResponse().getContentAsString(),
+          ShelfResponse.class
+    );
 
     assertEquals(shelf.getId(), shelfResponse.id());
     assertEquals(ShelfHelper.numberUpdate, shelfResponse.number());
-    assertEquals(ShelfHelper.numberUpdate, shelfRepository.findById(shelf.getId()).get().getNumber());
+    assertEquals(
+          ShelfHelper.numberUpdate,
+          shelfRepository.findById(shelf.getId()).get().getNumber()
+    );
     assertEquals(1, shelfRepository.findAll().size());
   }
 
   @Test
   @Transactional
   @WithMockUser(roles = {"ADMIN"})
-  public void givenIncorrectShelfUpdateIdNotExists_whenUpdateShelf_thenException() throws Exception {
+  public void givenIncorrectShelfUpdateIdNotExists_whenUpdateShelf_thenException()
+        throws Exception {
+
     List<Shelf> shelfList = ShelfHelper.prepareShelfList();
     shelfList.forEach(a -> shelfRepository.save(a));
     Long invalidId = 100L;
@@ -177,7 +205,10 @@ public class ManageShelvesIntegrationTest extends AbstractIntegrationTest {
 
     String errorMessage = response.getResponse().getContentAsString();
 
-    assertEquals(createEntityNotExistsMessage(Shelf.class.getSimpleName(), invalidId), errorMessage);
+    assertEquals(
+          createEntityNotExistsMessage(Shelf.class.getSimpleName(), invalidId),
+          errorMessage
+    );
   }
 
   @Test
@@ -194,7 +225,7 @@ public class ManageShelvesIntegrationTest extends AbstractIntegrationTest {
                     .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isNoContent());
 
-    assertEquals(ShelfHelper.testShelvesCount-1, shelfRepository.findAll().size());
+    assertEquals(ShelfHelper.testShelvesCount - 1, shelfRepository.findAll().size());
   }
 
   @Test
@@ -214,7 +245,10 @@ public class ManageShelvesIntegrationTest extends AbstractIntegrationTest {
 
     String errorMessage = response.getResponse().getContentAsString();
 
-    assertEquals(createEntityNotExistsMessage(Shelf.class.getSimpleName(), invalidId), errorMessage);
+    assertEquals(
+          createEntityNotExistsMessage(Shelf.class.getSimpleName(), invalidId),
+          errorMessage
+    );
     assertEquals(ShelfHelper.testShelvesCount, shelfRepository.findAll().size());
   }
 }

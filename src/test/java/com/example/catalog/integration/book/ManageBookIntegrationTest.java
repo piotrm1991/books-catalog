@@ -11,7 +11,6 @@ import com.example.catalog.author.entity.Author;
 import com.example.catalog.author.repository.AuthorRepository;
 import com.example.catalog.book.BookHelper;
 import com.example.catalog.book.entity.Book;
-import com.example.catalog.book.mapper.BookMapper;
 import com.example.catalog.book.repository.BookRepository;
 import com.example.catalog.book.response.BookResponse;
 import com.example.catalog.publisher.PublisherHelper;
@@ -36,13 +35,13 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+/**
+ * Integration tests for POST, PUT, DELETE operations on Book entity.
+ */
 public class ManageBookIntegrationTest extends AbstractIntegrationTest {
 
   @Autowired
   private BookRepository bookRepository;
-
-  @Autowired
-  private BookMapper bookMapper;
 
   @Autowired
   private AuthorRepository authorRepository;

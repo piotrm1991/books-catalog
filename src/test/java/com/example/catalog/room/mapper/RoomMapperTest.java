@@ -1,10 +1,12 @@
 package com.example.catalog.room.mapper;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
+
+import com.example.catalog.room.RoomHelper;
 import com.example.catalog.room.entity.Room;
-import com.example.catalog.room.mapper.RoomMapper;
 import com.example.catalog.room.request.RoomCreate;
 import com.example.catalog.room.response.RoomResponse;
-import com.example.catalog.room.RoomHelper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,9 +15,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class RoomMapperTest {
@@ -48,7 +47,8 @@ class RoomMapperTest {
 
   @Test
   void givenCorrectEntity_whenMapEntityToResponse_thenCorrect() throws JsonProcessingException {
-    when(mapper.readValue(mapper.writeValueAsString(room), RoomResponse.class)).thenReturn(roomResponse);
+    when(mapper.readValue(mapper.writeValueAsString(room), RoomResponse.class))
+          .thenReturn(roomResponse);
 
     RoomResponse expectedRoomResponse = roomMapper.mapEntityToResponse(room);
 

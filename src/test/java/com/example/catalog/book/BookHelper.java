@@ -12,10 +12,12 @@ import com.example.catalog.shelf.ShelfHelper;
 import com.example.catalog.shelf.entity.Shelf;
 import com.example.catalog.statustype.StatusTypeHelper;
 import com.example.catalog.statustype.entity.StatusType;
-
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Helper class for test with Book entity.
+ */
 public class BookHelper {
   public static final String bookUrlPath = "/books";
   public static final Long id = 1L;
@@ -23,6 +25,11 @@ public class BookHelper {
   public static final String titleUpdated = "Book Test Updated";
   public static final int testBooksCount = 10;
 
+  /**
+   * Create Book object.
+   *
+   * @return Book entity.
+   */
   public static Book createBook() {
 
     return Book.builder()
@@ -35,6 +42,11 @@ public class BookHelper {
             .build();
   }
 
+  /**
+   * Creates BookCreate record request.
+   *
+   * @return BookCreate record.
+   */
   public static BookCreate createBookCreate() {
 
     return new BookCreate(
@@ -46,6 +58,11 @@ public class BookHelper {
     );
   }
 
+  /**
+   * Create BookResponse record.
+   *
+   * @return BookResponse record.
+   */
   public static BookResponse createBookResponse() {
 
     return new BookResponse(
@@ -58,6 +75,11 @@ public class BookHelper {
     );
   }
 
+  /**
+   * Creates BookUpdate record request.
+   *
+   * @return BookUpdate record.
+   */
   public static BookUpdate createBookUpdate() {
 
     return new BookUpdate(
@@ -69,6 +91,11 @@ public class BookHelper {
     );
   }
 
+  /**
+   * Creates list of Book objects for tests.
+   *
+   * @return List of Book objects.
+   */
   public static List<Book> prepareBookList() {
     List<Book> list = new ArrayList<>();
     for (int i = 0; i < testBooksCount; i++) {
@@ -80,6 +107,11 @@ public class BookHelper {
     return list;
   }
 
+  /**
+   * Creates BookCreate record with blank book title.
+   *
+   * @return BookCreate record.
+   */
   public static BookCreate createEmptyBookCreate() {
     
     return new BookCreate(
@@ -91,6 +123,11 @@ public class BookHelper {
     );
   }
 
+  /**
+   * Creates BookUpdate record with blank title and null ids.
+   *
+   * @return BookUpdate record.
+   */
   public static BookUpdate createBookUpdateBlankName() {
 
     return new BookUpdate(
@@ -102,6 +139,15 @@ public class BookHelper {
   );
   }
 
+  /**
+   * Create BookCreate record with give ids.
+   *
+   * @param authorId Long Author id.
+   * @param publisherId Long Publisher id.
+   * @param shelfId Long Shelf id.
+   * @param statusTypeId Long StatusType id.
+   * @return BookCreate record.
+   */
   public static BookCreate createBookCreateWithAllIds(
       Long authorId,
       Long publisherId,
@@ -118,7 +164,16 @@ public class BookHelper {
     );
   }
 
-  public static Book createBookWithAllIds(
+  /**
+   * Create Book object with given author, publisher, shelf and statusType.
+   *
+   * @param author Author entity.
+   * @param publisher Publisher entity.
+   * @param shelf Shelf entity.
+   * @param statusType StatusType entity.
+   * @return Book object.
+   */
+  public static Book createBookWithGivenAllSubEntities(
         Author author,
         Publisher publisher,
         Shelf shelf,
