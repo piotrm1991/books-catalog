@@ -29,7 +29,7 @@ public class LoginController {
   @PostMapping("/login")
   public String login(HttpSession session) {
     String currentUserLogin = SecurityContextHolder.getContext().getAuthentication().getName();
-    log.info("GET-request: successful login with login: {}", currentUserLogin);
+    log.info("POST-request: successful login with login: {}", currentUserLogin);
 
     session.setMaxInactiveInterval(60 * 5);
 
