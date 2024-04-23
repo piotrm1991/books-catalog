@@ -24,10 +24,15 @@ public class UserDetailsImpl implements UserDetails {
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
     Set<GrantedAuthority> authorities = new HashSet<>();
-    String role = user.getRole().name();
+    String role = user.getRole().toString();
     authorities.add(new SimpleGrantedAuthority("ROLE_" + role));
 
     return authorities;
+  }
+
+  public String getCurrentUserRole() {
+
+    return this.user.getRole().toString();
   }
 
   @Override

@@ -15,7 +15,7 @@ import javax.validation.Payload;
  * the provided user login does not exist in the system.
  */
 @Constraint(validatedBy = LoginValidator.class)
-@Target({ ElementType.METHOD, ElementType.FIELD })
+@Target({ElementType.TYPE, ElementType.METHOD, ElementType.FIELD })
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public  @interface LoginAlreadyExists {

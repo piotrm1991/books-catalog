@@ -41,8 +41,12 @@ public class BasicAuthWebSecurityConfiguration implements WebMvcConfigurer {
    */
   LogoutHandler logoutHandler() {
     return ((request, response, authentication) -> {
-      String username = authentication.getName();
-      log.info("DELETE-request: successful logout of user: {}.", username);
+      if (authentication != null) {
+        String username = authentication.getName();
+        log.info("DELETE-request: successful logout of user: {}.", username);
+      } else {
+        log.info("DELETE-request: tried to logout on finished session");
+      }
     });
   }
 
