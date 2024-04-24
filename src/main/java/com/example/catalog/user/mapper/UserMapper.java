@@ -69,9 +69,6 @@ public class UserMapper {
     if (userUpdate.login() != null) {
       user.setLogin(userUpdate.login());
     }
-//    if (userUpdate.password() != null) {
-//      user.setPassword(userUpdate.password());
-//    }
     if (userUpdate.role() != null) {
       user.setRole(userUpdate.role());
     }

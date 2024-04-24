@@ -137,6 +137,7 @@ public class AuthenticationTest extends AbstractIntegrationTest {
                 .contentType(MediaType.APPLICATION_JSON))
           .andExpect(status().isOk());
 
+    // TODO: change after logout log, FIX
     mockMvc.perform(delete(SecurityHelper.urlPathLogout)
                 .session(session)
                 .contentType(MediaType.APPLICATION_JSON))

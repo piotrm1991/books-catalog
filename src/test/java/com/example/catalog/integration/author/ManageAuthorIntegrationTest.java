@@ -1,7 +1,7 @@
 package com.example.catalog.integration.author;
 
-import static com.example.catalog.util.MessagesConstants.AuthorNameAlreadyExists;
-import static com.example.catalog.util.MessagesConstants.AuthorNameCanNotBeBlank;
+import static com.example.catalog.util.MessagesConstants.AuthorNameAlreadyExistsMessage;
+import static com.example.catalog.util.MessagesConstants.AuthorNameCanNotBeBlankMessage;
 import static com.example.catalog.util.MessagesConstants.createEntityNotExistsMessage;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -9,7 +9,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.example.catalog.author.AuthorHelper;
 import com.example.catalog.author.entity.Author;
-import com.example.catalog.author.mapper.AuthorMapper;
 import com.example.catalog.author.repository.AuthorRepository;
 import com.example.catalog.author.response.AuthorResponse;
 import com.example.catalog.shared.AbstractIntegrationTest;
@@ -79,7 +78,7 @@ public class ManageAuthorIntegrationTest extends AbstractIntegrationTest {
 
     String errorMessage = response.getResponse().getContentAsString();
 
-    assertTrue(errorMessage.contains(AuthorNameAlreadyExists));
+    assertTrue(errorMessage.contains(AuthorNameAlreadyExistsMessage));
     assertEquals(1, authorRepository.findAll().size());
   }
 
@@ -98,7 +97,7 @@ public class ManageAuthorIntegrationTest extends AbstractIntegrationTest {
 
     String errorMessage = response.getResponse().getContentAsString();
 
-    assertTrue(errorMessage.contains(AuthorNameCanNotBeBlank));
+    assertTrue(errorMessage.contains(AuthorNameCanNotBeBlankMessage));
     assertEquals(0, authorRepository.findAll().size());
   }
 
@@ -145,7 +144,7 @@ public class ManageAuthorIntegrationTest extends AbstractIntegrationTest {
 
     String errorMessage = response.getResponse().getContentAsString();
 
-    assertTrue(errorMessage.contains(AuthorNameCanNotBeBlank));
+    assertTrue(errorMessage.contains(AuthorNameCanNotBeBlankMessage));
     assertEquals(1, authorRepository.findAll().size());
   }
 
@@ -166,7 +165,7 @@ public class ManageAuthorIntegrationTest extends AbstractIntegrationTest {
 
     String errorMessage = response.getResponse().getContentAsString();
 
-    assertTrue(errorMessage.contains(AuthorNameAlreadyExists));
+    assertTrue(errorMessage.contains(AuthorNameAlreadyExistsMessage));
     assertEquals(1, authorRepository.findAll().size());
   }
 

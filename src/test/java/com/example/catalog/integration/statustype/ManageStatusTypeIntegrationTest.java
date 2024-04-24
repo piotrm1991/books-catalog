@@ -1,7 +1,7 @@
 package com.example.catalog.integration.statustype;
 
-import static com.example.catalog.util.MessagesConstants.StatusTypeNameAlreadyExists;
-import static com.example.catalog.util.MessagesConstants.StatusTypeNameCanNotBeBlank;
+import static com.example.catalog.util.MessagesConstants.StatusTypeNameAlreadyExistsMessage;
+import static com.example.catalog.util.MessagesConstants.StatusTypeNameCanNotBeBlankMessage;
 import static com.example.catalog.util.MessagesConstants.createEntityNotExistsMessage;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -79,7 +79,7 @@ public class ManageStatusTypeIntegrationTest extends AbstractIntegrationTest {
 
     String errorMessage = response.getResponse().getContentAsString();
 
-    assertTrue(errorMessage.contains(StatusTypeNameAlreadyExists));
+    assertTrue(errorMessage.contains(StatusTypeNameAlreadyExistsMessage));
     assertEquals(1, statusTypeRepository.findAll().size());
   }
 
@@ -101,7 +101,7 @@ public class ManageStatusTypeIntegrationTest extends AbstractIntegrationTest {
 
     String errorMessage = response.getResponse().getContentAsString();
 
-    assertTrue(errorMessage.contains(StatusTypeNameCanNotBeBlank));
+    assertTrue(errorMessage.contains(StatusTypeNameCanNotBeBlankMessage));
     assertEquals(0, statusTypeRepository.findAll().size());
   }
 
@@ -159,7 +159,7 @@ public class ManageStatusTypeIntegrationTest extends AbstractIntegrationTest {
 
     String errorMessage = response.getResponse().getContentAsString();
 
-    assertTrue(errorMessage.contains(StatusTypeNameCanNotBeBlank));
+    assertTrue(errorMessage.contains(StatusTypeNameCanNotBeBlankMessage));
     assertEquals(1, statusTypeRepository.findAll().size());
   }
 
@@ -186,7 +186,7 @@ public class ManageStatusTypeIntegrationTest extends AbstractIntegrationTest {
 
     String errorMessage = response.getResponse().getContentAsString();
 
-    assertTrue(errorMessage.contains(StatusTypeNameAlreadyExists));
+    assertTrue(errorMessage.contains(StatusTypeNameAlreadyExistsMessage));
     assertEquals(1, statusTypeRepository.findAll().size());
   }
 

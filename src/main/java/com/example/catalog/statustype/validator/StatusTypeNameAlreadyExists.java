@@ -1,6 +1,6 @@
 package com.example.catalog.statustype.validator;
 
-import static com.example.catalog.util.MessagesConstants.StatusTypeNameAlreadyExists;
+import static com.example.catalog.util.MessagesConstants.DefaultEntityNameAlreadyExists;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -25,7 +25,7 @@ public  @interface StatusTypeNameAlreadyExists {
    *
    * @return The validation error message.
    */
-  String message() default StatusTypeNameAlreadyExists;
+  String message() default DefaultEntityNameAlreadyExists;
 
   /**
    * Specifies the validation groups to which this constraint belongs.

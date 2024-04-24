@@ -68,7 +68,6 @@ public class UserMapperTest {
     User expectedUser = userMapper.mapUserUpdateToEntity(user, userUpdate);
 
     assertEquals(userUpdate.login(), expectedUser.getLogin());
-    assertEquals(userUpdate.password(), expectedUser.getPassword());
     assertEquals(userUpdate.role(), expectedUser.getRole());
     assertEquals(userUpdate.status(), expectedUser.getStatus());
   }

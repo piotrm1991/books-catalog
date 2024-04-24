@@ -22,8 +22,9 @@ public class MessagesConstants {
   public static final String PasswordSizeMinMessage =
           "Password must be at least 8 characters long.";
   public static final String LoginAlreadyExists = "This login already exists in the system.";
-  public static final String AuthorNameAlreadyExists = "Author with this name already exists.";
-  public static final String AuthorNameCanNotBeBlank = "You need to provide author name.";
+  public static final String AuthorNameAlreadyExistsMessage =
+          "Author with this name already exists.";
+  public static final String AuthorNameCanNotBeBlankMessage = "You need to provide author name.";
   public static final String ShelfLetterNotBeBlank = "You need to provide letter for shelf.";
   public static final String ShelfNumberNotBeBlank = "You need to provide number for shelf.";
   public static final String ShelfRoomNotBeBlank = "You need to provide room for shelf.";
@@ -32,18 +33,22 @@ public class MessagesConstants {
   public static final String AuthorCanNotBeBlank = "You need to provide author.";
   public static final String PublisherCanNotBeBlank = "You need to provide publisher.";
   public static final String StatusTypeCanNotBeBlank = "You need to provide status type.";
-  public static final String PublisherNameAlreadyExists =
+  public static final String PublisherNameAlreadyExistsMessage =
           "Publisher with this name already exists.";
   public static final String PublisherNameCanNotBeBlank = "You need to provide publisher name.";
 
-  public static final String RoomNameAlreadyExists =
+  public static final String RoomNameAlreadyExistsMessage =
           "Room with this name already exists.";
-  public static final String RoomNameCanNotBeBlank = "You need to provide room name.";
+  public static final String RoomNameCanNotBeBlankMessage = "You need to provide room name.";
 
-  public static final String StatusTypeNameAlreadyExists =
+  public static final String StatusTypeNameAlreadyExistsMessage =
           "StatusType with this name already exists.";
-  public static final String StatusTypeNameCanNotBeBlank = "You need to provide status type name.";
+  public static final String StatusTypeNameCanNotBeBlankMessage =
+          "You need to provide status type name.";
   public static final String SuccessfulLoginMessage = "You successfully logged in!";
+
+  public static final String DefaultEntityNameAlreadyExists =
+          "Entity with this name already exists.";
 
   /**
    * Takes entity name and its id and creates error message entity not found.

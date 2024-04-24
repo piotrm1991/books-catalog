@@ -1,6 +1,6 @@
 package com.example.catalog.publisher.validator;
 
-import static com.example.catalog.util.MessagesConstants.PublisherNameAlreadyExists;
+import static com.example.catalog.util.MessagesConstants.DefaultEntityNameAlreadyExists;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -25,7 +25,7 @@ public  @interface PublisherNameAlreadyExists {
    *
    * @return The validation error message.
    */
-  String message() default PublisherNameAlreadyExists;
+  String message() default DefaultEntityNameAlreadyExists;
 
   /**
    * Specifies the validation groups to which this constraint belongs.

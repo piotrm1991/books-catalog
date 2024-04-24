@@ -2,10 +2,8 @@ package com.example.catalog.security.controller;
 
 import static com.example.catalog.util.MessagesConstants.SuccessfulLoginMessage;
 
-import javax.servlet.http.HttpSession;
-
 import com.example.catalog.security.service.UserDetailsImpl;
-import com.example.catalog.user.service.UserService;
+import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -51,8 +49,10 @@ public class LoginController {
   @GetMapping("/currentUserRole")
   public String getCurrentUserRole() {
     String currentUserLogin = SecurityContextHolder.getContext().getAuthentication().getName();
-    String currentUserRole = ((UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getCurrentUserRole();
-    log.info("GET-request: getting current role: {} from user: {}", currentUserRole, currentUserLogin);
+    String currentUserRole = ((UserDetailsImpl) SecurityContextHolder
+            .getContext().getAuthentication().getPrincipal()).getCurrentUserRole();
+    log.info("GET-request: getting current role: {} from user: {}",
+            currentUserRole, currentUserLogin);
 
     return currentUserRole;
   }

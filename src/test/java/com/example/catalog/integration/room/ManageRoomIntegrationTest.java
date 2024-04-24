@@ -1,7 +1,7 @@
 package com.example.catalog.integration.room;
 
-import static com.example.catalog.util.MessagesConstants.RoomNameAlreadyExists;
-import static com.example.catalog.util.MessagesConstants.RoomNameCanNotBeBlank;
+import static com.example.catalog.util.MessagesConstants.RoomNameAlreadyExistsMessage;
+import static com.example.catalog.util.MessagesConstants.RoomNameCanNotBeBlankMessage;
 import static com.example.catalog.util.MessagesConstants.createEntityNotExistsMessage;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -75,7 +75,7 @@ public class ManageRoomIntegrationTest extends AbstractIntegrationTest {
 
     String errorMessage = response.getResponse().getContentAsString();
 
-    assertTrue(errorMessage.contains(RoomNameAlreadyExists));
+    assertTrue(errorMessage.contains(RoomNameAlreadyExistsMessage));
     assertEquals(1, roomRepository.findAll().size());
   }
 
@@ -93,7 +93,7 @@ public class ManageRoomIntegrationTest extends AbstractIntegrationTest {
 
     String errorMessage = response.getResponse().getContentAsString();
 
-    assertTrue(errorMessage.contains(RoomNameCanNotBeBlank));
+    assertTrue(errorMessage.contains(RoomNameCanNotBeBlankMessage));
     assertEquals(0, roomRepository.findAll().size());
   }
 
@@ -136,7 +136,7 @@ public class ManageRoomIntegrationTest extends AbstractIntegrationTest {
 
     String errorMessage = response.getResponse().getContentAsString();
 
-    assertTrue(errorMessage.contains(RoomNameCanNotBeBlank));
+    assertTrue(errorMessage.contains(RoomNameCanNotBeBlankMessage));
     assertEquals(1, roomRepository.findAll().size());
   }
 
@@ -157,8 +157,9 @@ public class ManageRoomIntegrationTest extends AbstractIntegrationTest {
         .andReturn();
 
     String errorMessage = response.getResponse().getContentAsString();
+    System.out.println("test-- " + errorMessage);
 
-    assertTrue(errorMessage.contains(RoomNameAlreadyExists));
+    assertTrue(errorMessage.contains(RoomNameAlreadyExistsMessage));
     assertEquals(1, roomRepository.findAll().size());
   }
 

@@ -1,6 +1,6 @@
 package com.example.catalog.statustype.request;
 
-import static com.example.catalog.util.MessagesConstants.StatusTypeNameCanNotBeBlank;
+import static com.example.catalog.util.MessagesConstants.StatusTypeNameCanNotBeBlankMessage;
 
 import com.example.catalog.statustype.validator.StatusTypeNameAlreadyExists;
 import javax.validation.constraints.NotBlank;
@@ -10,7 +10,7 @@ import javax.validation.constraints.NotBlank;
  */
 public record StatusTypeUpdate(
 
-    @NotBlank(message = StatusTypeNameCanNotBeBlank)
+    @NotBlank(message = StatusTypeNameCanNotBeBlankMessage)
     @StatusTypeNameAlreadyExists
     String name
 ) {}

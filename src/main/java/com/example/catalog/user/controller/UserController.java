@@ -74,7 +74,7 @@ public class UserController {
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("hasRole('ADMIN')")
   public Page<UserResponse> getAllUsers(@PageableDefault(size = 5) Pageable pageable) {
-    log.info("GET-request: getting all books.");
+    log.info("GET-request: getting all users.");
 
     return userService.getAllUsers(pageable);
   }

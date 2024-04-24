@@ -1,6 +1,6 @@
 package com.example.catalog.integration.publisher;
 
-import static com.example.catalog.util.MessagesConstants.PublisherNameAlreadyExists;
+import static com.example.catalog.util.MessagesConstants.PublisherNameAlreadyExistsMessage;
 import static com.example.catalog.util.MessagesConstants.PublisherNameCanNotBeBlank;
 import static com.example.catalog.util.MessagesConstants.createEntityNotExistsMessage;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -77,7 +77,7 @@ public class ManagePublisherIntegrationTest extends AbstractIntegrationTest {
 
     String errorMessage = response.getResponse().getContentAsString();
 
-    assertTrue(errorMessage.contains(PublisherNameAlreadyExists));
+    assertTrue(errorMessage.contains(PublisherNameAlreadyExistsMessage));
     assertEquals(1, publisherRepository.findAll().size());
   }
 
@@ -166,7 +166,7 @@ public class ManagePublisherIntegrationTest extends AbstractIntegrationTest {
 
     String errorMessage = response.getResponse().getContentAsString();
 
-    assertTrue(errorMessage.contains(PublisherNameAlreadyExists));
+    assertTrue(errorMessage.contains(PublisherNameAlreadyExistsMessage));
     assertEquals(1, publisherRepository.findAll().size());
   }
 

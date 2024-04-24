@@ -61,23 +61,23 @@ public class BasicAuthWebSecurityConfiguration implements WebMvcConfigurer {
   protected SecurityFilterChain configure(HttpSecurity http) throws Exception {
 
     http
-      .csrf().disable()
-      .cors().and()
-      .authorizeRequests()
-      .anyRequest().authenticated()
-      .and().userDetailsService(userDetailsService())
-      .logout().deleteCookies("JSESSIONID").addLogoutHandler(logoutHandler())
-      .logoutSuccessHandler((new HttpStatusReturningLogoutSuccessHandler(HttpStatus.OK)))
-      .and()
-      .httpBasic((basic) -> basic
-            .addObjectPostProcessor(new ObjectPostProcessor<BasicAuthenticationFilter>() {
-              @Override
-              public <O extends BasicAuthenticationFilter> O postProcess(O filter) {
-                filter.setSecurityContextRepository(new HttpSessionSecurityContextRepository());
-                return filter;
-              }
-            })
-      );
+        .csrf().disable()
+        .cors().and()
+        .authorizeRequests()
+        .anyRequest().authenticated()
+        .and().userDetailsService(userDetailsService())
+        .logout().deleteCookies("JSESSIONID").addLogoutHandler(logoutHandler())
+        .logoutSuccessHandler((new HttpStatusReturningLogoutSuccessHandler(HttpStatus.OK)))
+        .and()
+        .httpBasic((basic) -> basic
+              .addObjectPostProcessor(new ObjectPostProcessor<BasicAuthenticationFilter>() {
+                @Override
+                public <O extends BasicAuthenticationFilter> O postProcess(O filter) {
+                  filter.setSecurityContextRepository(new HttpSessionSecurityContextRepository());
+                  return filter;
+                }
+              })
+    );
 
     return http.build();
   }

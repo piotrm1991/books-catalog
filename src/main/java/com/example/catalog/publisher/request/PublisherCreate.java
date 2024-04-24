@@ -1,5 +1,6 @@
 package com.example.catalog.publisher.request;
 
+import static com.example.catalog.util.MessagesConstants.PublisherNameAlreadyExistsMessage;
 import static com.example.catalog.util.MessagesConstants.PublisherNameCanNotBeBlank;
 
 import com.example.catalog.publisher.validator.PublisherNameAlreadyExists;
@@ -11,6 +12,6 @@ import javax.validation.constraints.NotBlank;
 public record PublisherCreate(
 
     @NotBlank(message = PublisherNameCanNotBeBlank)
-    @PublisherNameAlreadyExists
+    @PublisherNameAlreadyExists(message = PublisherNameAlreadyExistsMessage)
     String name
 ) {}

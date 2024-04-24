@@ -12,6 +12,7 @@ import com.example.catalog.user.validator.LoginAlreadyExists;
 import com.example.catalog.user.validator.PasswordMatching;
 import com.example.catalog.user.validator.StrongPassword;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
@@ -36,5 +37,6 @@ public record UserCreate(
         @NotBlank(message = ConfirmPasswordCanNotBeBlankErrorMessage)
         String confirmPassword,
 
+        @NotNull(message = "You have to choose user status.")
         UserRoleEnum role
 ) {}

@@ -88,9 +88,8 @@ public class UserHelper {
   public static UserUpdate createUserUpdate() {
 
     return new UserUpdate(
+        id,
         updateLogin,
-        updatePassword,
-        updatePassword,
         updateRole,
         updateStatus
     );
@@ -205,9 +204,8 @@ public class UserHelper {
   public static UserUpdate createUserUpdateBlankLogin() {
 
     return new UserUpdate(
+        id,
         "",
-        updatePassword,
-        updatePassword,
         updateRole,
         updateStatus
     );
@@ -221,9 +219,8 @@ public class UserHelper {
   public static UserUpdate createUserUpdateWithExistingLogin() {
 
     return new UserUpdate(
+        id,
         login,
-        updatePassword,
-        updatePassword,
         updateRole,
         updateStatus
     );
