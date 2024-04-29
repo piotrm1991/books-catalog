@@ -4,6 +4,7 @@ import com.example.catalog.publisher.request.PublisherCreate;
 import com.example.catalog.publisher.request.PublisherUpdate;
 import com.example.catalog.publisher.response.PublisherResponse;
 import com.example.catalog.publisher.service.PublisherService;
+import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -87,13 +88,28 @@ public class PublisherController {
    * @param pageable        The pagination information.
    * @return A {@link Page} containing publisher responses.
    */
-  @GetMapping
+  @GetMapping(params = {"page", "size"})
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
   public Page<PublisherResponse> getAllPublishers(@PageableDefault(size = 5) Pageable pageable) {
     log.info("GET-request: getting all publishers.");
 
     return publisherService.getAllPublishersPage(pageable);
+  }
+
+  /**
+   * Retrieve a list of publisher responses,
+   * if params page and size are not provided.
+   *
+   * @return {@link List} containing PublisherResponse records.
+   */
+  @GetMapping(params = {})
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+  public List<PublisherResponse> getAllPublishers() {
+    log.info("GET-request: getting all publishers as List.");
+
+    return publisherService.getAllPublishersList();
   }
 
   /**

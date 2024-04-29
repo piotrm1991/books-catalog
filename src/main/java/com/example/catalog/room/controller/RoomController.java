@@ -4,6 +4,7 @@ import com.example.catalog.room.request.RoomCreate;
 import com.example.catalog.room.request.RoomUpdate;
 import com.example.catalog.room.response.RoomResponse;
 import com.example.catalog.room.service.RoomService;
+import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -82,18 +83,34 @@ public class RoomController {
   }
 
   /**
-   * Retrieve a paginated list of room responses.
+   * Retrieve a paginated list of room responses,
+   * if params page and size are provided.
    *
    * @param pageable        The pagination information.
    * @return A {@link Page} containing room responses.
    */
-  @GetMapping
+  @GetMapping(params = {"page", "size"})
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
   public Page<RoomResponse> getAllRooms(@PageableDefault(size = 5) Pageable pageable) {
-    log.info("GET-request: getting all rooms.");
+    log.info("GET-request: getting all rooms as Page.");
 
     return roomService.getAllRoomsPage(pageable);
+  }
+
+  /**
+   * Retrieve a list of room responses,
+   * if params page and size are not provided.
+   *
+   * @return A {@link List} containing RoomResponse records.
+   */
+  @GetMapping(params = {})
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+  public List<RoomResponse> getAllRooms() {
+    log.info("GET-request: getting all rooms as List.");
+
+    return roomService.getAllRoomsList();
   }
 
   /**

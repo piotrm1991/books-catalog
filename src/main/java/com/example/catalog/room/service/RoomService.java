@@ -4,6 +4,7 @@ import com.example.catalog.room.entity.Room;
 import com.example.catalog.room.request.RoomCreate;
 import com.example.catalog.room.request.RoomUpdate;
 import com.example.catalog.room.response.RoomResponse;
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -67,4 +68,11 @@ public interface RoomService {
    * @return boolean true if exits, false if not.
    */
   boolean checkOfNameAlreadyExists(String name);
+
+  /**
+   * Method returns a List of all rooms.
+   *
+   * @return A {@link List} containing RoomResponse records.
+   */
+  List<RoomResponse> getAllRoomsList();
 }

@@ -12,6 +12,8 @@ import com.example.catalog.shelf.request.ShelfCreate;
 import com.example.catalog.shelf.request.ShelfUpdate;
 import com.example.catalog.shelf.response.ShelfResponse;
 import com.example.catalog.shelf.service.ShelfService;
+import java.util.List;
+import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -82,6 +84,17 @@ public class ShelfServiceImpl implements ShelfService {
     return shelfRepository.findById(id).orElseThrow(()
             -> new EntityNotFoundException(
                     createEntityNotExistsMessage(Shelf.class.getSimpleName(), id)));
+  }
+
+  @Override
+  public List<ShelfResponse> getAllShelvesList() {
+    log.info("Getting all shelves to the list.");
+
+    return shelfRepository
+          .findAll()
+          .stream()
+          .map(shelfMapper::mapEntityToResponse)
+          .collect(Collectors.toList());
   }
 
   @Transactional

@@ -4,6 +4,7 @@ import com.example.catalog.statustype.entity.StatusType;
 import com.example.catalog.statustype.request.StatusTypeCreate;
 import com.example.catalog.statustype.request.StatusTypeUpdate;
 import com.example.catalog.statustype.response.StatusTypeResponse;
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -67,4 +68,11 @@ public interface StatusTypeService {
    * @return boolean true if exits, false if not.
    */
   boolean checkOfNameAlreadyExists(String name);
+
+  /**
+   * Retrieve a list of statusType responses.
+   *
+   * @return A {@link List} containing StatusTypeResponse records.
+   */
+  List<StatusTypeResponse> getAllStatusTypesList();
 }

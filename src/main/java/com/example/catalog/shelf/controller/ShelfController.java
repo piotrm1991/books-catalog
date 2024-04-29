@@ -4,6 +4,7 @@ import com.example.catalog.shelf.request.ShelfCreate;
 import com.example.catalog.shelf.request.ShelfUpdate;
 import com.example.catalog.shelf.response.ShelfResponse;
 import com.example.catalog.shelf.service.ShelfService;
+import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -88,13 +89,28 @@ public class ShelfController {
    * @param pageable        The pagination information.
    * @return A {@link Page} containing shelf responses.
    */
-  @GetMapping
+  @GetMapping(params = {"page", "size"})
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
   public Page<ShelfResponse> getAllShelves(@PageableDefault(size = 5) Pageable pageable) {
     log.info("GET-request: getting all shelves.");
 
     return shelfService.getAllShelvesPage(pageable);
+  }
+
+  /**
+   * Retrieve a list of shelf responses,
+   * if params page and size are not provided.
+   *
+   * @return A {@link List} containing ShelfResponse records.
+   */
+  @GetMapping(params = {})
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+  public List<ShelfResponse> getAllShelves() {
+    log.info("GET-request: getting all shelves as List.");
+
+    return shelfService.getAllShelvesList();
   }
 
   /**

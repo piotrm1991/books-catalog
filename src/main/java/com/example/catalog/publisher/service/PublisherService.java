@@ -4,6 +4,7 @@ import com.example.catalog.publisher.entity.Publisher;
 import com.example.catalog.publisher.request.PublisherCreate;
 import com.example.catalog.publisher.request.PublisherUpdate;
 import com.example.catalog.publisher.response.PublisherResponse;
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -67,4 +68,11 @@ public interface PublisherService {
    * @return boolean true if exits, false if not.
    */
   boolean checkOfNameAlreadyExists(String name);
+
+  /**
+   * Retrieve a list of publisher responses.
+   *
+   * @return A {@link List} containing publisher responses.
+   */
+  List<PublisherResponse> getAllPublishersList();
 }

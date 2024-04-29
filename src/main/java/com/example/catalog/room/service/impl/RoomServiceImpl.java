@@ -10,6 +10,8 @@ import com.example.catalog.room.request.RoomCreate;
 import com.example.catalog.room.request.RoomUpdate;
 import com.example.catalog.room.response.RoomResponse;
 import com.example.catalog.room.service.RoomService;
+import java.util.List;
+import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -82,6 +84,17 @@ public class RoomServiceImpl implements RoomService {
     log.info("Checking if room with name: {}, already exists.", name);
 
     return roomRepository.existsByName(name);
+  }
+
+  @Override
+  public List<RoomResponse> getAllRoomsList() {
+    log.info("Getting all rooms to the list.");
+
+    return roomRepository
+          .findAll()
+          .stream()
+          .map(roomMapper::mapEntityToResponse)
+          .collect(Collectors.toList());
   }
 
   @Transactional

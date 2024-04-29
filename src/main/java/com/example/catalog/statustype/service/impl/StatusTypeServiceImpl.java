@@ -10,6 +10,8 @@ import com.example.catalog.statustype.request.StatusTypeCreate;
 import com.example.catalog.statustype.request.StatusTypeUpdate;
 import com.example.catalog.statustype.response.StatusTypeResponse;
 import com.example.catalog.statustype.service.StatusTypeService;
+import java.util.List;
+import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -82,6 +84,17 @@ public class StatusTypeServiceImpl implements StatusTypeService {
     log.info("Checking if statusType with name: {}, already exists.", name);
 
     return statusTypeRepository.existsByName(name);
+  }
+
+  @Override
+  public List<StatusTypeResponse> getAllStatusTypesList() {
+    log.info("Getting all status types to the list.");
+
+    return statusTypeRepository
+          .findAll()
+          .stream()
+          .map(statusTypeMapper::mapEntityToResponse)
+          .collect(Collectors.toList());
   }
 
   @Transactional

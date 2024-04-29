@@ -4,6 +4,7 @@ import com.example.catalog.statustype.request.StatusTypeCreate;
 import com.example.catalog.statustype.request.StatusTypeUpdate;
 import com.example.catalog.statustype.response.StatusTypeResponse;
 import com.example.catalog.statustype.service.StatusTypeService;
+import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -89,13 +90,28 @@ public class StatusTypeController {
    * @param pageable        The pagination information.
    * @return A {@link Page} containing statusType responses.
    */
-  @GetMapping
+  @GetMapping(params = {"page", "size"})
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
   public Page<StatusTypeResponse> getAllStatusTypes(@PageableDefault(size = 5) Pageable pageable) {
     log.info("GET-request: getting all statusTypes.");
 
     return statusTypeService.getAllStatusTypesPage(pageable);
+  }
+
+  /**
+   * Retrieve a list of status type responses,
+   * if params page and size are not provided.
+   *
+   * @return A {@link List} containing StatusTypeResponse records.
+   */
+  @GetMapping(params = {})
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+  public List<StatusTypeResponse> getAllStatusTypes() {
+    log.info("GET-request: getting all status types as List.");
+
+    return statusTypeService.getAllStatusTypesList();
   }
 
   /**

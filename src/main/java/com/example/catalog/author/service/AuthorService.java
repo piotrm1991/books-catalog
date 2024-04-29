@@ -4,6 +4,7 @@ import com.example.catalog.author.entity.Author;
 import com.example.catalog.author.request.AuthorCreate;
 import com.example.catalog.author.request.AuthorUpdate;
 import com.example.catalog.author.response.AuthorResponse;
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -67,4 +68,11 @@ public interface AuthorService {
    * @return boolean true if exits, false if not.
    */
   boolean checkOfNameAlreadyExists(String name);
+
+  /**
+   * Retrieve a list of author responses.
+   *
+   * @return A {@link List} containing author responses.
+   */
+  List<AuthorResponse> getAllAuthorsList();
 }

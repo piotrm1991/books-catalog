@@ -4,6 +4,7 @@ import com.example.catalog.shelf.entity.Shelf;
 import com.example.catalog.shelf.request.ShelfCreate;
 import com.example.catalog.shelf.request.ShelfUpdate;
 import com.example.catalog.shelf.response.ShelfResponse;
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -59,4 +60,11 @@ public interface ShelfService {
    * @return The Shelf entity if found.
    */
   Shelf getShelfById(Long id);
+
+  /**
+   * Retrieve a list of shelf responses.
+   *
+   * @return A {@link List} containing ShelfResponse records.
+   */
+  List<ShelfResponse> getAllShelvesList();
 }

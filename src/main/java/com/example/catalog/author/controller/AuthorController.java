@@ -4,6 +4,7 @@ import com.example.catalog.author.request.AuthorCreate;
 import com.example.catalog.author.request.AuthorUpdate;
 import com.example.catalog.author.response.AuthorResponse;
 import com.example.catalog.author.service.AuthorService;
+import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -87,13 +88,28 @@ public class AuthorController {
    * @param pageable        The pagination information.
    * @return A {@link Page} containing author responses.
    */
-  @GetMapping
+  @GetMapping(params = {"page", "size"})
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
   public Page<AuthorResponse> getAllAuthors(@PageableDefault(size = 5) Pageable pageable) {
     log.info("GET-request: getting all authors.");
 
     return authorService.getAllAuthorsPage(pageable);
+  }
+
+  /**
+   * Retrieve a list of author responses,
+   * if params page and size are not provided.
+   *
+   * @return List of AuthorResponse records.
+   */
+  @GetMapping(params = {})
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+  public List<AuthorResponse> getAllAuthors() {
+    log.info("GET-request: getting all authors as List.");
+
+    return authorService.getAllAuthorsList();
   }
 
   /**

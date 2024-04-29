@@ -39,18 +39,18 @@ public class Book {
   private String title;
 
   @ManyToOne
-  @JoinColumn(name = "id_author")
+  @JoinColumn
   private Author author;
 
   @ManyToOne
-  @JoinColumn(name = "id_publisher")
+  @JoinColumn
   private Publisher publisher;
 
   @ManyToOne
-  @JoinColumn(name = "id_shelf")
+  @JoinColumn
   private Shelf shelf;
 
   @ManyToOne
-  @JoinColumn(name = "id_status_type")
+  @JoinColumn
   private StatusType statusType;
 }

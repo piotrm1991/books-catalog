@@ -10,6 +10,8 @@ import com.example.catalog.publisher.request.PublisherCreate;
 import com.example.catalog.publisher.request.PublisherUpdate;
 import com.example.catalog.publisher.response.PublisherResponse;
 import com.example.catalog.publisher.service.PublisherService;
+import java.util.List;
+import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -82,6 +84,17 @@ public class PublisherServiceImpl implements PublisherService {
     log.info("Checking if publisher with name: {}, already exists.", name);
 
     return publisherRepository.existsByName(name);
+  }
+
+  @Override
+  public List<PublisherResponse> getAllPublishersList() {
+    log.info("Getting all publishers to the list.");
+
+    return publisherRepository
+          .findAll()
+          .stream()
+          .map(publisherMapper::mapEntityToResponse)
+          .collect(Collectors.toList());
   }
 
   @Transactional

@@ -10,6 +10,8 @@ import com.example.catalog.author.request.AuthorUpdate;
 import com.example.catalog.author.response.AuthorResponse;
 import com.example.catalog.author.service.AuthorService;
 import com.example.catalog.exception.EntityNotFoundException;
+import java.util.List;
+import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -82,6 +84,17 @@ public class AuthorServiceImpl implements AuthorService {
     log.info("Checking if author with name: {}, already exists.", name);
 
     return authorRepository.existsByName(name);
+  }
+
+  @Override
+  public List<AuthorResponse> getAllAuthorsList() {
+    log.info("Getting all authors to the list.");
+
+    return authorRepository
+          .findAll()
+          .stream()
+          .map(authorMapper::mapEntityToResponse)
+          .collect(Collectors.toList());
   }
 
   @Transactional
