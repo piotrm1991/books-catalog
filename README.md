@@ -1,4 +1,7 @@
-# Project
+# Project Books Catalog
+ 
+Application allows user to save books, with its author, publisher, custom status and its placement. 
+The for this application is [here](https://github.com/piotrm1991/books-catalog-front-angular):
 
 ## Environment:
 
@@ -22,29 +25,13 @@ This will start database in separate docker container.
 
 Run Application with Intellij IDEA functionality, edit configuration - set active profile to local.
 
+Add `VM option`:
+> -Dspring.profiles.active=local
+
 Project should start as expected
 
 ## StyleGuides
 
 To run style check it is needed to execute `mvn checkstyle:checkstyle`
 
-You can also install `checkstyle` plugin from Intellij IDEA marketplace. It will refactor your code on the fly to comply with configuration for this project
- Setup:
-   * Go to Settings
-   * Editor -> Codestyle
-   * Click on gear icon and choose `Import scheme`
-   * Choose Checkstyle configuration and navigate to `projectRoot`/checkstyle/google_checks_custom.xml
-
-## Tests
-
-To run Unit Tests:
-
-* Compile project with maven compiler plugin
-* Compile testClasses
-* Navigate to surefire maven plugin. Launch tests with `surefire:test`
-
-To run Integration Tests:
-
-* Compile project with maven compiler plugin
-* Compile testClasses
-* Navigate to failsafe maven plugin. Launch tests with `failsafe:integration-test`
+You can also install `checkstyle` plugin from Intellij IDEA marketplace. 
