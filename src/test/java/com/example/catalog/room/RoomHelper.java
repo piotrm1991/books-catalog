@@ -17,6 +17,8 @@ public class RoomHelper {
   public static final String name = "Room Test";
   public static final String nameUpdated = "Room Test Updated";
   public static final int testRoomsCount = 18;
+  public static final int page = 0;
+  public static final int size = 5;
 
   /**
    * Creates Room object.
@@ -131,5 +133,15 @@ public class RoomHelper {
     return new RoomCreate(
           roomNewName
     );
+  }
+
+  public static String getRoomUrlPathWithPageAndSize(int page, int size) {
+
+    return roomUrlPath + "?page=" + page + "&size=" + size;
+  }
+
+  public static String getRoomUrlPathWithPageAndSize() {
+
+    return roomUrlPath + "?page=" + page + "&size=" + size;
   }
 }

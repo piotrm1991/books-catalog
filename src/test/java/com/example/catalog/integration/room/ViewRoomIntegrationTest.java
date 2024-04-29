@@ -1,7 +1,8 @@
 package com.example.catalog.integration.room;
 
-import static com.example.catalog.util.MessagesConstants.createEntityNotExistsMessage;
+import static com.example.catalog.util.ExceptionMessagesConstants.createEntityNotExistsMessage;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -20,6 +21,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+
+import java.util.ArrayList;
 import java.util.List;
 import javax.transaction.Transactional;
 import org.assertj.core.api.AssertionsForClassTypes;
@@ -98,11 +101,15 @@ public class ViewRoomIntegrationTest extends AbstractIntegrationTest {
     List<Room> roomList = RoomHelper.prepareRoomList();
     roomList.forEach(a -> roomRepository.save(a));
 
-    var response = mockMvc.perform(get(RoomHelper.roomUrlPath)
-                .contentType(MediaType.APPLICATION_JSON))
-          .andExpect(status().isOk())
-          .andExpect(jsonPath("$['pageable']['paged']").value("true"))
-          .andReturn();
+    var response = mockMvc
+            .perform(get(RoomHelper.getRoomUrlPathWithPageAndSize())
+                    .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$['pageable']['paged']").value("true"))
+            .andExpect(jsonPath("$['content']", hasSize(RoomHelper.size)))
+            .andExpect(jsonPath("$['totalElements']").value(RoomHelper.testRoomsCount))
+            .andReturn();
+
     Page<RoomResponse> roomsResponse = mapper.readValue(
           response.getResponse().getContentAsString(),
           new TypeReference<RestPageImpl<RoomResponse>>() {}
@@ -124,12 +131,46 @@ public class ViewRoomIntegrationTest extends AbstractIntegrationTest {
   @Test
   @Transactional
   @WithMockUser(roles = {"ADMIN"})
+  public void testGetAllRooms_noPageRequest() throws Exception {
+    List<Room> roomList = RoomHelper.prepareRoomList();
+    roomList.forEach(a -> roomRepository.save(a));
+
+    var response = mockMvc
+            .perform(get(RoomHelper.roomUrlPath)
+                    .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$", hasSize(RoomHelper.testRoomsCount)))
+            .andReturn();
+
+    List<RoomResponse> roomsResponse = mapper.readValue(
+            response.getResponse().getContentAsString(),
+            new TypeReference<ArrayList<RoomResponse>>() {}
+    );
+
+    assertFalse(roomsResponse.isEmpty());
+    assertEquals(RoomHelper.testRoomsCount, roomsResponse.size());
+
+    for (int i = 0; i < RoomHelper.testRoomsCount; i++) {
+      AssertionsForClassTypes.assertThat(roomsResponse.get(i))
+              .usingRecursiveComparison()
+              .ignoringFields("id")
+              .isEqualTo(roomMapper.mapEntityToResponse(roomList.get(i)));
+    }
+  }
+
+  @Test
+  @Transactional
+  @WithMockUser(roles = {"ADMIN"})
   public void testGetAllRooms_empty() throws Exception {
-    var response = mockMvc.perform(get(RoomHelper.roomUrlPath)
-                .contentType(MediaType.APPLICATION_JSON))
-          .andExpect(status().isOk())
-          .andExpect(jsonPath("$['pageable']['paged']").value("true"))
-          .andReturn();
+    var response = mockMvc
+            .perform(get(RoomHelper.getRoomUrlPathWithPageAndSize())
+                    .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$['pageable']['paged']").value("true"))
+            .andExpect(jsonPath("$['content']", hasSize(0)))
+            .andExpect(jsonPath("$['totalElements']").value(0))
+            .andReturn();
+
     Page<RoomResponse> roomsResponse = mapper.readValue(
           response.getResponse().getContentAsString(),
           new TypeReference<RestPageImpl<RoomResponse>>() {}
@@ -139,6 +180,25 @@ public class ViewRoomIntegrationTest extends AbstractIntegrationTest {
     assertEquals(0, roomsResponse.getTotalElements());
     assertEquals(0, roomsResponse.getTotalPages());
     assertEquals(0, roomsResponse.getContent().size());
+  }
+
+  @Test
+  @Transactional
+  @WithMockUser(roles = {"ADMIN"})
+  public void testGetAllRooms_noPageRequest_empty() throws Exception {
+    var response = mockMvc
+            .perform(get(RoomHelper.roomUrlPath)
+                    .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$", hasSize(0)))
+            .andReturn();
+
+    List<RoomResponse> roomsResponse = mapper.readValue(
+            response.getResponse().getContentAsString(),
+            new TypeReference<ArrayList<RoomResponse>>() {}
+    );
+
+    assertTrue(roomsResponse.isEmpty());
   }
 
   @Test

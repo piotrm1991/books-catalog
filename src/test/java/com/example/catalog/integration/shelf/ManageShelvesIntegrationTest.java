@@ -1,9 +1,9 @@
 package com.example.catalog.integration.shelf;
 
-import static com.example.catalog.util.MessagesConstants.ShelfLetterNotBeBlank;
-import static com.example.catalog.util.MessagesConstants.ShelfNumberNotBeBlank;
-import static com.example.catalog.util.MessagesConstants.ShelfRoomNotBeBlank;
-import static com.example.catalog.util.MessagesConstants.createEntityNotExistsMessage;
+import static com.example.catalog.util.MessagesConstants.SHELF_LETTER_CAN_NOT_BE_BLANK;
+import static com.example.catalog.util.MessagesConstants.SHELF_NUMBER_CAN_NOT_BE_BLANK;
+import static com.example.catalog.util.MessagesConstants.SHELF_ROOM_CAN_NOT_BE_NULL;
+import static com.example.catalog.util.ExceptionMessagesConstants.createEntityNotExistsMessage;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -16,7 +16,6 @@ import com.example.catalog.shelf.ShelfHelper;
 import com.example.catalog.shelf.entity.Shelf;
 import com.example.catalog.shelf.repository.ShelfRepository;
 import com.example.catalog.shelf.response.ShelfResponse;
-import com.example.catalog.util.MessagesConstants;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -88,7 +87,7 @@ public class ManageShelvesIntegrationTest extends AbstractIntegrationTest {
 
     assertTrue(errorMessage
           .contains(
-                MessagesConstants.createEntityNotExistsMessage(Room.class.getSimpleName(),
+                createEntityNotExistsMessage(Room.class.getSimpleName(),
                 1L)
           ));
     assertEquals(0, shelfRepository.findAll().size());
@@ -110,7 +109,7 @@ public class ManageShelvesIntegrationTest extends AbstractIntegrationTest {
 
     String errorMessage = response.getResponse().getContentAsString();
 
-    assertTrue(errorMessage.contains(ShelfLetterNotBeBlank));
+    assertTrue(errorMessage.contains(SHELF_LETTER_CAN_NOT_BE_BLANK));
     assertEquals(0, shelfRepository.findAll().size());
   }
 
@@ -130,7 +129,7 @@ public class ManageShelvesIntegrationTest extends AbstractIntegrationTest {
 
     String errorMessage = response.getResponse().getContentAsString();
 
-    assertTrue(errorMessage.contains(ShelfNumberNotBeBlank));
+    assertTrue(errorMessage.contains(SHELF_NUMBER_CAN_NOT_BE_BLANK));
     assertEquals(0, shelfRepository.findAll().size());
   }
 
@@ -150,7 +149,7 @@ public class ManageShelvesIntegrationTest extends AbstractIntegrationTest {
 
     String errorMessage = response.getResponse().getContentAsString();
 
-    assertTrue(errorMessage.contains(ShelfRoomNotBeBlank));
+    assertTrue(errorMessage.contains(SHELF_ROOM_CAN_NOT_BE_NULL));
     assertEquals(0, shelfRepository.findAll().size());
   }
 

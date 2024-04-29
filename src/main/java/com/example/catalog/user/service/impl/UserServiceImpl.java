@@ -1,7 +1,7 @@
 package com.example.catalog.user.service.impl;
 
-import static com.example.catalog.util.MessagesConstants.createEntityNotExistsMessage;
-import static com.example.catalog.util.MessagesConstants.createUserWithLoginNotExistsMessage;
+import static com.example.catalog.util.ExceptionMessagesConstants.createEntityNotExistsMessage;
+import static com.example.catalog.util.ExceptionMessagesConstants.createUserWithLoginNotExistsMessage;
 
 import com.example.catalog.date.service.DateService;
 import com.example.catalog.exception.EntityNotFoundException;
@@ -117,6 +117,6 @@ public class UserServiceImpl implements UserService {
 
     return userRepository.findByLogin(login).orElseThrow(()
         -> new EntityNotFoundException(
-        createUserWithLoginNotExistsMessage(User.class.getSimpleName(), login)));
+        createUserWithLoginNotExistsMessage(login)));
   }
 }

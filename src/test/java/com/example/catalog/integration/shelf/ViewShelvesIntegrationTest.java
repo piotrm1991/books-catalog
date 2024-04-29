@@ -1,7 +1,8 @@
 package com.example.catalog.integration.shelf;
 
-import static com.example.catalog.util.MessagesConstants.createEntityNotExistsMessage;
+import static com.example.catalog.util.ExceptionMessagesConstants.createEntityNotExistsMessage;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -20,6 +21,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+
+import java.util.ArrayList;
 import java.util.List;
 import javax.transaction.Transactional;
 import org.assertj.core.api.AssertionsForClassTypes;
@@ -97,15 +100,18 @@ public class ViewShelvesIntegrationTest extends AbstractIntegrationTest {
   @Test
   @Transactional
   @WithMockUser(roles = {"ADMIN"})
-  public void testGetAllShelves_defaultPageRequest() throws Exception {
+  public void testGetAllShelvesWithParametersPageAndSize_defaultPageRequest() throws Exception {
     List<Shelf> shelfList = ShelfHelper.prepareShelfList();
     shelfList.forEach(a -> shelfRepository.save(a));
 
-    var response = mockMvc.perform(get(ShelfHelper.shelfUrlPath)
+    var response = mockMvc.perform(get(ShelfHelper.getShelfUrlPathWithPageAndSize())
                 .contentType(MediaType.APPLICATION_JSON))
-          .andExpect(status().isOk())
-          .andExpect(jsonPath("$['pageable']['paged']").value("true"))
-          .andReturn();
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$['pageable']['paged']").value("true"))
+            .andExpect(jsonPath("$['content']", hasSize(ShelfHelper.size)))
+            .andExpect(jsonPath("$['totalElements']").value(ShelfHelper.testShelvesCount))
+            .andReturn();
+
     Page<ShelfResponse> shelvesResponse = mapper.readValue(
           response.getResponse().getContentAsString(),
           new TypeReference<RestPageImpl<ShelfResponse>>() {}
@@ -127,15 +133,66 @@ public class ViewShelvesIntegrationTest extends AbstractIntegrationTest {
   @Test
   @Transactional
   @WithMockUser(roles = {"ADMIN"})
-  public void testGetAllShelves_empty() throws Exception {
+  public void testGetAllShelvesWithoutParameters_shelvesList() throws Exception {
+    List<Shelf> shelfList = ShelfHelper.prepareShelfList();
+    shelfList.forEach(a -> shelfRepository.save(a));
+
     var response = mockMvc.perform(get(ShelfHelper.shelfUrlPath)
-                .contentType(MediaType.APPLICATION_JSON))
-          .andExpect(status().isOk())
-          .andExpect(jsonPath("$['pageable']['paged']").value("true"))
-          .andReturn();
-    Page<ShelfResponse> shelvesResponse = mapper.readValue(
+                    .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$", hasSize(ShelfHelper.testShelvesCount)))
+            .andReturn();
+
+    List<ShelfResponse> shelvesResponse = mapper.readValue(
+            response.getResponse().getContentAsString(),
+            new TypeReference<ArrayList<ShelfResponse>>() {}
+    );
+
+    assertFalse(shelvesResponse.isEmpty());
+    assertEquals(ShelfHelper.testShelvesCount, shelvesResponse.size());
+
+    for (int i = 0; i < ShelfHelper.testShelvesCount; i++) {
+      AssertionsForClassTypes.assertThat(shelvesResponse.get(i))
+              .usingRecursiveComparison()
+              .ignoringFields("id")
+              .isEqualTo(shelfMapper.mapEntityToResponse(shelfList.get(i)));
+    }
+  }
+
+  @Test
+  @Transactional
+  @WithMockUser(roles = {"ADMIN"})
+  public void testGetAllShelvesWithoutParameters_empty() throws Exception {
+    var response = mockMvc
+            .perform(get(ShelfHelper.shelfUrlPath)
+                    .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$", hasSize(0)))
+            .andReturn();
+
+    List<ShelfResponse> shelvesResponse = mapper.readValue(
           response.getResponse().getContentAsString(),
-          new TypeReference<RestPageImpl<ShelfResponse>>() {}
+          new TypeReference<ArrayList<ShelfResponse>>() {}
+    );
+
+    assertTrue(shelvesResponse.isEmpty());
+  }
+
+  @Test
+  @Transactional
+  @WithMockUser(roles = {"ADMIN"})
+  public void testGetAllShelvesWithParametersPageAndSize_empty() throws Exception {
+    var response = mockMvc
+            .perform(get(ShelfHelper.getShelfUrlPathWithPageAndSize())
+                    .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$['pageable']['paged']").value("true"))
+            .andExpect(jsonPath("$['content']", hasSize(0)))
+            .andReturn();
+
+    Page<ShelfResponse> shelvesResponse = mapper.readValue(
+            response.getResponse().getContentAsString(),
+            new TypeReference<RestPageImpl<ShelfResponse>>() {}
     );
 
     assertTrue(shelvesResponse.isEmpty());
@@ -159,6 +216,7 @@ public class ViewShelvesIntegrationTest extends AbstractIntegrationTest {
           .andExpect(status().isOk())
           .andExpect(jsonPath("$['pageable']['paged']").value("true"))
           .andReturn();
+
     Page<ShelfResponse> shelvesResponse = mapper.readValue(
           response.getResponse().getContentAsString(),
           new TypeReference<RestPageImpl<ShelfResponse>>() {}

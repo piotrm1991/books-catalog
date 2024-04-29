@@ -1,8 +1,8 @@
 package com.example.catalog.integration.author;
 
-import static com.example.catalog.util.MessagesConstants.AuthorNameAlreadyExistsMessage;
-import static com.example.catalog.util.MessagesConstants.AuthorNameCanNotBeBlankMessage;
-import static com.example.catalog.util.MessagesConstants.createEntityNotExistsMessage;
+import static com.example.catalog.util.MessagesConstants.AUTHOR_WITH_THIS_NAME_ALREADY_EXISTS;
+import static com.example.catalog.util.MessagesConstants.AUTHOR_NAME_CAN_NOT_BE_BLANK;
+import static com.example.catalog.util.ExceptionMessagesConstants.createEntityNotExistsMessage;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -78,7 +78,7 @@ public class ManageAuthorIntegrationTest extends AbstractIntegrationTest {
 
     String errorMessage = response.getResponse().getContentAsString();
 
-    assertTrue(errorMessage.contains(AuthorNameAlreadyExistsMessage));
+    assertTrue(errorMessage.contains(AUTHOR_WITH_THIS_NAME_ALREADY_EXISTS));
     assertEquals(1, authorRepository.findAll().size());
   }
 
@@ -97,7 +97,7 @@ public class ManageAuthorIntegrationTest extends AbstractIntegrationTest {
 
     String errorMessage = response.getResponse().getContentAsString();
 
-    assertTrue(errorMessage.contains(AuthorNameCanNotBeBlankMessage));
+    assertTrue(errorMessage.contains(AUTHOR_NAME_CAN_NOT_BE_BLANK));
     assertEquals(0, authorRepository.findAll().size());
   }
 
@@ -144,7 +144,7 @@ public class ManageAuthorIntegrationTest extends AbstractIntegrationTest {
 
     String errorMessage = response.getResponse().getContentAsString();
 
-    assertTrue(errorMessage.contains(AuthorNameCanNotBeBlankMessage));
+    assertTrue(errorMessage.contains(AUTHOR_NAME_CAN_NOT_BE_BLANK));
     assertEquals(1, authorRepository.findAll().size());
   }
 
@@ -165,7 +165,7 @@ public class ManageAuthorIntegrationTest extends AbstractIntegrationTest {
 
     String errorMessage = response.getResponse().getContentAsString();
 
-    assertTrue(errorMessage.contains(AuthorNameAlreadyExistsMessage));
+    assertTrue(errorMessage.contains(AUTHOR_WITH_THIS_NAME_ALREADY_EXISTS));
     assertEquals(1, authorRepository.findAll().size());
   }
 

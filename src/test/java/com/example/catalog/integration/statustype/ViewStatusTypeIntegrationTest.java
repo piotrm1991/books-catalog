@@ -1,7 +1,8 @@
 package com.example.catalog.integration.statustype;
 
-import static com.example.catalog.util.MessagesConstants.createEntityNotExistsMessage;
+import static com.example.catalog.util.ExceptionMessagesConstants.createEntityNotExistsMessage;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -20,6 +21,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+
+import java.util.ArrayList;
 import java.util.List;
 import javax.transaction.Transactional;
 import org.assertj.core.api.AssertionsForClassTypes;
@@ -103,11 +106,15 @@ public class ViewStatusTypeIntegrationTest extends AbstractIntegrationTest {
     List<StatusType> statusTypeList = StatusTypeHelper.prepareStatusTypeList();
     statusTypeList.forEach(a -> statusTypeRepository.save(a));
 
-    var response = mockMvc.perform(get(StatusTypeHelper.statusTypeUrlPath)
-                .contentType(MediaType.APPLICATION_JSON))
-          .andExpect(status().isOk())
-          .andExpect(jsonPath("$['pageable']['paged']").value("true"))
-          .andReturn();
+    var response = mockMvc
+            .perform(get(StatusTypeHelper.getStatusTypeUrlPathWithPageAndSize())
+                    .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$['pageable']['paged']").value("true"))
+            .andExpect(jsonPath("$['content']", hasSize(StatusTypeHelper.size)))
+            .andExpect(jsonPath("$['totalElements']").value(StatusTypeHelper.testStatusTypesCount))
+            .andReturn();
+
     Page<StatusTypeResponse> statusTypesResponse = mapper.readValue(
           response.getResponse().getContentAsString(),
           new TypeReference<RestPageImpl<StatusTypeResponse>>() {}
@@ -129,12 +136,46 @@ public class ViewStatusTypeIntegrationTest extends AbstractIntegrationTest {
   @Test
   @Transactional
   @WithMockUser(roles = {"ADMIN"})
-  public void testGetAllStatusTypes_empty() throws Exception {
-    var response = mockMvc.perform(get(StatusTypeHelper.statusTypeUrlPath)
-                .contentType(MediaType.APPLICATION_JSON))
-          .andExpect(status().isOk())
-          .andExpect(jsonPath("$['pageable']['paged']").value("true"))
-          .andReturn();
+  public void testGetAllStatusTypes_noPageRequest() throws Exception {
+    List<StatusType> statusTypeList = StatusTypeHelper.prepareStatusTypeList();
+    statusTypeList.forEach(a -> statusTypeRepository.save(a));
+
+    var response = mockMvc
+            .perform(get(StatusTypeHelper.statusTypeUrlPath)
+                    .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$", hasSize(StatusTypeHelper.testStatusTypesCount)))
+            .andReturn();
+
+    List<StatusTypeResponse> statusTypesResponse = mapper.readValue(
+            response.getResponse().getContentAsString(),
+            new TypeReference<ArrayList<StatusTypeResponse>>() {}
+    );
+
+    assertFalse(statusTypesResponse.isEmpty());
+    assertEquals(StatusTypeHelper.testStatusTypesCount, statusTypesResponse.size());
+
+    for (int i = 0; i < StatusTypeHelper.testStatusTypesCount; i++) {
+      AssertionsForClassTypes.assertThat(statusTypesResponse.get(i))
+              .usingRecursiveComparison()
+              .ignoringFields("id")
+              .isEqualTo(statusTypeMapper.mapEntityToResponse(statusTypeList.get(i)));
+    }
+  }
+
+  @Test
+  @Transactional
+  @WithMockUser(roles = {"ADMIN"})
+  public void testGetAllStatusTypes_withPageRequest_empty() throws Exception {
+    var response = mockMvc
+            .perform(get(StatusTypeHelper.getStatusTypeUrlPathWithPageAndSize())
+                    .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$['pageable']['paged']").value("true"))
+            .andExpect(jsonPath("$['content']", hasSize(0)))
+            .andExpect(jsonPath("$['totalElements']").value(0))
+            .andReturn();
+
     Page<StatusTypeResponse> statusTypesResponse = mapper.readValue(
           response.getResponse().getContentAsString(),
           new TypeReference<RestPageImpl<StatusTypeResponse>>() {}
@@ -144,6 +185,25 @@ public class ViewStatusTypeIntegrationTest extends AbstractIntegrationTest {
     assertEquals(0, statusTypesResponse.getTotalElements());
     assertEquals(0, statusTypesResponse.getTotalPages());
     assertEquals(0, statusTypesResponse.getContent().size());
+  }
+
+  @Test
+  @Transactional
+  @WithMockUser(roles = {"ADMIN"})
+  public void testGetAllStatusTypes_noPageRequest_empty() throws Exception {
+    var response = mockMvc
+            .perform(get(StatusTypeHelper.statusTypeUrlPath)
+                    .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$", hasSize(0)))
+            .andReturn();
+
+    List<StatusTypeResponse> statusTypesResponse = mapper.readValue(
+            response.getResponse().getContentAsString(),
+            new TypeReference<ArrayList<StatusTypeResponse>>() {}
+    );
+
+    assertTrue(statusTypesResponse.isEmpty());
   }
 
   @Test

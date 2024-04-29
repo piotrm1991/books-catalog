@@ -1,7 +1,7 @@
 package com.example.catalog.integration.book;
 
-import static com.example.catalog.util.MessagesConstants.BookTitleCanNotBeBlank;
-import static com.example.catalog.util.MessagesConstants.createEntityNotExistsMessage;
+import static com.example.catalog.util.MessagesConstants.BOOK_TITLE_CAN_NOT_BE_BLANK;
+import static com.example.catalog.util.ExceptionMessagesConstants.createEntityNotExistsMessage;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -109,7 +109,7 @@ public class ManageBookIntegrationTest extends AbstractIntegrationTest {
 
     String errorMessage = response.getResponse().getContentAsString();
 
-    assertTrue(errorMessage.contains(BookTitleCanNotBeBlank));
+    assertTrue(errorMessage.contains(BOOK_TITLE_CAN_NOT_BE_BLANK));
     assertEquals(0, bookRepository.findAll().size());
   }
 
@@ -162,7 +162,7 @@ public class ManageBookIntegrationTest extends AbstractIntegrationTest {
 
     String errorMessage = response.getResponse().getContentAsString();
 
-    assertTrue(errorMessage.contains(BookTitleCanNotBeBlank));
+    assertTrue(errorMessage.contains(BOOK_TITLE_CAN_NOT_BE_BLANK));
     assertEquals(1, bookRepository.findAll().size());
   }
 

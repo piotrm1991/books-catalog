@@ -1,7 +1,8 @@
 package com.example.catalog.integration.publisher;
 
-import static com.example.catalog.util.MessagesConstants.createEntityNotExistsMessage;
+import static com.example.catalog.util.ExceptionMessagesConstants.createEntityNotExistsMessage;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -20,6 +21,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+
+import java.util.ArrayList;
 import java.util.List;
 import javax.transaction.Transactional;
 import org.assertj.core.api.AssertionsForClassTypes;
@@ -102,11 +105,15 @@ public class ViewPublishersIntegrationTest extends AbstractIntegrationTest {
     List<Publisher> publisherList = PublisherHelper.preparePublisherList();
     publisherList.forEach(a -> publisherRepository.save(a));
 
-    var response = mockMvc.perform(get(PublisherHelper.publisherUrlPath)
-                .contentType(MediaType.APPLICATION_JSON))
-          .andExpect(status().isOk())
-          .andExpect(jsonPath("$['pageable']['paged']").value("true"))
-          .andReturn();
+    var response = mockMvc
+            .perform(get(PublisherHelper.getPublisherUrlPathWithPageAndSize())
+                    .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$['pageable']['paged']").value("true"))
+            .andExpect(jsonPath("$['content']", hasSize(PublisherHelper.size)))
+            .andExpect(jsonPath("$['totalElements']").value(PublisherHelper.testPublishersCount))
+            .andReturn();
+
     Page<PublisherResponse> publishersResponse = mapper.readValue(
           response.getResponse().getContentAsString(),
           new TypeReference<RestPageImpl<PublisherResponse>>() {}
@@ -128,12 +135,65 @@ public class ViewPublishersIntegrationTest extends AbstractIntegrationTest {
   @Test
   @Transactional
   @WithMockUser(roles = {"ADMIN"})
+  public void testGetAllPublishers_noPageRequest() throws Exception {
+    List<Publisher> publisherList = PublisherHelper.preparePublisherList();
+    publisherList.forEach(a -> publisherRepository.save(a));
+
+    var response = mockMvc
+            .perform(get(PublisherHelper.publisherUrlPath)
+                    .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$", hasSize(PublisherHelper.testPublishersCount)))
+            .andReturn();
+
+    List<PublisherResponse> publishersResponse = mapper.readValue(
+            response.getResponse().getContentAsString(),
+            new TypeReference<ArrayList<PublisherResponse>>() {}
+    );
+
+    assertFalse(publishersResponse.isEmpty());
+    assertEquals(PublisherHelper.testPublishersCount, publishersResponse.size());
+
+    for (int i = 0; i < PublisherHelper.testPublishersCount; i++) {
+      AssertionsForClassTypes.assertThat(publishersResponse.get(i))
+              .usingRecursiveComparison()
+              .ignoringFields("id")
+              .isEqualTo(publisherMapper.mapEntityToResponse(publisherList.get(i)));
+    }
+  }
+
+  @Test
+  @Transactional
+  @WithMockUser(roles = {"ADMIN"})
+  public void testGetAllPublishers_noPageRequest_empty() throws Exception {
+    var response = mockMvc
+            .perform(get(PublisherHelper.publisherUrlPath)
+                    .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$", hasSize(0)))
+            .andReturn();
+
+    List<PublisherResponse> publishersResponse = mapper.readValue(
+            response.getResponse().getContentAsString(),
+            new TypeReference<ArrayList<PublisherResponse>>() {}
+    );
+
+    assertTrue(publishersResponse.isEmpty());
+  }
+
+  @Test
+  @Transactional
+  @WithMockUser(roles = {"ADMIN"})
   public void testGetAllPublishers_empty() throws Exception {
-    var response = mockMvc.perform(get(PublisherHelper.publisherUrlPath)
-                .contentType(MediaType.APPLICATION_JSON))
-          .andExpect(status().isOk())
-          .andExpect(jsonPath("$['pageable']['paged']").value("true"))
-          .andReturn();
+    var response = mockMvc
+            .perform(get(PublisherHelper.getPublisherUrlPathWithPageAndSize())
+                    .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$['pageable']['paged']").value("true"))
+            .andExpect(jsonPath("$['content']", hasSize(0)))
+            .andExpect(jsonPath("$['totalElements']").value(0))
+            .andReturn();
+
     Page<PublisherResponse> publishersResponse = mapper.readValue(
           response.getResponse().getContentAsString(),
           new TypeReference<RestPageImpl<PublisherResponse>>() {}
@@ -155,12 +215,12 @@ public class ViewPublishersIntegrationTest extends AbstractIntegrationTest {
           publisherRepository.findAll(PageRequest.of(1, 3, Sort.by("id").descending()));
 
     var response = mockMvc
-          .perform(
-            get(createUrlPathGetPageable(PublisherHelper.publisherUrlPath, 1, 3, "id", false))
-                .contentType(MediaType.APPLICATION_JSON))
-          .andExpect(status().isOk())
-          .andExpect(jsonPath("$['pageable']['paged']").value("true"))
-          .andReturn();
+            .perform(get(createUrlPathGetPageable(PublisherHelper.publisherUrlPath, 1, 3, "id", false))
+                    .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$['pageable']['paged']").value("true"))
+            .andReturn();
+
     Page<PublisherResponse> publishersResponse = mapper.readValue(
           response.getResponse().getContentAsString(),
           new TypeReference<RestPageImpl<PublisherResponse>>() {}

@@ -1,8 +1,8 @@
 package com.example.catalog.integration.user;
 
-import static com.example.catalog.util.MessagesConstants.LoginAlreadyExists;
-import static com.example.catalog.util.MessagesConstants.LoginIsRequiredMessage;
-import static com.example.catalog.util.MessagesConstants.createEntityNotExistsMessage;
+import static com.example.catalog.util.AuthenticationMessageConstants.LOGIN_ALREADY_EXISTS;
+import static com.example.catalog.util.AuthenticationMessageConstants.LOGIN_IS_REQUIRED;
+import static com.example.catalog.util.ExceptionMessagesConstants.createEntityNotExistsMessage;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -78,7 +78,7 @@ public class ManageUserIntegrationTest extends AbstractIntegrationTest {
 
     String errorMessage = response.getResponse().getContentAsString();
 
-    assertTrue(errorMessage.contains(LoginAlreadyExists));
+    assertTrue(errorMessage.contains(LOGIN_ALREADY_EXISTS));
     assertEquals(UserHelper.numberOfUserAtStartup + 1, userRepository.findAll().size());
   }
 
@@ -97,7 +97,7 @@ public class ManageUserIntegrationTest extends AbstractIntegrationTest {
 
     String errorMessage = response.getResponse().getContentAsString();
 
-    assertTrue(errorMessage.contains(LoginIsRequiredMessage));
+    assertTrue(errorMessage.contains(LOGIN_IS_REQUIRED));
     assertEquals(UserHelper.numberOfUserAtStartup, userRepository.findAll().size());
   }
 
@@ -144,7 +144,7 @@ public class ManageUserIntegrationTest extends AbstractIntegrationTest {
 
     String errorMessage = response.getResponse().getContentAsString();
 
-    assertTrue(errorMessage.contains(LoginIsRequiredMessage));
+    assertTrue(errorMessage.contains(LOGIN_IS_REQUIRED));
     assertEquals(UserHelper.numberOfUserAtStartup + 1, userRepository.findAll().size());
   }
 
@@ -165,7 +165,7 @@ public class ManageUserIntegrationTest extends AbstractIntegrationTest {
 
     String errorMessage = response.getResponse().getContentAsString();
 
-    assertTrue(errorMessage.contains(LoginAlreadyExists));
+    assertTrue(errorMessage.contains(LOGIN_ALREADY_EXISTS));
     assertEquals(UserHelper.numberOfUserAtStartup + 1, userRepository.findAll().size());
   }
 
@@ -186,7 +186,7 @@ public class ManageUserIntegrationTest extends AbstractIntegrationTest {
 
     String errorMessage = response.getResponse().getContentAsString();
 
-    assertTrue(errorMessage.contains(LoginAlreadyExists));
+    assertTrue(errorMessage.contains(LOGIN_ALREADY_EXISTS));
     assertEquals(UserHelper.numberOfUserAtStartup + 1, userRepository.findAll().size());
   }
 

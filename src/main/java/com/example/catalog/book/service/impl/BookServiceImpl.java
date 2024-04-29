@@ -1,6 +1,6 @@
 package com.example.catalog.book.service.impl;
 
-import static com.example.catalog.util.MessagesConstants.createEntityNotExistsMessage;
+import static com.example.catalog.util.ExceptionMessagesConstants.createEntityNotExistsMessage;
 
 import com.example.catalog.author.service.AuthorService;
 import com.example.catalog.book.entity.Book;
@@ -41,13 +41,9 @@ public class BookServiceImpl implements BookService {
     log.info("Creating book with title: {}", bookCreate.title());
     Book book = bookMapper.mapBookCreateToEntity(bookCreate);
     book.setAuthor(authorService.getAuthorById(bookCreate.authorId()));
-    if (bookCreate.publisherId() != null) {
-      book.setPublisher(publisherService.getPublisherById(bookCreate.publisherId()));
-    }
-    if (bookCreate.shelfId() != null) {
-      book.setShelf(shelfService.getShelfById(bookCreate.shelfId()));
-    }
-    book.setStatusType(statusTypeService.getStatusTypeById(bookCreate.shelfId()));
+    book.setPublisher(publisherService.getPublisherById(bookCreate.publisherId()));
+    book.setShelf(shelfService.getShelfById(bookCreate.shelfId()));
+    book.setStatusType(statusTypeService.getStatusTypeById(bookCreate.statusTypeId()));
     book = save(book);
 
     return bookMapper.mapEntityToResponse(book);

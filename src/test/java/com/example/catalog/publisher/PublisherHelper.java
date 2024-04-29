@@ -17,6 +17,8 @@ public class PublisherHelper {
   public static final String name = "Publisher Test";
   public static final String nameUpdated = "Publisher Test Updated";
   public static final int testPublishersCount = 18;
+  public static final int page = 0;
+  public static final int size = 5;
 
   /**
    * Creates Publisher object.
@@ -118,5 +120,15 @@ public class PublisherHelper {
     return new PublisherUpdate(
             name
     );
+  }
+
+  public static String getPublisherUrlPathWithPageAndSize(int page, int size) {
+
+    return publisherUrlPath + "?page=" + page + "&size=" + size;
+  }
+
+  public static String getPublisherUrlPathWithPageAndSize() {
+
+    return publisherUrlPath + "?page=" + page + "&size=" + size;
   }
 }

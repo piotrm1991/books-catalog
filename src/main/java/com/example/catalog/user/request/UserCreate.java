@@ -1,11 +1,11 @@
 package com.example.catalog.user.request;
 
-import static com.example.catalog.util.MessagesConstants.ConfirmPasswordCanNotBeBlankErrorMessage;
-import static com.example.catalog.util.MessagesConstants.LoginIsRequiredMessage;
-import static com.example.catalog.util.MessagesConstants.LoginSizeMinMessage;
-import static com.example.catalog.util.MessagesConstants.PasswordAndConfirmPasswordMatchingMessage;
-import static com.example.catalog.util.MessagesConstants.PasswordCanNotBeBlankErrorMessage;
-import static com.example.catalog.util.MessagesConstants.PasswordSizeMinMessage;
+import static com.example.catalog.util.AuthenticationMessageConstants.CONFIRM_PASSWORD_IS_REQUIRED;
+import static com.example.catalog.util.AuthenticationMessageConstants.LOGIN_IS_REQUIRED;
+import static com.example.catalog.util.AuthenticationMessageConstants.LOGIN_SIZE_MIN_MESSAGE;
+import static com.example.catalog.util.AuthenticationMessageConstants.PASSWORD_AND_CONFIRM_PASSWORD_MUST_BE_MATCHED;
+import static com.example.catalog.util.AuthenticationMessageConstants.PASSWORD_IS_REQUIRED;
+import static com.example.catalog.util.AuthenticationMessageConstants.PASSWORD_SIZE_MIN_MESSAGE;
 
 import com.example.catalog.user.enums.UserRoleEnum;
 import com.example.catalog.user.validator.LoginAlreadyExists;
@@ -21,20 +21,20 @@ import javax.validation.constraints.Size;
 @PasswordMatching(
         password = "password",
         confirmPassword = "confirmPassword",
-        message = PasswordAndConfirmPasswordMatchingMessage
+        message = PASSWORD_AND_CONFIRM_PASSWORD_MUST_BE_MATCHED
 )
 public record UserCreate(
-        @NotBlank(message = LoginIsRequiredMessage)
-        @Size(min = 6, message = LoginSizeMinMessage)
+        @NotBlank(message = LOGIN_IS_REQUIRED)
+        @Size(min = 6, message = LOGIN_SIZE_MIN_MESSAGE)
         @LoginAlreadyExists
         String login,
 
-        @NotBlank(message = PasswordCanNotBeBlankErrorMessage)
-        @Size(min = 8, message = PasswordSizeMinMessage)
+        @NotBlank(message = PASSWORD_IS_REQUIRED)
+        @Size(min = 8, message = PASSWORD_SIZE_MIN_MESSAGE)
         @StrongPassword
         String password,
 
-        @NotBlank(message = ConfirmPasswordCanNotBeBlankErrorMessage)
+        @NotBlank(message = CONFIRM_PASSWORD_IS_REQUIRED)
         String confirmPassword,
 
         @NotNull(message = "You have to choose user status.")

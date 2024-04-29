@@ -1,8 +1,8 @@
 package com.example.catalog.integration.publisher;
 
-import static com.example.catalog.util.MessagesConstants.PublisherNameAlreadyExistsMessage;
-import static com.example.catalog.util.MessagesConstants.PublisherNameCanNotBeBlank;
-import static com.example.catalog.util.MessagesConstants.createEntityNotExistsMessage;
+import static com.example.catalog.util.MessagesConstants.PUBLISHER_WITH_THIS_NAME_ALREADY_EXISTS;
+import static com.example.catalog.util.MessagesConstants.PUBLISHER_NAME_CAN_NOT_BE_BLANK;
+import static com.example.catalog.util.ExceptionMessagesConstants.createEntityNotExistsMessage;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -21,6 +21,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 /**
@@ -77,7 +78,7 @@ public class ManagePublisherIntegrationTest extends AbstractIntegrationTest {
 
     String errorMessage = response.getResponse().getContentAsString();
 
-    assertTrue(errorMessage.contains(PublisherNameAlreadyExistsMessage));
+    assertTrue(errorMessage.contains(PUBLISHER_WITH_THIS_NAME_ALREADY_EXISTS));
     assertEquals(1, publisherRepository.findAll().size());
   }
 
@@ -96,7 +97,7 @@ public class ManagePublisherIntegrationTest extends AbstractIntegrationTest {
 
     String errorMessage = response.getResponse().getContentAsString();
 
-    assertTrue(errorMessage.contains(PublisherNameCanNotBeBlank));
+    assertTrue(errorMessage.contains(PUBLISHER_NAME_CAN_NOT_BE_BLANK));
     assertEquals(0, publisherRepository.findAll().size());
   }
 
@@ -144,7 +145,7 @@ public class ManagePublisherIntegrationTest extends AbstractIntegrationTest {
 
     String errorMessage = response.getResponse().getContentAsString();
 
-    assertTrue(errorMessage.contains(PublisherNameCanNotBeBlank));
+    assertTrue(errorMessage.contains(PUBLISHER_NAME_CAN_NOT_BE_BLANK));
     assertEquals(1, publisherRepository.findAll().size());
   }
 
@@ -166,7 +167,7 @@ public class ManagePublisherIntegrationTest extends AbstractIntegrationTest {
 
     String errorMessage = response.getResponse().getContentAsString();
 
-    assertTrue(errorMessage.contains(PublisherNameAlreadyExistsMessage));
+    assertTrue(errorMessage.contains(PUBLISHER_WITH_THIS_NAME_ALREADY_EXISTS));
     assertEquals(1, publisherRepository.findAll().size());
   }
 
@@ -178,7 +179,7 @@ public class ManagePublisherIntegrationTest extends AbstractIntegrationTest {
 
     List<Publisher> publisherList = PublisherHelper.preparePublisherList();
     publisherList.forEach(a -> publisherRepository.save(a));
-    Long invalidId = 100L;
+    Long invalidId = 1000L;
 
     var response = mockMvc.perform(MockMvcRequestBuilders
         .put(createUrlPathWithId(PublisherHelper.publisherUrlPath, invalidId))

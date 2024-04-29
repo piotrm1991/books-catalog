@@ -1,6 +1,6 @@
 package com.example.catalog.author.validator;
 
-import static com.example.catalog.util.MessagesConstants.DefaultEntityNameAlreadyExists;
+import static com.example.catalog.util.ExceptionMessagesConstants.ENTITY_WITH_THIS_NAME_ALREADY_EXISTS;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -25,7 +25,7 @@ public  @interface AuthorNameAlreadyExists {
    *
    * @return The validation error message.
    */
-  String message() default DefaultEntityNameAlreadyExists;
+  String message() default ENTITY_WITH_THIS_NAME_ALREADY_EXISTS;
 
   /**
    * Specifies the validation groups to which this constraint belongs.

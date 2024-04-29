@@ -1,6 +1,6 @@
 package com.example.catalog.room.service.impl;
 
-import static com.example.catalog.util.MessagesConstants.createEntityNotExistsMessage;
+import static com.example.catalog.util.ExceptionMessagesConstants.createEntityNotExistsMessage;
 
 import com.example.catalog.exception.EntityNotFoundException;
 import com.example.catalog.room.entity.Room;

@@ -20,6 +20,8 @@ public class ShelfHelper {
   public static final Integer number = 1;
   public static final Integer numberUpdate = 3;
   public static final int testShelvesCount = 10;
+  public static final int page = 0;
+  public static final int size = 5;
 
   /**
    * Create Shelf object.
@@ -167,5 +169,15 @@ public class ShelfHelper {
             .number(numberUpdate)
             .room(RoomHelper.createRoom())
             .build();
+  }
+
+  public static String getShelfUrlPathWithPageAndSize(int page, int size) {
+
+    return shelfUrlPath + "?page=" + page + "&size=" + size;
+  }
+
+  public static String getShelfUrlPathWithPageAndSize() {
+
+    return shelfUrlPath + "?page=" + page + "&size=" + size;
   }
 }

@@ -67,7 +67,7 @@ public class BasicAuthWebSecurityConfiguration implements WebMvcConfigurer {
         .anyRequest().authenticated()
         .and().userDetailsService(userDetailsService())
         .logout().deleteCookies("JSESSIONID").addLogoutHandler(logoutHandler())
-        .logoutSuccessHandler((new HttpStatusReturningLogoutSuccessHandler(HttpStatus.OK)))
+        .logoutSuccessHandler((new HttpStatusReturningLogoutSuccessHandler(HttpStatus.NO_CONTENT)))
         .and()
         .httpBasic((basic) -> basic
               .addObjectPostProcessor(new ObjectPostProcessor<BasicAuthenticationFilter>() {

@@ -1,7 +1,7 @@
 package com.example.catalog.room.request;
 
-import static com.example.catalog.util.MessagesConstants.RoomNameAlreadyExistsMessage;
-import static com.example.catalog.util.MessagesConstants.RoomNameCanNotBeBlankMessage;
+import static com.example.catalog.util.MessagesConstants.ROOM_NAME_ALREADY_EXISTS;
+import static com.example.catalog.util.MessagesConstants.ROOM_NAME_CAN_NOT_BE_BLANK;
 
 import com.example.catalog.room.validator.RoomNameAlreadyExists;
 import javax.validation.constraints.NotBlank;
@@ -11,7 +11,7 @@ import javax.validation.constraints.NotBlank;
  */
 public record RoomCreate(
 
-    @NotBlank(message = RoomNameCanNotBeBlankMessage)
-    @RoomNameAlreadyExists(message = RoomNameAlreadyExistsMessage)
+    @NotBlank(message = ROOM_NAME_CAN_NOT_BE_BLANK)
+    @RoomNameAlreadyExists(message = ROOM_NAME_ALREADY_EXISTS)
     String name
 ) {}

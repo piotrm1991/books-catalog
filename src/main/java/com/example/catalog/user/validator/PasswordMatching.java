@@ -1,6 +1,6 @@
 package com.example.catalog.user.validator;
 
-import static com.example.catalog.util.MessagesConstants.PasswordMustMatchDefaultMessage;
+import static com.example.catalog.util.AuthenticationMessageConstants.PASSWORDS_MUST_MATCH_DEFAULT;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -22,7 +22,7 @@ public @interface PasswordMatching {
    *
    * @return The validation error message.
    */
-  String message() default PasswordMustMatchDefaultMessage;
+  String message() default PASSWORDS_MUST_MATCH_DEFAULT;
 
   /**
    * Returns the validation groups to which this constraint belongs.

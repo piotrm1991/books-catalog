@@ -1,6 +1,6 @@
 package com.example.catalog.security.controller;
 
-import static com.example.catalog.util.MessagesConstants.SuccessfulLoginMessage;
+import static com.example.catalog.util.AuthenticationMessageConstants.SUCCESSFULLY_LOGGED_IN;
 
 import com.example.catalog.security.service.UserDetailsImpl;
 import javax.servlet.http.HttpSession;
@@ -36,7 +36,7 @@ public class LoginController {
 
     session.setMaxInactiveInterval(60 * 5);
 
-    return SuccessfulLoginMessage;
+    return SUCCESSFULLY_LOGGED_IN;
   }
 
   /**

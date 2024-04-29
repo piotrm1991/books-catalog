@@ -17,6 +17,8 @@ public class StatusTypeHelper {
   public static final String name = "StatusType Test";
   public static final String nameUpdated = "StatusType Test Updated";
   public static final int testStatusTypesCount = 10;
+  public static final int page = 0;
+  public static final int size = 5;
 
   /**
    * Creates StatusType object.
@@ -130,5 +132,15 @@ public class StatusTypeHelper {
     return new StatusTypeCreate(
           statusTypeNewName
     );
+  }
+
+  public static String getStatusTypeUrlPathWithPageAndSize(int page, int size) {
+
+    return statusTypeUrlPath + "?page=" + page + "&size=" + size;
+  }
+
+  public static String getStatusTypeUrlPathWithPageAndSize() {
+
+    return statusTypeUrlPath + "?page=" + page + "&size=" + size;
   }
 }

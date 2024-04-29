@@ -1,7 +1,7 @@
 package com.example.catalog.user.request;
 
-import static com.example.catalog.util.MessagesConstants.LoginIsRequiredMessage;
-import static com.example.catalog.util.MessagesConstants.LoginSizeMinMessage;
+import static com.example.catalog.util.AuthenticationMessageConstants.LOGIN_IS_REQUIRED;
+import static com.example.catalog.util.AuthenticationMessageConstants.LOGIN_SIZE_MIN_MESSAGE;
 
 import com.example.catalog.user.enums.UserRoleEnum;
 import com.example.catalog.user.enums.UserStatusEnum;
@@ -19,8 +19,8 @@ public record UserUpdate(
         @NotNull(message = "Unexpected error!")
         Long id,
 
-        @NotBlank(message = LoginIsRequiredMessage)
-        @Size(min = 4, message = LoginSizeMinMessage)
+        @NotBlank(message = LOGIN_IS_REQUIRED)
+        @Size(min = 4, message = LOGIN_SIZE_MIN_MESSAGE)
         String login,
 
         @NotNull(message = "You have to choose user role.")

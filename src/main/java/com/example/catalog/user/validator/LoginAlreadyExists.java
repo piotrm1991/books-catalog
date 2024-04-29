@@ -1,6 +1,6 @@
 package com.example.catalog.user.validator;
 
-import static com.example.catalog.util.MessagesConstants.LoginAlreadyExists;
+import static com.example.catalog.util.AuthenticationMessageConstants.LOGIN_ALREADY_EXISTS;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -25,7 +25,7 @@ public  @interface LoginAlreadyExists {
    *
    * @return The validation error message.
    */
-  String message() default LoginAlreadyExists;
+  String message() default LOGIN_ALREADY_EXISTS;
 
   /**
    * Specifies the validation groups to which this constraint belongs.

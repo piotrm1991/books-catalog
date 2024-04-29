@@ -17,6 +17,8 @@ public class AuthorHelper {
   public static final String name = "Author Test";
   public static final String nameUpdated = "Author Test Updated";
   public static final int testAuthorsCount = 18;
+  public static final int page = 0;
+  public static final int size = 0;
 
   /**
    * Creates Author object.
@@ -119,5 +121,15 @@ public class AuthorHelper {
     return new AuthorUpdate(
             name
     );
+  }
+
+  public static String getAuthorUrlPathWithPageAndSize(int page, int size) {
+
+    return authorUrlPath + "?page=" + page + "&size=" + size;
+  }
+
+  public static String getAuthorUrlPathWithPageAndSize() {
+
+    return authorUrlPath + "?page=" + page + "&size=" + size;
   }
 }

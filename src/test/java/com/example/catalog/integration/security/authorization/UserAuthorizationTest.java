@@ -294,21 +294,18 @@ public class UserAuthorizationTest extends AbstractIntegrationTest {
           .andExpect(status().isInternalServerError());
   }
 
-
-  // TODO: same problem with status type when all tests go
   @Test
   @Transactional
   public void userAuthorizationOnBookEntity() throws Exception {
 
     mockMvc.perform(post(BookHelper.bookUrlPath)
-                .content(mapper.writeValueAsString(
-                      BookHelper.createBookCreateWithAllIds(
-                            author.getId(), publisher.getId(), shelf.getId(), statusType.getId())
-                      )
-                )
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON))
-          .andExpect(status().isCreated());
+                    .content(mapper
+                            .writeValueAsString(BookHelper
+                                    .createBookCreateWithAllIds(
+                                            author.getId(), publisher.getId(), shelf.getId(), statusType.getId())))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isCreated());
 
     mockMvc.perform(put(createPathWithBaseUrlAndId(BookHelper.bookUrlPath, book.getId()))
                 .content(mapper.writeValueAsString(BookHelper.createBookUpdate()))

@@ -1,6 +1,6 @@
 package com.example.catalog.integration.security;
 
-import static com.example.catalog.util.MessagesConstants.SuccessfulLoginMessage;
+import static com.example.catalog.util.AuthenticationMessageConstants.SUCCESSFULLY_LOGGED_IN;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
@@ -77,7 +77,7 @@ public class AuthenticationTest extends AbstractIntegrationTest {
           .andReturn();
 
     String responseMessage = responseLogin.getResponse().getContentAsString();
-    assertEquals(responseMessage, SuccessfulLoginMessage);
+    assertEquals(responseMessage, SUCCESSFULLY_LOGGED_IN);
 
     MockHttpSession session = (MockHttpSession) responseLogin.getRequest().getSession();
 
@@ -128,7 +128,7 @@ public class AuthenticationTest extends AbstractIntegrationTest {
           .andReturn();
 
     String responseMessage = responseLogin.getResponse().getContentAsString();
-    assertEquals(responseMessage, SuccessfulLoginMessage);
+    assertEquals(responseMessage, SUCCESSFULLY_LOGGED_IN);
 
     MockHttpSession session = (MockHttpSession) responseLogin.getRequest().getSession();
 

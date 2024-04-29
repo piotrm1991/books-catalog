@@ -1,7 +1,7 @@
 package com.example.catalog.author.request;
 
-import static com.example.catalog.util.MessagesConstants.AuthorNameAlreadyExistsMessage;
-import static com.example.catalog.util.MessagesConstants.AuthorNameCanNotBeBlankMessage;
+import static com.example.catalog.util.MessagesConstants.AUTHOR_WITH_THIS_NAME_ALREADY_EXISTS;
+import static com.example.catalog.util.MessagesConstants.AUTHOR_NAME_CAN_NOT_BE_BLANK;
 
 import com.example.catalog.author.validator.AuthorNameAlreadyExists;
 import javax.validation.constraints.NotBlank;
@@ -11,7 +11,7 @@ import javax.validation.constraints.NotBlank;
  */
 public record AuthorCreate(
 
-    @NotBlank(message = AuthorNameCanNotBeBlankMessage)
-    @AuthorNameAlreadyExists(message = AuthorNameAlreadyExistsMessage)
+    @NotBlank(message = AUTHOR_NAME_CAN_NOT_BE_BLANK)
+    @AuthorNameAlreadyExists(message = AUTHOR_WITH_THIS_NAME_ALREADY_EXISTS)
     String name
 ) {}

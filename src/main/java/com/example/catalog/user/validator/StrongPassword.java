@@ -1,6 +1,6 @@
 package com.example.catalog.user.validator;
 
-import static com.example.catalog.util.MessagesConstants.StrongPasswordDefaultMessage;
+import static com.example.catalog.util.AuthenticationMessageConstants.STRONG_PASSWORD_MESSAGE;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -24,7 +24,7 @@ public @interface StrongPassword {
    *
    * @return The validation error message.
    */
-  String message() default StrongPasswordDefaultMessage;
+  String message() default STRONG_PASSWORD_MESSAGE;
 
   /**
    * Specifies the validation groups to which this constraint belongs.

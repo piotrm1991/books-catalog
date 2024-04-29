@@ -1,7 +1,8 @@
 package com.example.catalog.integration.author;
 
-import static com.example.catalog.util.MessagesConstants.createEntityNotExistsMessage;
+import static com.example.catalog.util.ExceptionMessagesConstants.createEntityNotExistsMessage;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -20,6 +21,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+
+import java.util.ArrayList;
 import java.util.List;
 import javax.transaction.Transactional;
 import org.assertj.core.api.AssertionsForClassTypes;
@@ -89,7 +92,6 @@ public class ViewAuthorsIntegrationTest extends AbstractIntegrationTest {
           Author.class.getSimpleName(),
           invalidId)
     ));
-
   }
 
   @Test
@@ -99,11 +101,13 @@ public class ViewAuthorsIntegrationTest extends AbstractIntegrationTest {
     List<Author> authorList = AuthorHelper.prepareAuthorList();
     authorList.forEach(a -> authorRepository.save(a));
 
-    var response = mockMvc.perform(get(AuthorHelper.authorUrlPath)
-                .contentType(MediaType.APPLICATION_JSON))
-          .andExpect(status().isOk())
-          .andExpect(jsonPath("$['pageable']['paged']").value("true"))
-          .andReturn();
+    var response = mockMvc.perform(get(AuthorHelper.getAuthorUrlPathWithPageAndSize())
+                    .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$['pageable']['paged']").value("true"))
+            .andExpect(jsonPath("$['content']", hasSize(5)))
+            .andReturn();
+
     Page<AuthorResponse> authorsResponse = mapper.readValue(
           response.getResponse().getContentAsString(),
           new TypeReference<RestPageImpl<AuthorResponse>>() {}
@@ -125,12 +129,14 @@ public class ViewAuthorsIntegrationTest extends AbstractIntegrationTest {
   @Test
   @Transactional
   @WithMockUser(roles = {"ADMIN"})
-  public void testGetAllAuthors_empty() throws Exception {
-    var response = mockMvc.perform(get(AuthorHelper.authorUrlPath)
+  public void testGetAllAuthorsWithParameterPageAndSize_empty() throws Exception {
+    var response = mockMvc.perform(get(AuthorHelper.getAuthorUrlPathWithPageAndSize())
                 .contentType(MediaType.APPLICATION_JSON))
           .andExpect(status().isOk())
           .andExpect(jsonPath("$['pageable']['paged']").value("true"))
+          .andExpect(jsonPath("$['content']", hasSize(0)))
           .andReturn();
+
     Page<AuthorResponse> authorsResponse = mapper.readValue(
           response.getResponse().getContentAsString(),
           new TypeReference<RestPageImpl<AuthorResponse>>() {}
@@ -145,19 +151,69 @@ public class ViewAuthorsIntegrationTest extends AbstractIntegrationTest {
   @Test
   @Transactional
   @WithMockUser(roles = {"ADMIN"})
+  public void testGetAllAuthorsWithoutParameters_empty() throws Exception {
+    var response = mockMvc.perform(get(AuthorHelper.authorUrlPath)
+                    .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$", hasSize(0)))
+            .andReturn();
+
+    List<AuthorResponse> authorsResponse = mapper.readValue(
+            response.getResponse().getContentAsString(),
+            new TypeReference<ArrayList<AuthorResponse>>() {}
+    );
+
+    assertTrue(authorsResponse.isEmpty());
+    assertEquals(0, authorsResponse.size());
+  }
+
+  @Test
+  @Transactional
+  @WithMockUser(roles = {"ADMIN"})
+  public void testGetAllAuthorsWithoutParameters_authorList() throws Exception {
+    List<Author> authorList = AuthorHelper.prepareAuthorList();
+    authorList.forEach(a -> authorRepository.save(a));
+
+    var response = mockMvc.perform(get(AuthorHelper.authorUrlPath)
+                    .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$", hasSize(authorList.size())))
+            .andReturn();
+
+    List<AuthorResponse> authorsResponse = mapper.readValue(
+            response.getResponse().getContentAsString(),
+            new TypeReference<ArrayList<AuthorResponse>>() {}
+    );
+
+    assertFalse(authorsResponse.isEmpty());
+    assertEquals(AuthorHelper.testAuthorsCount, authorsResponse.size());
+
+    for (int i = 0; i < AuthorHelper.testAuthorsCount; i++) {
+      AssertionsForClassTypes.assertThat(authorsResponse.get(i))
+              .usingRecursiveComparison()
+              .ignoringFields("id")
+              .isEqualTo(authorMapper.mapEntityToResponse(authorList.get(i)));
+    }
+  }
+
+  @Test
+  @Transactional
+  @WithMockUser(roles = {"ADMIN"})
   public void testGetAllAuthors_customPageRequest() throws Exception {
     List<Author> authorList = AuthorHelper.prepareAuthorList();
     authorList.forEach(a -> authorRepository.save(a));
     Page<Author> expectedAuthorList =
           authorRepository.findAll(PageRequest.of(1, 3, Sort.by("id").descending()));
 
-    var response = mockMvc.perform(get(createUrlPathGetPageable(
-          AuthorHelper.authorUrlPath, 1, 3, "id", false)
-          )
-                .contentType(MediaType.APPLICATION_JSON))
-          .andExpect(status().isOk())
-          .andExpect(jsonPath("$['pageable']['paged']").value("true"))
-          .andReturn();
+    var response = mockMvc
+            .perform(get(createUrlPathGetPageable(AuthorHelper.authorUrlPath, 1, 3, "id", false))
+                    .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$['pageable']['paged']").value("true"))
+            .andExpect(jsonPath("$['content']", hasSize(expectedAuthorList.getContent().size())))
+            .andExpect(jsonPath("$['totalElements']").value(expectedAuthorList.getTotalElements()))
+            .andReturn();
+
     Page<AuthorResponse> authorsResponse = mapper.readValue(
           response.getResponse().getContentAsString(),
           new TypeReference<RestPageImpl<AuthorResponse>>() {}
