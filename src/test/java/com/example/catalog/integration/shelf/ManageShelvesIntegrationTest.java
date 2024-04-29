@@ -1,9 +1,9 @@
 package com.example.catalog.integration.shelf;
 
+import static com.example.catalog.util.ExceptionMessagesConstants.createEntityNotExistsMessage;
 import static com.example.catalog.util.MessagesConstants.SHELF_LETTER_CAN_NOT_BE_BLANK;
 import static com.example.catalog.util.MessagesConstants.SHELF_NUMBER_CAN_NOT_BE_BLANK;
 import static com.example.catalog.util.MessagesConstants.SHELF_ROOM_CAN_NOT_BE_NULL;
-import static com.example.catalog.util.ExceptionMessagesConstants.createEntityNotExistsMessage;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;

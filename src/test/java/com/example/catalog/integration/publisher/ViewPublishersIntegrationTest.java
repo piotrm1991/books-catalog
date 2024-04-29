@@ -21,7 +21,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-
 import java.util.ArrayList;
 import java.util.List;
 import javax.transaction.Transactional;
@@ -215,7 +214,8 @@ public class ViewPublishersIntegrationTest extends AbstractIntegrationTest {
           publisherRepository.findAll(PageRequest.of(1, 3, Sort.by("id").descending()));
 
     var response = mockMvc
-            .perform(get(createUrlPathGetPageable(PublisherHelper.publisherUrlPath, 1, 3, "id", false))
+            .perform(get(createUrlPathGetPageable(PublisherHelper
+                    .publisherUrlPath, 1, 3, "id", false))
                     .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$['pageable']['paged']").value("true"))

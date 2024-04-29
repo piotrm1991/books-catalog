@@ -1,8 +1,8 @@
 package com.example.catalog.integration.publisher;
 
-import static com.example.catalog.util.MessagesConstants.PUBLISHER_WITH_THIS_NAME_ALREADY_EXISTS;
-import static com.example.catalog.util.MessagesConstants.PUBLISHER_NAME_CAN_NOT_BE_BLANK;
 import static com.example.catalog.util.ExceptionMessagesConstants.createEntityNotExistsMessage;
+import static com.example.catalog.util.MessagesConstants.PUBLISHER_NAME_CAN_NOT_BE_BLANK;
+import static com.example.catalog.util.MessagesConstants.PUBLISHER_WITH_THIS_NAME_ALREADY_EXISTS;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;

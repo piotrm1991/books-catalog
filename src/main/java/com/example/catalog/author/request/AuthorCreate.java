@@ -1,7 +1,7 @@
 package com.example.catalog.author.request;
 
-import static com.example.catalog.util.MessagesConstants.AUTHOR_WITH_THIS_NAME_ALREADY_EXISTS;
 import static com.example.catalog.util.MessagesConstants.AUTHOR_NAME_CAN_NOT_BE_BLANK;
+import static com.example.catalog.util.MessagesConstants.AUTHOR_WITH_THIS_NAME_ALREADY_EXISTS;
 
 import com.example.catalog.author.validator.AuthorNameAlreadyExists;
 import javax.validation.constraints.NotBlank;

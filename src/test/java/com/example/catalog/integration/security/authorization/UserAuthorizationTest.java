@@ -298,11 +298,14 @@ public class UserAuthorizationTest extends AbstractIntegrationTest {
   @Transactional
   public void userAuthorizationOnBookEntity() throws Exception {
 
-    mockMvc.perform(post(BookHelper.bookUrlPath)
-                    .content(mapper
-                            .writeValueAsString(BookHelper
+    mockMvc
+            .perform(post(BookHelper.bookUrlPath)
+                    .content(mapper.writeValueAsString(BookHelper
                                     .createBookCreateWithAllIds(
-                                            author.getId(), publisher.getId(), shelf.getId(), statusType.getId())))
+                                            author.getId(),
+                                            publisher.getId(),
+                                            shelf.getId(),
+                                            statusType.getId())))
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isCreated());

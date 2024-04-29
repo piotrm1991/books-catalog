@@ -2,6 +2,9 @@ package com.example.catalog.util;
 
 import lombok.experimental.UtilityClass;
 
+/**
+ * Utility class with exception error messages constants.
+ */
 @UtilityClass
 public class ExceptionMessagesConstants {
 

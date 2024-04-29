@@ -1,7 +1,7 @@
 package com.example.catalog.integration.book;
 
-import static com.example.catalog.util.MessagesConstants.BOOK_TITLE_CAN_NOT_BE_BLANK;
 import static com.example.catalog.util.ExceptionMessagesConstants.createEntityNotExistsMessage;
+import static com.example.catalog.util.MessagesConstants.BOOK_TITLE_CAN_NOT_BE_BLANK;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
