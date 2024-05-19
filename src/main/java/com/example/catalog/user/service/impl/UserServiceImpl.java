@@ -18,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 /**
@@ -31,6 +32,7 @@ public class UserServiceImpl implements UserService {
   private final UserRepository userRepository;
   private final UserMapper userMapper;
   private final DateService dateService;
+  private final PasswordEncoder passwordEncoder;
 
   @Override
   @Transactional
@@ -80,7 +82,7 @@ public class UserServiceImpl implements UserService {
     user.setStatus(UserStatusEnum.ENABLED);
     user.setCreateDate(dateService.getCurrentDate());
     user.setUpdateDate(dateService.getCurrentDate());
-    //TODO: password encoder
+    user.setPassword(passwordEncoder.encode(user.getPassword()));
     save(user);
 
     return userMapper.mapEntityToResponse(user);
